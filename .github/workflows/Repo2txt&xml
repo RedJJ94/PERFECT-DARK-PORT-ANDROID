@@ -1,0 +1,110 @@
+name: Export repo as TXT/XML
+
+on:
+  workflow_dispatch:
+    inputs:
+      include_submodules:
+        description: 'Checkout submodules recursively'
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: ${{ github.event.inputs.include_submodules }}
+
+      - name: Build file list (skip binaries/build dirs)
+        run: |
+          set -euo pipefail
+          # Directories to skip
+          SKIP_DIRS=".git build .gradle .idea .vscode .vs node_modules dist bin obj out android/app/build"
+          # File extensions to treat as text (expand as needed)
+          ALLOW_EXT="c|cpp|cc|h|hpp|m|mm|java|kt|kts|cs|py|rs|go|rb|php|js|jsx|ts|tsx|css|scss|less|html|xml|json|yml|yaml|toml|ini|cfg|txt|md|cmake|mak|gradle|props|sh|bat|ps1|sql"
+          # Build prune expression for find
+          PRUNE=''
+          for d in $SKIP_DIRS; do PRUNE="$PRUNE -path ./$d -prune -o"; done
+          # Save file list
+          eval "find . $PRUNE -type f -regex '.*\.($ALLOW_EXT)$' -size -2M -print0" > files.txt
+
+      - name: Create repo_dump.txt
+        run: |
+          set -euo pipefail
+          OUT=repo_dump.txt
+          : > "$OUT"
+          while IFS= read -r -d '' f; do
+            # Normalize path
+            p="${f#./}"
+            echo "===== FILE: $p =====" >> "$OUT"
+            echo "" >> "$OUT"
+            sed -e 's/\r$//' "$f" >> "$OUT" || true
+            echo -e "\n\n" >> "$OUT"
+          done < files.txt
+
+      - name: Create repo_dump.xml
+        run: |
+          python3 - <<'PY'
+import os, sys, xml.sax.saxutils as sx
+from pathlib import Path
+
+files = []
+with open("files.txt", "rb") as fh:
+    for part in fh.read().split(b"\x00"):
+        if part:
+            files.append(Path(part.decode("utf-8")).as_posix().lstrip("./"))
+
+print('<?xml version="1.0" encoding="UTF-8"?>')
+print('<repo>')
+for p in files:
+    try:
+        with open(p, "r", encoding="utf-8", errors="replace") as fh:
+            data = fh.read()
+    except Exception as e:
+        data = f"<<ERROR READING FILE: {e}>>"
+    # Simple language guess by extension
+    ext = p.split(".")[-1].lower() if "." in p else ""
+    print(f'  <file path="{sx.escape(p)}" lang="{sx.escape(ext)}">')
+    # Wrap contents in CDATA (and split if it contains "]]>")
+    chunks = data.split("]]>")
+    for i, chunk in enumerate(chunks):
+        print("    <![CDATA[" + chunk + ("]]" if i < len(chunks)-1 else "") + "]]>")
+    print("  </file>")
+print("</repo>")
+PY
+          # Write python stdout to file
+        shell: bash
+        continue-on-error: false
+        stdout: repo_dump.xml
+
+      - name: Also provide zipped per-file copy (same tree)
+        run: |
+          zip -r repo_sources.zip . -x \
+            ".git/**" "build/**" ".gradle/**" ".idea/**" ".vscode/**" ".vs/**" \
+            "node_modules/**" "dist/**" "bin/**" "obj/**" "out/**" "android/app/build/**"
+
+      - name: Split large outputs into ~20MB chunks (if needed)
+        run: |
+          mkdir -p chunks
+          for f in repo_dump.txt repo_dump.xml; do
+            if [ -f "$f" ]; then
+              split -b 20m "$f" "chunks/${f}." || true
+            fi
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-export
+          path: |
+            repo_dump.txt
+            repo_dump.xml
+            chunks/
+            repo_sources.zip
+          if-no-files-found: warn
