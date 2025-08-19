@@ -48,41 +48,6 @@ jobs:
             echo -e "\n\n" >> "$OUT"
           done < files.txt
 
-      - name: Create repo_dump.xml
-        run: |
-          python3 - <<'PY'
-import os, sys, xml.sax.saxutils as sx
-from pathlib import Path
-
-files = []
-with open("files.txt", "rb") as fh:
-    for part in fh.read().split(b"\x00"):
-        if part:
-            files.append(Path(part.decode("utf-8")).as_posix().lstrip("./"))
-
-print('<?xml version="1.0" encoding="UTF-8"?>')
-print('<repo>')
-for p in files:
-    try:
-        with open(p, "r", encoding="utf-8", errors="replace") as fh:
-            data = fh.read()
-    except Exception as e:
-        data = f"<<ERROR READING FILE: {e}>>"
-    # Simple language guess by extension
-    ext = p.split(".")[-1].lower() if "." in p else ""
-    print(f'  <file path="{sx.escape(p)}" lang="{sx.escape(ext)}">')
-    # Wrap contents in CDATA (and split if it contains "]]>")
-    chunks = data.split("]]>")
-    for i, chunk in enumerate(chunks):
-        print("    <![CDATA[" + chunk + ("]]" if i < len(chunks)-1 else "") + "]]>")
-    print("  </file>")
-print("</repo>")
-PY
-          # Write python stdout to file
-        shell: bash
-        continue-on-error: false
-        stdout: repo_dump.xml
-
       - name: Also provide zipped per-file copy (same tree)
         run: |
           zip -r repo_sources.zip . -x \
@@ -104,7 +69,6 @@ PY
           name: repo-export
           path: |
             repo_dump.txt
-            repo_dump.xml
             chunks/
             repo_sources.zip
           if-no-files-found: warn
