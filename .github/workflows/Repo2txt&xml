@@ -5,7 +5,7 @@ on:
     inputs:
       include_submodules:
         description: 'Checkout submodules recursively'
-        default: 'false'
+        default: 'true'
         type: choice
         options: ['false', 'true']
 
