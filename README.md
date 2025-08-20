@@ -192,21 +192,6 @@ Controls can be rebound in `pd.ini`. Default control scheme is as follows:
    * Execute command: `make -C build -j4`
 8. The resulting executable will be at `build/pd.arm64.nro`.
 
-### Android
-
-1. Install [Android Studio](https://developer.android.com/studio) with Android SDK and NDK.
-2. Set environment variables:
-   * `ANDROID_HOME` - path to Android SDK
-   * `ANDROID_NDK_HOME` - path to Android NDK
-3. Get the source code:  
-   `git clone --recursive https://github.com/fgsfdsfgs/perfect_dark.git && cd perfect_dark`
-4. Build:
-   * On Windows: execute `build_android.bat`
-   * On Linux/Mac: execute `cd android && ./gradlew assembleDebug`
-5. The resulting APK will be at `android/app/build/outputs/apk/debug/app-debug.apk`.
-6. Install on device: `adb install android/app/build/outputs/apk/debug/app-debug.apk`
-7. Copy your ROM to `/Android/data/com.perfectdark.port/files/data/pd.ntsc-final.z64` on the device.
-
 ### Notes
 
 Alternate compilers or toolchains can be specified by passing `-DCMAKE_TOOLCHAIN_FILE=whatever` as normal. The port does not build with Visual Studio.
