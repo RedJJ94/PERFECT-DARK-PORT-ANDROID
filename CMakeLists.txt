@@ -67,6 +67,9 @@ elseif(APPLE)
 elseif(NINTENDO_SWITCH)
   # Switch
   set(TARGET_OS "nswitch")
+elseif(ANDROID)
+  # Android
+  set(TARGET_OS "android")
 elseif(UNIX)
   # Generic *nix; assume Linux
   set(TARGET_OS "linux")
@@ -151,6 +154,10 @@ if(TARGET_IS_64BIT)
   add_definitions(-DPLATFORM_64BIT=1)
 endif()
 
+if(ANDROID)
+  add_definitions(-DANDROID=1)
+endif()
+
 # Compiler flags
 
 # Include directories
@@ -201,8 +208,11 @@ add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-unused-function>)
 if (APPLE)
   # Make it look for libs in the executable folder manually since CMake's rpath system is wack
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -rpath @executable_path")
-else()
-  # This warning is not recognized by XCode/Clang for some reason.
+elseif(ANDROID)
+  # Android NDK enforces format-security as error, but our langGet() calls are safe
+  add_compile_options(-Wno-format-security)
+elseif(NOT ANDROID)
+  # This warning is not recognized by XCode/Clang for some reason, and also not by Android NDK clang.
   add_compile_options(-Wno-format-truncation)
 endif()
 
@@ -211,16 +221,22 @@ endif()
 set(LIBS )
 
 # SDL2
-find_package(SDL2 REQUIRED)
-if(NINTENDO_SWITCH)
-  if(NOT SDL2_LIBRARY OR NOT SDL2_INCLUDE_DIR)
-    # sometimes FindSDL2 just wants us to suffer and does not set these
-    set(SDL2_LIBRARY "SDL2")
-    set(SDL2_INCLUDE_DIR "${DEVKITPRO}/portlibs/switch/include/SDL2")
+if(ANDROID)
+  # For Android, include dependencies from android.cmake
+  include(cmake/android.cmake)
+  list(APPEND LIBS SDL2::SDL2)
+else()
+  find_package(SDL2 REQUIRED)
+  if(NINTENDO_SWITCH)
+    if(NOT SDL2_LIBRARY OR NOT SDL2_INCLUDE_DIR)
+      # sometimes FindSDL2 just wants us to suffer and does not set these
+      set(SDL2_LIBRARY "SDL2")
+      set(SDL2_INCLUDE_DIR "${DEVKITPRO}/portlibs/switch/include/SDL2")
+    endif()
   endif()
+  include_directories(SYSTEM "${SDL2_INCLUDE_DIR}")
+  list(APPEND LIBS "${SDL2_LIBRARY}")
 endif()
-include_directories(SYSTEM "${SDL2_INCLUDE_DIR}")
-list(APPEND LIBS "${SDL2_LIBRARY}")
 
 # ZLib
 find_package(ZLIB REQUIRED)
@@ -235,6 +251,8 @@ if(NOT GL_LIBRARY)
     set(GL_LIBRARY opengl32)
   elseif(NINTENDO_SWITCH)
     set(GL_LIBRARY EGL glapi drm_nouveau)
+  elseif(ANDROID)
+    set(GL_LIBRARY GLESv3 EGL)
   elseif(APPLE)
     set(GL_LIBRARY "-framework OpenGL")
   else()
@@ -249,6 +267,8 @@ if(NOT EXTRA_LIBRARIES)
     set(EXTRA_LIBRARIES dbghelp -static-libstdc++)
   elseif(NINTENDO_SWITCH)
     set(EXTRA_LIBRARIES stdc++ pthread)
+  elseif(ANDROID)
+    set(EXTRA_LIBRARIES log android)
   else()
     set(EXTRA_LIBRARIES stdc++ m dl)
   endif()
@@ -341,10 +361,16 @@ add_custom_target(pd_headers ALL DEPENDS ${JSON_HEADERS})
 # Game target
 
 set(BIN_NAME "pd${BIN_REGION}.${TARGET_ARCH}")
-add_executable(pd ${SRC})
+if(ANDROID)
+  add_library(pd SHARED ${SRC})
+else()
+  add_executable(pd ${SRC})
+endif()
 add_dependencies(pd pd_headers)
 target_link_libraries(pd ${LIBS})
-set_target_properties(pd PROPERTIES OUTPUT_NAME "${BIN_NAME}")
+if(NOT ANDROID)
+  set_target_properties(pd PROPERTIES OUTPUT_NAME "${BIN_NAME}")
+endif()
 if(WIN32)
   set_target_properties(pd PROPERTIES WIN32_EXECUTABLE TRUE)
 endif()

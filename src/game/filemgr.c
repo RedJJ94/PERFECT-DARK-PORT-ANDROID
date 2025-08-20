@@ -717,7 +717,7 @@ char *filemgrMenuTextInsertOriginalPak(struct menuitem *item)
 	char namebuffer[100];
 	s32 i;
 
-	sprintf(namebuffer, filemgrMenuTextFileType(item));
+	sprintf(namebuffer, "%s", filemgrMenuTextFileType(item));
 
 	// Replace first line break in namebuffer with a terminator
 	i = 0;
@@ -2246,8 +2246,8 @@ MenuItemHandlerResult pakGameNoteListMenuHandler(s32 operation, struct menuitem 
 			sprintf(extbuffer, "%s\n", tmpext);
 			sprintf(pagesbuffer, "%d\n", note->file_size / 256);
 		} else {
-			sprintf(generalbuffer, langGet(L_OPTIONS_392)); // "Empty"
-			sprintf(pagesbuffer, langGet(L_OPTIONS_393)); // "--"
+			sprintf(generalbuffer, "%s", langGet(L_OPTIONS_392)); // "Empty"
+			sprintf(pagesbuffer, "%s", langGet(L_OPTIONS_393)); // "--"
 			sprintf(extbuffer, "", tmpname, tmpext);
 		}
 
@@ -2321,7 +2321,7 @@ MenuDialogHandlerResult pakGameNotesMenuDialog(s32 operation, struct menudialogd
 char *pakMenuTextPagesFree(struct menuitem *item)
 {
 	if (g_EditingPak == NULL) {
-		sprintf(g_StringPointer, langGet(L_OPTIONS_394)); // "Pages Free: "
+		sprintf(g_StringPointer, "%s", langGet(L_OPTIONS_394)); // "Pages Free: "
 	} else {
 		sprintf(g_StringPointer, langGet(L_OPTIONS_395), g_EditingPak->pagesfree); // "Pages Free: %d"
 	}
@@ -2332,7 +2332,7 @@ char *pakMenuTextPagesFree(struct menuitem *item)
 char *pakMenuTextPagesUsed(struct menuitem *item)
 {
 	if (g_EditingPak == NULL) {
-		sprintf(g_StringPointer2, langGet(L_OPTIONS_396)); // "Pages Used: "
+		sprintf(g_StringPointer2, "%s", langGet(L_OPTIONS_396)); // "Pages Used: "
 	} else {
 		sprintf(g_StringPointer2, langGet(L_OPTIONS_397), g_EditingPak->pagesused); // "Pages Used: %d"
 	}

@@ -40,6 +40,7 @@ There are minor graphics- and gameplay-related issues, and possibly occasional c
 * Linux: i686, x86_64
 * MacOS: x86_64 (OS 10.9+), arm64 (OS 11.0+)
 * Nintendo Switch: arm64
+* Android: arm64-v8a, armeabi-v7a, x86_64, x86
 
 ## Download
 
@@ -190,6 +191,21 @@ Controls can be rebound in `pd.ini`. Default control scheme is as follows:
 7. Build:
    * Execute command: `make -C build -j4`
 8. The resulting executable will be at `build/pd.arm64.nro`.
+
+### Android
+
+1. Install [Android Studio](https://developer.android.com/studio) with Android SDK and NDK.
+2. Set environment variables:
+   * `ANDROID_HOME` - path to Android SDK
+   * `ANDROID_NDK_HOME` - path to Android NDK
+3. Get the source code:  
+   `git clone --recursive https://github.com/fgsfdsfgs/perfect_dark.git && cd perfect_dark`
+4. Build:
+   * On Windows: execute `build_android.bat`
+   * On Linux/Mac: execute `cd android && ./gradlew assembleDebug`
+5. The resulting APK will be at `android/app/build/outputs/apk/debug/app-debug.apk`.
+6. Install on device: `adb install android/app/build/outputs/apk/debug/app-debug.apk`
+7. Copy your ROM to `/Android/data/com.perfectdark.port/files/data/pd.ntsc-final.z64` on the device.
 
 ### Notes
 

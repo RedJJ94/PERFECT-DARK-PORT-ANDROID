@@ -74,7 +74,11 @@ static s32 connectedMask = 0;
 
 static s32 numJoysticks = 0;
 
+#ifdef ANDROID
+static s32 useHIDAPI = 0; // Disable HIDAPI on Android due to receiver registration issues
+#else
 static s32 useHIDAPI = 1;
+#endif
 static s32 useRawInput = 1;
 
 static s32 mouseEnabled = 1;

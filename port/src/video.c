@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <SDL.h>
 #include <PR/ultratypes.h>
 #include <PR/gbi.h>
 #include "platform.h"
@@ -18,6 +19,11 @@
 #define DEFAULT_VID_HEIGHT 720
 #define DEFAULT_VID_FULLSCREEN true
 #define DEFAULT_VID_FULLSCREEN_EXCLUSIVE true
+#elif defined(ANDROID)
+#define DEFAULT_VID_WIDTH 0  // Use full screen width
+#define DEFAULT_VID_HEIGHT 0 // Use full screen height
+#define DEFAULT_VID_FULLSCREEN true
+#define DEFAULT_VID_FULLSCREEN_EXCLUSIVE false
 #else
 #define DEFAULT_VID_WIDTH 640
 #define DEFAULT_VID_HEIGHT 480
@@ -65,7 +71,20 @@ static s32 videoInitDisplayModes(void);
 
 s32 videoInit(void)
 {
+#ifdef ANDROID
+	// Use SDL2 for Android since we're using SDLActivity
 	wmAPI = &gfx_sdl;
+	
+	// Get the actual screen dimensions on Android
+	SDL_DisplayMode displayMode;
+	if (SDL_GetCurrentDisplayMode(0, &displayMode) == 0) {
+		if (vidWidth == 0) vidWidth = displayMode.w;
+		if (vidHeight == 0) vidHeight = displayMode.h;
+		sysLogPrintf(LOG_NOTE, "Android: using screen dimensions %dx%d", vidWidth, vidHeight);
+	}
+#else
+	wmAPI = &gfx_sdl;
+#endif
 	renderingAPI = &gfx_opengl_api;
 
 	gfx_current_native_viewport.width = 320;
@@ -82,8 +101,13 @@ s32 videoInit(void)
 			.title = "Perfect Dark",
 			.width = vidWidth,
 			.height = vidHeight,
+#ifdef ANDROID
+			.x = 0,
+			.y = 0,
+#else
 			.x = 100,
 			.y = 100,
+#endif
 			.fullscreen = vidFullscreen,
 			.fullscreen_is_exclusive = vidFullscreenExclusive,
 			.maximized = vidMaximize,

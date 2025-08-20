@@ -26,3 +26,7 @@ tools/mkrom/mkrom
 CppProperties.json
 .idea
 cmake-build-debug
+android/keystore.properties
+android/perfectdark-release.keystore
+*.keystore
+*.jks

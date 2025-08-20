@@ -223,6 +223,12 @@ static void *crashGetModuleBase(const void *addr)
 static void crashStackTrace(char *msg, s32 sig, void *pc)
 {
 	u32 msglen = 0;
+#ifdef ANDROID
+	CRASH_MSG("SIGNAL: %d\n", sig);
+	CRASH_MSG("PC: %p\n", pc);
+	CRASH_MSG("Stack trace not available on Android\n");
+	return;
+#else
 	void *frames[CRASH_MAX_FRAMES] = { NULL };
 
 	const s32 nframes = backtrace(frames, CRASH_MAX_FRAMES);
@@ -264,6 +270,7 @@ static void crashStackTrace(char *msg, s32 sig, void *pc)
 	}
 
 	free(strings);
+#endif
 }
 
 static void crashHandler(s32 sig, siginfo_t *siginfo, void *ctx)

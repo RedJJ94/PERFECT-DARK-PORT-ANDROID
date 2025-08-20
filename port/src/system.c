@@ -14,6 +14,11 @@
 #include "platform.h"
 #include "system.h"
 
+#ifdef ANDROID
+#include <android/log.h>
+#define LOG_TAG "PerfectDark"
+#endif
+
 #ifdef PLATFORM_WIN32
 
 #include <windows.h>
@@ -175,6 +180,15 @@ void sysLogPrintf(s32 level, const char *fmt, ...)
 	vsnprintf(logmsg, sizeof(logmsg), fmt, ap);
 	va_end(ap);
 
+#ifdef ANDROID
+	int android_level = ANDROID_LOG_INFO;
+	switch(level) {
+		case LOG_WARNING: android_level = ANDROID_LOG_WARN; break;
+		case LOG_ERROR: android_level = ANDROID_LOG_ERROR; break;
+		default: android_level = ANDROID_LOG_INFO; break;
+	}
+	__android_log_print(android_level, LOG_TAG, "%s%s", prefix[level], logmsg);
+#else
 	if (logPath[0]) {
 		FILE *f = fopen(logPath, "ab");
 		if (f) {
@@ -185,6 +199,7 @@ void sysLogPrintf(s32 level, const char *fmt, ...)
 
 	FILE *fout = (level == LOG_NOTE) ? stdout : stderr;
 	fprintf(fout, "%s%s\n", prefix[level], logmsg);
+#endif
 }
 
 void sysFatalError(const char *fmt, ...)
@@ -250,6 +265,24 @@ void sysGetExecutablePath(char *outPath, const u32 outLen)
 
 void sysGetHomePath(char *outPath, const u32 outLen)
 {
+#ifdef ANDROID
+	extern const char* sysGetDataPath(void);
+	const char* dataPath = sysGetDataPath();
+	if (dataPath && *dataPath) {
+		// For home path, use the parent directory of the data path
+		strncpy(outPath, dataPath, outLen - 1);
+		outPath[outLen - 1] = '\0';
+		
+		// Remove the "/data" suffix to get the parent directory
+		char* lastSlash = strrchr(outPath, '/');
+		if (lastSlash && strcmp(lastSlash, "/data") == 0) {
+			*lastSlash = '\0';
+		}
+	} else if (outLen > 1) {
+		outPath[0] = '.';
+		outPath[1] = '\0';
+	}
+#else
 	// try asking SDL
 	char *sdlPath = SDL_GetPrefPath("", "perfectdark");
 
@@ -276,6 +309,7 @@ void sysGetHomePath(char *outPath, const u32 outLen)
 #endif
 
 	SDL_free(sdlPath);
+#endif
 }
 
 void *sysMemAlloc(const u32 size)
@@ -315,3 +349,14 @@ void sysCpuRelax(void)
 {
 	DO_YIELD();
 }
+#ifdef ANDROID
+s32 sysIsAndroid(void)
+{
+	return 1;
+}
+#else
+s32 sysIsAndroid(void)
+{
+	return 0;
+}
+#endif

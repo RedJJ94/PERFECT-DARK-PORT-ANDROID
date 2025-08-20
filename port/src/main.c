@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <PR/ultratypes.h>
 #include <PR/ultrasched.h>
 #include <PR/os_message.h>
@@ -17,6 +18,13 @@
 #include "mod.h"
 #include "system.h"
 #include "utils.h"
+
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+#include <SDL.h>
+#include <SDL_main.h>
+#endif
 
 u32 g_OsMemSize = 0;
 s32 g_OsMemSizeMb = 16;
@@ -93,25 +101,181 @@ static void cleanup(void)
 	// TODO: actually shut down all subsystems
 }
 
+#ifdef ANDROID
+// Android-specific globals
+static char g_data_path[512] = {0};
+static int g_initialized = 0;
+
+// JNI functions for Android
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
+    return JNI_VERSION_1_6;
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_MainActivity_nativeInit(JNIEnv* env, jobject thiz, jstring dataPath) {
+    if (g_initialized) return;
+    
+    const char* path = (*env)->GetStringUTFChars(env, dataPath, NULL);
+    strncpy(g_data_path, path, sizeof(g_data_path) - 1);
+    (*env)->ReleaseStringUTFChars(env, dataPath, path);
+    
+    g_initialized = 1;
+    
+    sysLogPrintf(LOG_NOTE, "Android native init complete, data path: %s", g_data_path);
+    
+    // Don't call pd_main here - let SDL2 handle it
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_MainActivity_nativeStartGame(JNIEnv* env, jobject thiz) {
+    __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "nativeStartGame called");
+    if (g_initialized) {
+        char* argv[] = {"pd", NULL};
+        pd_main(1, (const char**)argv);
+    }
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_MainActivity_nativeDestroy(JNIEnv* env, jobject thiz) {
+    // Cleanup when activity is destroyed
+    g_initialized = 0;
+}
+
+// Forward declaration
+int pd_main(int argc, const char **argv);
+
+// SDL2 will call this as the main function on Android
+int SDL_main(int argc, char* argv[]) {
+    // Add some basic logging to see if we get here
+    __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "SDL_main started on Android");
+    
+    // Wait for initialization if needed
+    int timeout = 50; // 5 seconds
+    while (!g_initialized && timeout > 0) {
+        SDL_Delay(100);
+        timeout--;
+    }
+    
+    if (!g_initialized) {
+        __android_log_print(ANDROID_LOG_ERROR, "PerfectDark", "Android not initialized after timeout");
+        return -1;
+    }
+    
+    // Log the data path for debugging
+    __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Android data path: %s", g_data_path);
+    
+    // Change to the data directory so the game can find files
+    if (chdir(g_data_path) != 0) {
+        __android_log_print(ANDROID_LOG_ERROR, "PerfectDark", "Failed to change to data directory: %s", g_data_path);
+    } else {
+        __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Changed working directory to: %s", g_data_path);
+    }
+    
+    return pd_main(argc, (const char**)argv);
+}
+
+const char* sysGetDataPath(void) {
+    if (g_data_path[0] == '\0') {
+        // Default to SDL2's internal storage path for Android
+        strcpy(g_data_path, "/data/data/com.perfectdark.port/files");
+        sysLogPrintf(LOG_NOTE, "Using default Android data path: %s", g_data_path);
+    }
+    return g_data_path;
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_GameView_nativeSurfaceCreated(JNIEnv* env, jobject thiz) {
+    // OpenGL surface created - SDL2 will handle this
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_GameView_nativeSurfaceChanged(JNIEnv* env, jobject thiz, jint width, jint height) {
+    // Surface size changed - SDL2 will handle this
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_GameView_nativeDrawFrame(JNIEnv* env, jobject thiz) {
+    // Frame drawing - SDL2 will handle this
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_GameView_nativeKeyDown(JNIEnv* env, jobject thiz, jint keyCode) {
+    // Key down event
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_GameView_nativeKeyUp(JNIEnv* env, jobject thiz, jint keyCode) {
+    // Key up event
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_GameView_nativeTouchEvent(JNIEnv* env, jobject thiz, jint action, jfloat x, jfloat y, jint pointerId) {
+    // Touch event
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_TouchControls_nativeStickInput(JNIEnv* env, jobject thiz, jint stick, jfloat x, jfloat y) {
+    // Stick input - could be used for game input later
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_TouchControls_nativeButtonDown(JNIEnv* env, jobject thiz, jint button) {
+    // Button down - could be used for game input later
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_TouchControls_nativeButtonUp(JNIEnv* env, jobject thiz, jint button) {
+    // Button up - could be used for game input later
+}
+
+int pd_main(int argc, const char **argv)
+#else
 int main(int argc, const char **argv)
+#endif
 {
+
+
 	sysInitArgs(argc, argv);
+
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Starting initialization sequence");
 
 	if (!sysArgCheck("--no-crash-handler")) {
 		crashInit();
 	}
 
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "sysInit starting");
 	sysInit();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "fsInit starting");
 	fsInit();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "configInit starting");
 	configInit();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "SDL2 init starting");
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
+		__android_log_print(ANDROID_LOG_ERROR, "PerfectDark", "SDL_Init failed: %s", SDL_GetError());
+		return -1;
+	}
+	
+	// Set OpenGL ES attributes for Android
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+	
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "videoInit starting");
 	videoInit();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "inputInit starting");
 	inputInit();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "audioInit starting");
 	audioInit();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "romdataInit starting");
 	romdataInit();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "romdataInit complete");
 
 	g_ValidGbcRomFound = romdataCheckGbcRom();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "GBC ROM check complete");
 
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "gameInit starting");
 	gameInit();
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "gameInit complete");
 
 	if (fsGetModDir()) {
 		modConfigLoad(MOD_CONFIG_FNAME);

@@ -109,6 +109,10 @@ s32 fsInit(void)
 	// get path to base dir and expand it if needed
 	const char *path = sysArgGetString("--basedir");
 	if (!path) {
+#ifdef ANDROID
+		// On Android, we're already in the data directory, so use current directory
+		path = ".";
+#else
 		// check if there's a `data` directory in working directory or homeDir, otherwise default to exe directory
 		path = "$E/" DEFAULT_BASEDIR_NAME;
 		if (!portable) {
@@ -118,6 +122,7 @@ s32 fsInit(void)
 				path = "$H/" DEFAULT_BASEDIR_NAME;
 			}
 		}
+#endif
 	}
 	strncpy(baseDir, fsFullPath(path), FS_MAXPATH);
 
@@ -152,7 +157,10 @@ s32 fsInit(void)
 		if (portable) {
 			path = "$E";
 		} else {
-#if defined(PLATFORM_LINUX) || defined(PLATFORM_OSX)
+#ifdef ANDROID
+			// On Android, use the home directory directly (not the data subfolder)
+			path = "$H";
+#elif defined(PLATFORM_LINUX) || defined(PLATFORM_OSX)
 			// check if there's a config in the working directory, otherwise default to homeDir
 			if (fsFileSize("./" CONFIG_FNAME) >= 0) {
 				path = ".";
