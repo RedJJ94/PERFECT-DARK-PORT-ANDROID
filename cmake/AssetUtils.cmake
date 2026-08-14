@@ -16,11 +16,11 @@ macro(generate_asset_headers jsonpath execcmd extraarg headerlist)
     string(REPLACE ".json" ".h" HEADERNAME ${JSON})
     string(REPLACE "${CMAKE_SOURCE_DIR}/${ASSET_DIR}" "${CMAKE_BINARY_DIR}/${GENERATED_DIR}" HEADERNAME ${HEADERNAME})
     if(WIN32 OR ANDROID)
-      # On Windows and Android, run Python scripts with python
+      # On Windows and Android, run Python scripts with python3
       add_custom_command(
         OUTPUT  ${HEADERNAME}
         DEPENDS ${JSON}
-        COMMAND python ${execcmd} ${JSON} ${extraarg} --headers-only --romid=${ROMID}
+        COMMAND python3 ${execcmd} ${JSON} ${extraarg} --headers-only --romid=${ROMID}
       )
     else()
       add_custom_command(

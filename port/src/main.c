@@ -24,6 +24,7 @@
 #include <android/log.h>
 #include <SDL.h>
 #include <SDL_main.h>
+#include <unistd.h>
 #endif
 
 u32 g_OsMemSize = 0;
@@ -102,6 +103,9 @@ static void cleanup(void)
 }
 
 #ifdef ANDROID
+// Forward declaration
+int pd_main(int argc, const char **argv);
+
 // Android-specific globals
 static char g_data_path[512] = {0};
 static int g_initialized = 0;
@@ -140,9 +144,6 @@ Java_com_perfectdark_port_MainActivity_nativeDestroy(JNIEnv* env, jobject thiz) 
     // Cleanup when activity is destroyed
     g_initialized = 0;
 }
-
-// Forward declaration
-int pd_main(int argc, const char **argv);
 
 // SDL2 will call this as the main function on Android
 int SDL_main(int argc, char* argv[]) {
