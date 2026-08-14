@@ -93,6 +93,9 @@ static void gameInit(void)
 	}
 }
 
+static u64 lastConfigSaveTime = 0;
+static s32 configDirty = 0;
+
 static void cleanup(void)
 {
 	sysLogPrintf(LOG_NOTE, "shutdown");
@@ -101,6 +104,26 @@ static void cleanup(void)
 	videoShutdown();
 	crashShutdown();
 	// TODO: actually shut down all subsystems
+}
+
+void saveConfigIfNeeded(void)
+{
+	if (configDirty) {
+		u64 currentTime = sysGetMicroseconds();
+		// Save at most every 5 seconds to avoid excessive I/O
+		if (currentTime - lastConfigSaveTime > 5000000) {
+			sysLogPrintf(LOG_NOTE, "Auto-saving config");
+			inputSaveBinds();
+			configSave(CONFIG_PATH);
+			lastConfigSaveTime = currentTime;
+			configDirty = 0;
+		}
+	}
+}
+
+void markConfigDirty(void)
+{
+	configDirty = 1;
 }
 
 #ifdef ANDROID
@@ -178,9 +201,10 @@ int SDL_main(int argc, char* argv[]) {
 
 const char* sysGetDataPath(void) {
     if (g_data_path[0] == '\0') {
-        // Default to SDL2's internal storage path for Android
-        strcpy(g_data_path, "/data/data/com.perfectdark.port/files");
-        sysLogPrintf(LOG_NOTE, "Using default Android data path: %s", g_data_path);
+        // Use public directory in internal storage that persists after uninstall
+        // This is typically /storage/emulated/0/perfect dark/ or /sdcard/perfect dark/
+        strcpy(g_data_path, "/storage/emulated/0/perfect dark");
+        sysLogPrintf(LOG_NOTE, "Using public Android data path: %s", g_data_path);
     }
     return g_data_path;
 }
@@ -275,7 +299,7 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength
 ) {
     __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Applying settings from Android");
-    
+
     // Apply video settings
     videoSetFullscreen(fullscreen ? 1 : 0);
     videoSetVsync(vsync ? 1 : 0); // Convert boolean to int for vsync
@@ -284,16 +308,16 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     videoSetTextureFilter2D(texFilter2D ? 1 : 0);
     videoSetFramerateLimit(framerateLimit);
     g_ViShakeIntensityMult = screenShake;
-    
+
     // Apply audio settings
     g_MusicDisableMpDeath = disableMpDeathMusic ? 1 : 0;
-    
+
     // Apply game settings
     g_TickRateDiv = uncapTickrate ? 0 : 1;
     g_BgunGeMuzzleFlashes = geMuzzleFlashes ? 1 : 0;
     g_PlayerExtCfg[0].fovy = (f32)fieldOfView;
     g_HudCenter = hudCenter;
-    
+
     // Apply controls settings
     // NOTE: extcontrols is NOT set here to preserve user's control style choice
     // showControls only affects Android virtual controls visibility
@@ -306,10 +330,12 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     inputControllerSetAxisDeadzone(0, 1, 0, rightStickDeadzone); // Right stick X deadzone
     inputControllerSetAxisDeadzone(0, 1, 1, rightStickDeadzone); // Right stick Y deadzone
     inputRumbleSetStrength(0, vibrationStrength);
-    
-    // Save configuration to file
+
+    // Mark config as dirty and save immediately
+    markConfigDirty();
+    inputSaveBinds();
     configSave(CONFIG_PATH);
-    
+
     __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Settings applied successfully");
 }
 

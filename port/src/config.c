@@ -302,10 +302,4 @@ void configInit(void)
 	if (fsFileSize(CONFIG_PATH) > 0) {
 		configLoad(CONFIG_PATH);
 	}
-	// Force StickCButtons to 1 (style 1.1) after loading config
-	// This prevents config file from overriding the default style
-	extern void inputControllerSetDualAnalog(s32 cidx, s32 enable);
-	inputControllerSetDualAnalog(0, 0); // 0 = disable dual analog = enable StickCButtons
-	// Save immediately to persist the forced value
-	configSave(CONFIG_PATH);
 }

@@ -106,6 +106,14 @@ s32 fsInit(void)
 		sysGetHomePath(homeDir, FS_MAXPATH);
 	}
 
+#ifdef ANDROID
+	// On Android, ensure the data directory exists
+	if (homeDir[0] && fsFileSize(homeDir) < 0) {
+		sysLogPrintf(LOG_NOTE, "Creating data directory: %s", homeDir);
+		fsCreateDir(homeDir);
+	}
+#endif
+
 	// get path to base dir and expand it if needed
 	const char *path = sysArgGetString("--basedir");
 	if (!path) {

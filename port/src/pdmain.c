@@ -1,5 +1,7 @@
 #include <stdlib.h>
 
+#include "config.h"
+
 #include <ultra64.h>
 #include <PR/ultrasched.h>
 #include "lib/sched.h"
@@ -280,6 +282,7 @@ void mainProc(void)
 	sndInit();
 
 	while (true) {
+		saveConfigIfNeeded();
 		mainLoop();
 	}
 }

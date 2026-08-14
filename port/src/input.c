@@ -12,6 +12,8 @@
 #include "system.h"
 #include "fs.h"
 
+extern void markConfigDirty(void);
+
 #if !SDL_VERSION_ATLEAST(2, 0, 14)
 // this was added in 2.0.14
 #define SDL_CONTROLLER_TYPE_VIRTUAL SDL_CONTROLLER_TYPE_UNKNOWN
@@ -42,8 +44,7 @@ static SDL_GameController *pads[INPUT_MAX_CONTROLLERS];
 	}, \
 	.sens = { 1.f, 1.f, 1.f, 1.f }, \
 	.deadzone = { DEFAULT_DEADZONE, DEFAULT_DEADZONE, DEFAULT_DEADZONE, DEFAULT_DEADZONE_RY }, \
-	.stickCButtons = 1, \
-	.swapSticks = 0, \
+	.swapSticks = 1, \
 	.deviceIndex = -1, \
 	.cancelCButtons = 0, \
 }
@@ -54,7 +55,6 @@ static struct controllercfg {
 	u32 axisMap[2][2];
 	f32 sens[4];
 	s32 deadzone[4];
-	s32 stickCButtons;
 	s32 swapSticks;
 	s32 deviceIndex;
 	s32 cancelCButtons;
@@ -864,22 +864,10 @@ s32 inputReadController(s32 idx, OSContPad *npad)
 	if (!pads[idx]) {
 #ifdef ANDROID
 		// No physical controller — use virtual touch inputs
-		// Hybrid mode: Y axis = movement, X axis = camera
 		if (idx == 0) {
-			// Y axis controls movement (frente/trás)
+			if (!npad->stick_x && g_androidStickX) npad->stick_x = g_androidStickX;
 			if (!npad->stick_y && g_androidStickY) npad->stick_y = g_androidStickY;
-			// X axis controls camera (esquerda/direita)
-			if (g_androidStickX) {
-				if (cfg->stickCButtons) {
-					// Style 1.1: X axis emulates C buttons
-					if (g_androidStickX < -0x4000) npad->button |= L_CBUTTONS;
-					if (g_androidStickX > +0x4000) npad->button |= R_CBUTTONS;
-				} else {
-					// Style ext: X axis as analog camera
-					npad->rstick_x = g_androidStickX;
-				}
-			}
-			// Virtual camera area still works for Y axis camera
+			if (g_androidCamX) npad->rstick_x = g_androidCamX;
 			if (g_androidCamY) npad->rstick_y = g_androidCamY;
 		}
 #endif
@@ -896,58 +884,38 @@ s32 inputReadController(s32 idx, OSContPad *npad)
 	rightX = inputAxisScale(rightX, cfg->deadzone[cfg->axisMap[1][0]], cfg->sens[cfg->axisMap[1][0]]);
 	rightY = inputAxisScale(rightY, cfg->deadzone[cfg->axisMap[1][1]], cfg->sens[cfg->axisMap[1][1]]);
 
-	// Hybrid mode: Left stick Y = movement, Left stick X = camera
-	// Y axis controls movement (frente/trás)
+	if (!npad->stick_x && leftX) {
+		npad->stick_x = leftX / 0x100;
+	}
+
 	s32 stickY = -leftY / 0x100;
 	if (!npad->stick_y && stickY) {
 		npad->stick_y = (stickY == 128) ? 127 : stickY;
 	}
 
-	// X axis controls camera (esquerda/direita)
-	if (leftX) {
-		if (cfg->stickCButtons) {
-			// Style 1.1: X axis emulates C buttons
-			if (leftX < -0x4000) npad->button |= L_CBUTTONS;
-			if (leftX > +0x4000) npad->button |= R_CBUTTONS;
-		} else {
-			// Style ext: X axis as analog camera
-			npad->rstick_x = leftX / 0x100;
-		}
-	}
-
 #ifdef ANDROID
 	// Overlay virtual stick on top of physical if physical is idle
-	// Hybrid mode: Only overlay Y axis for movement, X axis already handled above
 	if (idx == 0) {
+		if (!npad->stick_x && g_androidStickX) npad->stick_x = g_androidStickX;
 		if (!npad->stick_y && g_androidStickY) npad->stick_y = g_androidStickY;
 	}
 #endif
 
-	if (cfg->stickCButtons) {
-		// rstick emulates C buttons
-		if (rightX < -0x4000) npad->button |= L_CBUTTONS;
-		if (rightX > +0x4000) npad->button |= R_CBUTTONS;
-		if (rightY < -0x4000) npad->button |= U_CBUTTONS;
-		if (rightY > +0x4000) npad->button |= D_CBUTTONS;
-		npad->rstick_x = 0;
-		npad->rstick_y = 0;
-	} else {
-		// rstick is an analog input
-		if (rightX) {
-			npad->rstick_x = rightX / 0x100;
-		}
-		s32 rStickY = -rightY / 0x100;
-		if (rStickY) {
-			npad->rstick_y = (rStickY == 128) ? 127 : rStickY;
-		}
-#ifdef ANDROID
-		// Overlay virtual camera on top if physical right stick is idle
-		if (idx == 0) {
-			if (!npad->rstick_x && g_androidCamX) npad->rstick_x = g_androidCamX;
-			if (!npad->rstick_y && g_androidCamY) npad->rstick_y = g_androidCamY;
-		}
-#endif
+	// rstick is an analog input
+	if (rightX) {
+		npad->rstick_x = rightX / 0x100;
 	}
+	s32 rStickY = -rightY / 0x100;
+	if (rStickY) {
+		npad->rstick_y = (rStickY == 128) ? 127 : rStickY;
+	}
+#ifdef ANDROID
+	// Overlay virtual camera on top if physical right stick is idle
+	if (idx == 0) {
+		if (!npad->rstick_x && g_androidCamX) npad->rstick_x = g_androidCamX;
+		if (!npad->rstick_y && g_androidCamY) npad->rstick_y = g_androidCamY;
+	}
+#endif
 
 	return 0;
 }
@@ -1050,6 +1018,7 @@ f32 inputRumbleGetStrength(s32 cidx)
 void inputRumbleSetStrength(s32 cidx, f32 val)
 {
 	padsCfg[cidx].rumbleScale = val;
+	markConfigDirty();
 }
 
 s32 inputControllerMask(void)
@@ -1076,16 +1045,7 @@ void inputControllerSetSticksSwapped(s32 cidx, s32 swapped)
 		padsCfg[cidx].axisMap[1][0] = SDL_CONTROLLER_AXIS_RIGHTX;
 		padsCfg[cidx].axisMap[1][1] = SDL_CONTROLLER_AXIS_RIGHTY;
 	}
-}
-
-s32 inputControllerGetDualAnalog(s32 cidx)
-{
-	return !padsCfg[cidx].stickCButtons;
-}
-
-void inputControllerSetDualAnalog(s32 cidx, s32 enable)
-{
-	padsCfg[cidx].stickCButtons = !enable;
+	markConfigDirty();
 }
 
 s32 inputControllerGetCancelCButtons(s32 cidx)
@@ -1096,6 +1056,7 @@ s32 inputControllerGetCancelCButtons(s32 cidx)
 void inputControllerSetCancelCButtons(s32 cidx, s32 cancel)
 {
 	padsCfg[cidx].cancelCButtons = cancel;
+	markConfigDirty();
 }
 
 f32 inputControllerGetAxisScale(s32 cidx, s32 stick, s32 axis)
@@ -1116,6 +1077,7 @@ f32 inputControllerGetAxisDeadzone(s32 cidx, s32 stick, s32 axis)
 void inputControllerSetAxisDeadzone(s32 cidx, s32 stick, s32 axis, f32 value)
 {
 	padsCfg[cidx].deadzone[stick * 2 + axis] = value * 32767.f;
+	markConfigDirty();
 }
 
 s32 inputGetConnectedControllers(s32 *out)
@@ -1240,6 +1202,7 @@ void inputKeyBind(s32 idx, u32 ck, s32 bind, u32 vk)
 	}
 
 	binds[idx][ck][bind] = vk;
+	markConfigDirty();
 }
 
 const u32 *inputKeyGetBinds(s32 idx, u32 ck)
@@ -1618,8 +1581,6 @@ PD_CONSTRUCTOR static void inputConfigInit(void)
 		configRegisterFloat(strFmt("%s.LStickScaleY", secname), &padsCfg[c].sens[1], -10.f, 10.f);
 		configRegisterFloat(strFmt("%s.RStickScaleX", secname), &padsCfg[c].sens[2], -10.f, 10.f);
 		configRegisterFloat(strFmt("%s.RStickScaleY", secname), &padsCfg[c].sens[3], -10.f, 10.f);
-		// Register StickCButtons but force it to 1 (style 1.1) after config load
-		configRegisterInt(strFmt("%s.StickCButtons", secname), &padsCfg[c].stickCButtons, 0, 1);
 		configRegisterInt(strFmt("%s.CancelCButtons", secname), &padsCfg[c].cancelCButtons, 0, 1);
 		configRegisterInt(strFmt("%s.SwapSticks", secname), &padsCfg[c].swapSticks, 0, 1);
 		configRegisterInt(strFmt("%s.ControllerIndex", secname), &padsCfg[c].deviceIndex, -1, 0x7FFFFFFF);

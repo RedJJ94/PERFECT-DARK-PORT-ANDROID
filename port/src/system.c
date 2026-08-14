@@ -269,15 +269,9 @@ void sysGetHomePath(char *outPath, const u32 outLen)
 	extern const char* sysGetDataPath(void);
 	const char* dataPath = sysGetDataPath();
 	if (dataPath && *dataPath) {
-		// For home path, use the parent directory of the data path
+		// For home path, use the data path directly (it's already writable)
 		strncpy(outPath, dataPath, outLen - 1);
 		outPath[outLen - 1] = '\0';
-		
-		// Remove the "/data" suffix to get the parent directory
-		char* lastSlash = strrchr(outPath, '/');
-		if (lastSlash && strcmp(lastSlash, "/data") == 0) {
-			*lastSlash = '\0';
-		}
 	} else if (outLen > 1) {
 		outPath[0] = '.';
 		outPath[1] = '\0';

@@ -13,6 +13,12 @@ s32 configLoad(const char *fname);
 // saves config to file (path extensions such as ! apply)
 s32 configSave(const char *fname);
 
+// marks config as dirty, triggering auto-save
+void markConfigDirty(void);
+
+// saves config if dirty and enough time has passed (called periodically)
+void saveConfigIfNeeded(void);
+
 // registers a variable in the config file
 // this should be done before configInit() is called, preferably in a module constructor
 void configRegisterInt(const char *key, s32 *var, s32 min, s32 max);
