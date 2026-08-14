@@ -7,6 +7,9 @@ on:
     branches: [ "port" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-android-apk:
     runs-on: ubuntu-latest
@@ -48,12 +51,35 @@ jobs:
           cd android
           ./gradlew assembleRelease
 
-      - name: Find APK
-        run: find android/app/build/outputs -name "*.apk" -type f
+      - name: Rename APK with build info
+        id: rename_apk
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          APK_SRC=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
+          APK_DEST="perfect-dark-port-${SHORT_SHA}.apk"
+          mv "$APK_SRC" "$APK_DEST"
+          echo "apk_path=$APK_DEST" >> $GITHUB_OUTPUT
+          echo "short_sha=$SHORT_SHA" >> $GITHUB_OUTPUT
 
-      - name: Upload signed APK artifact
-        uses: actions/upload-artifact@v4
+      - name: Publish GitHub Release
+        if: github.event_name != 'pull_request'
+        uses: softprops/action-gh-release@v2
         with:
-          name: perfect-dark-android-apk
-          path: android/app/build/outputs/apk/release/*.apk
-          retention-days: 90
+          tag_name: latest
+          name: "Perfect Dark Port – Latest Build"
+          body: |
+            🎮 **Automatic build** do branch `port`
+
+            **Commit:** [`${{ steps.rename_apk.outputs.short_sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            **Data:** ${{ github.event.head_commit.timestamp }}
+
+            ### Como instalar
+            1. Baixe o arquivo `.apk` abaixo
+            2. No Android, habilite **"Instalar de fontes desconhecidas"**
+            3. Instale o APK
+            4. Coloque a ROM `Perfect Dark (USA).z64` na pasta indicada pelo app
+
+            > ⚠️ Esta é uma build de desenvolvimento, pode conter bugs.
+          files: ${{ steps.rename_apk.outputs.apk_path }}
+          prerelease: true
+          make_latest: true
