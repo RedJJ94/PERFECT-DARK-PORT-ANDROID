@@ -42,7 +42,7 @@ static SDL_GameController *pads[INPUT_MAX_CONTROLLERS];
 	}, \
 	.sens = { 1.f, 1.f, 1.f, 1.f }, \
 	.deadzone = { DEFAULT_DEADZONE, DEFAULT_DEADZONE, DEFAULT_DEADZONE, DEFAULT_DEADZONE_RY }, \
-	.stickCButtons = 0, \
+	.stickCButtons = 1, \
 	.swapSticks = 1, \
 	.deviceIndex = -1, \
 	.cancelCButtons = 0, \
@@ -78,6 +78,35 @@ static s32 numJoysticks = 0;
 static s32 useHIDAPI = 0; // Disable HIDAPI on Android due to receiver registration issues
 #else
 static s32 useHIDAPI = 1;
+#endif
+
+#ifdef ANDROID
+// -------------------------------------------------------------------------
+//  Android virtual touch-controller state
+//  Written by the JNI handlers in main.c, read every frame in inputReadController.
+// -------------------------------------------------------------------------
+
+// Bitmask of currently-pressed N64 buttons (uses CONT_* bit positions)
+// Bit layout matches OSContPad.button:
+//   bit 0  = C_RIGHT      CK_C_R
+//   bit 1  = C_LEFT       CK_C_L
+//   bit 2  = C_DOWN       CK_C_D
+//   bit 3  = C_UP         CK_C_U
+//   bit 4  = R_TRIG       CK_RTRIG
+//   bit 5  = L_TRIG       CK_LTRIG
+//   bit 12 = START        CK_START
+//   bit 13 = Z_TRIG       CK_ZTRIG
+//   bit 14 = B_BUTTON     CK_B
+//   bit 15 = A_BUTTON     CK_A
+volatile u32 g_androidButtons = 0;
+
+// Left analog stick [-128..127]
+volatile s8 g_androidStickX = 0;
+volatile s8 g_androidStickY = 0;
+
+// Right analog (camera) stick [-128..127]
+volatile s8 g_androidCamX = 0;
+volatile s8 g_androidCamY = 0;
 #endif
 static s32 useRawInput = 1;
 
@@ -808,6 +837,13 @@ s32 inputReadController(s32 idx, OSContPad *npad)
 		}
 	}
 
+#ifdef ANDROID
+	if (idx == 0) {
+		// Merge virtual touch-controller buttons
+		npad->button |= g_androidButtons;
+	}
+#endif
+
 	const s32 xdiff = (inputBindPressed(idx, CK_STICK_XPOS) - inputBindPressed(idx, CK_STICK_XNEG));
 	const s32 ydiff = (inputBindPressed(idx, CK_STICK_YPOS) - inputBindPressed(idx, CK_STICK_YNEG));
 	npad->stick_x = xdiff < 0 ? -0x80 : (xdiff > 0 ? 0x7F : 0);
@@ -826,6 +862,15 @@ s32 inputReadController(s32 idx, OSContPad *npad)
 	}
 
 	if (!pads[idx]) {
+#ifdef ANDROID
+		// No physical controller — use virtual touch inputs
+		if (idx == 0) {
+			if (!npad->stick_x && g_androidStickX) npad->stick_x = g_androidStickX;
+			if (!npad->stick_y && g_androidStickY) npad->stick_y = g_androidStickY;
+			if (g_androidCamX) npad->rstick_x = g_androidCamX;
+			if (g_androidCamY) npad->rstick_y = g_androidCamY;
+		}
+#endif
 		return 0;
 	}
 
@@ -848,6 +893,14 @@ s32 inputReadController(s32 idx, OSContPad *npad)
 		npad->stick_y = (stickY == 128) ? 127 : stickY;
 	}
 
+#ifdef ANDROID
+	// Overlay virtual stick on top of physical if physical is idle
+	if (idx == 0) {
+		if (!npad->stick_x && g_androidStickX) npad->stick_x = g_androidStickX;
+		if (!npad->stick_y && g_androidStickY) npad->stick_y = g_androidStickY;
+	}
+#endif
+
 	if (cfg->stickCButtons) {
 		// rstick emulates C buttons
 		if (rightX < -0x4000) npad->button |= L_CBUTTONS;
@@ -865,6 +918,13 @@ s32 inputReadController(s32 idx, OSContPad *npad)
 		if (rStickY) {
 			npad->rstick_y = (rStickY == 128) ? 127 : rStickY;
 		}
+#ifdef ANDROID
+		// Overlay virtual camera on top if physical right stick is idle
+		if (idx == 0) {
+			if (!npad->rstick_x && g_androidCamX) npad->rstick_x = g_androidCamX;
+			if (!npad->rstick_y && g_androidCamY) npad->rstick_y = g_androidCamY;
+		}
+#endif
 	}
 
 	return 0;
@@ -1536,6 +1596,7 @@ PD_CONSTRUCTOR static void inputConfigInit(void)
 		configRegisterFloat(strFmt("%s.LStickScaleY", secname), &padsCfg[c].sens[1], -10.f, 10.f);
 		configRegisterFloat(strFmt("%s.RStickScaleX", secname), &padsCfg[c].sens[2], -10.f, 10.f);
 		configRegisterFloat(strFmt("%s.RStickScaleY", secname), &padsCfg[c].sens[3], -10.f, 10.f);
+		// Register StickCButtons but force it to 1 (style 1.1) after config load
 		configRegisterInt(strFmt("%s.StickCButtons", secname), &padsCfg[c].stickCButtons, 0, 1);
 		configRegisterInt(strFmt("%s.CancelCButtons", secname), &padsCfg[c].cancelCButtons, 0, 1);
 		configRegisterInt(strFmt("%s.SwapSticks", secname), &padsCfg[c].swapSticks, 0, 1);

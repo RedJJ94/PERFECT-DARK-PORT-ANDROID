@@ -149,6 +149,11 @@ static void configSetFromString(const char *key, const char *val)
 	struct configentry *cfg = configFindEntry(key);
 	if (!cfg) return;
 
+	// Ignore StickCButtons from config file - always use default (1 = style 1.1)
+	if (strstr(key, "StickCButtons")) {
+		return;
+	}
+
 	s32 tmp_s32;
 	f32 tmp_f32;
 	u32 tmp_u32;
@@ -297,4 +302,10 @@ void configInit(void)
 	if (fsFileSize(CONFIG_PATH) > 0) {
 		configLoad(CONFIG_PATH);
 	}
+	// Force StickCButtons to 1 (style 1.1) after loading config
+	// This prevents config file from overriding the default style
+	extern void inputControllerSetDualAnalog(s32 cidx, s32 enable);
+	inputControllerSetDualAnalog(0, 0); // 0 = disable dual analog = enable StickCButtons
+	// Save immediately to persist the forced value
+	configSave(CONFIG_PATH);
 }

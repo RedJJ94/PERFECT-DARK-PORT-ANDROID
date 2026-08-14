@@ -215,19 +215,53 @@ Java_com_perfectdark_port_GameView_nativeTouchEvent(JNIEnv* env, jobject thiz, j
     // Touch event
 }
 
+// N64 button bitmask constants (from os_cont.h CONT_* defines)
+// A_BUTTON=0x8000, B_BUTTON=0x4000, Z_TRIG=0x2000, START=0x1000, R_TRIG=0x0010, L_TRIG=0x0020
+#define ANDROID_BTN_A     0x8000u
+#define ANDROID_BTN_B     0x4000u
+#define ANDROID_BTN_Z     0x2000u
+#define ANDROID_BTN_L     0x0020u
+#define ANDROID_BTN_R     0x0010u
+#define ANDROID_BTN_START 0x1000u
+
+static const u32 androidBtnMap[] = {
+    ANDROID_BTN_A,      // 0 = BTN_A
+    ANDROID_BTN_B,      // 1 = BTN_B
+    ANDROID_BTN_Z,      // 2 = BTN_Z (gatilho)
+    ANDROID_BTN_L,      // 3 = BTN_L (shoulder esquerdo)
+    ANDROID_BTN_R,      // 4 = BTN_R (shoulder direito)
+    ANDROID_BTN_START,  // 5 = BTN_START
+};
+#define ANDROID_BTN_COUNT (sizeof(androidBtnMap) / sizeof(androidBtnMap[0]))
+
 JNIEXPORT void JNICALL
 Java_com_perfectdark_port_TouchControls_nativeStickInput(JNIEnv* env, jobject thiz, jint stick, jfloat x, jfloat y) {
-    // Stick input - could be used for game input later
+    // Clamp float [-1..1] to s8 [-127..127]
+    s8 ix = (s8)(x * 127.0f);
+    s8 iy = (s8)(y * 127.0f);
+    if (stick == 0) {
+        // Left stick — movement
+        g_androidStickX = ix;
+        g_androidStickY = iy;
+    } else if (stick == 1) {
+        // Right stick — camera (swipe area)
+        g_androidCamX = ix;
+        g_androidCamY = iy;
+    }
 }
 
 JNIEXPORT void JNICALL
 Java_com_perfectdark_port_TouchControls_nativeButtonDown(JNIEnv* env, jobject thiz, jint button) {
-    // Button down - could be used for game input later
+    if (button >= 0 && (u32)button < ANDROID_BTN_COUNT) {
+        g_androidButtons |= androidBtnMap[button];
+    }
 }
 
 JNIEXPORT void JNICALL
 Java_com_perfectdark_port_TouchControls_nativeButtonUp(JNIEnv* env, jobject thiz, jint button) {
-    // Button up - could be used for game input later
+    if (button >= 0 && (u32)button < ANDROID_BTN_COUNT) {
+        g_androidButtons &= ~androidBtnMap[button];
+    }
 }
 
 JNIEXPORT void JNICALL
@@ -261,7 +295,8 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     g_HudCenter = hudCenter;
     
     // Apply controls settings
-    g_PlayerExtCfg[0].extcontrols = showControls ? 1 : 0;
+    // NOTE: extcontrols is NOT set here to preserve user's control style choice
+    // showControls only affects Android virtual controls visibility
     inputControllerSetAxisScale(0, 0, 0, leftStickSensitivity); // Left stick X
     inputControllerSetAxisScale(0, 0, 1, leftStickSensitivity); // Left stick Y
     inputControllerSetAxisScale(0, 1, 0, rightStickSensitivity); // Right stick X
