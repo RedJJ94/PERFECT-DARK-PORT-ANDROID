@@ -90,3 +90,5 @@ jobs:
           files: ${{ steps.rename_apk.outputs.apk_path }}
           prerelease: true
           make_latest: true
+          replace_latest: true
+          draft: false
