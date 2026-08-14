@@ -3,18 +3,23 @@ package com.perfectdark.port;
 import org.libsdl.app.SDLActivity;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
+import android.widget.ImageButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import com.perfectdark.port.R;
 import java.io.File;
 
 public class MainActivity extends SDLActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int SETTINGS_REQUEST_CODE = 100;
+    private ImageButton backButton;
     
     static {
         System.loadLibrary("SDL2");
@@ -39,9 +44,39 @@ public class MainActivity extends SDLActivity {
         
         hideSystemUI();
         
+        // Setup touch controls with back button listener
+        setupTouchControls();
+        
         // No external storage permissions needed with SAF + app-scoped storage
         initializeGame();
         android.util.Log.i("PerfectDark", "MainActivity onCreate complete");
+    }
+    
+    private void setupTouchControls() {
+        // Add overlay with back button
+        addGameOverlay();
+    }
+    
+    private void addGameOverlay() {
+        // Inflate the overlay layout
+        View overlay = LayoutInflater.from(this).inflate(R.layout.game_overlay, mLayout, false);
+        
+        // Get the back button and set click listener
+        backButton = overlay.findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSettings();
+            }
+        });
+        
+        // Add overlay to the layout on top of the SDL surface
+        mLayout.addView(overlay);
+    }
+    
+    private void openSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivityForResult(intent, SETTINGS_REQUEST_CODE);
     }
     
     private void hideSystemUI() {
@@ -97,6 +132,15 @@ public class MainActivity extends SDLActivity {
     protected void onDestroy() {
         super.onDestroy();
         nativeDestroy();
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SETTINGS_REQUEST_CODE) {
+            // Settings were potentially changed, you could reload game settings here if needed
+            hideSystemUI();
+        }
     }
 
     // Native methods

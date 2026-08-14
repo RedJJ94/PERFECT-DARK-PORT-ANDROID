@@ -21,4 +21,11 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+    
+    <style name="Theme.PerfectDark.Settings" parent="Theme.AppCompat">
+        <item name="android:windowBackground">#1a1a2e</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="colorPrimary">#4a9eff</item>
+        <item name="colorAccent">#4a9eff</item>
+    </style>
 </resources>

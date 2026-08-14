@@ -25,6 +25,7 @@
 #include <SDL.h>
 #include <SDL_main.h>
 #include <unistd.h>
+#include "android_system.h"
 #endif
 
 u32 g_OsMemSize = 0;
@@ -227,6 +228,54 @@ Java_com_perfectdark_port_TouchControls_nativeButtonDown(JNIEnv* env, jobject th
 JNIEXPORT void JNICALL
 Java_com_perfectdark_port_TouchControls_nativeButtonUp(JNIEnv* env, jobject thiz, jint button) {
     // Button up - could be used for game input later
+}
+
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
+    JNIEnv* env, jobject thiz,
+    jboolean fullscreen, jboolean vsync, jboolean displayFPS, jboolean detailTextures, jboolean texFilter2D,
+    jint framerateLimit, jfloat screenShake,
+    jboolean disableMpDeathMusic,
+    jboolean uncapTickrate, jboolean geMuzzleFlashes, jint fieldOfView, jint hudCenter,
+    jboolean showControls, jfloat leftStickSensitivity, jfloat rightStickSensitivity,
+    jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength
+) {
+    __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Applying settings from Android");
+    
+    // Apply video settings
+    videoSetFullscreen(fullscreen ? 1 : 0);
+    videoSetVsync(vsync ? 1 : 0); // Convert boolean to int for vsync
+    videoSetDisplayFPS(displayFPS ? 1 : 0);
+    videoSetDetailTextures(detailTextures ? 1 : 0);
+    videoSetTextureFilter2D(texFilter2D ? 1 : 0);
+    videoSetFramerateLimit(framerateLimit);
+    g_ViShakeIntensityMult = screenShake;
+    
+    // Apply audio settings
+    g_MusicDisableMpDeath = disableMpDeathMusic ? 1 : 0;
+    
+    // Apply game settings
+    g_TickRateDiv = uncapTickrate ? 0 : 1;
+    g_BgunGeMuzzleFlashes = geMuzzleFlashes ? 1 : 0;
+    g_PlayerExtCfg[0].fovy = (f32)fieldOfView;
+    g_HudCenter = hudCenter;
+    
+    // Apply controls settings
+    g_PlayerExtCfg[0].extcontrols = showControls ? 1 : 0;
+    inputControllerSetAxisScale(0, 0, 0, leftStickSensitivity); // Left stick X
+    inputControllerSetAxisScale(0, 0, 1, leftStickSensitivity); // Left stick Y
+    inputControllerSetAxisScale(0, 1, 0, rightStickSensitivity); // Right stick X
+    inputControllerSetAxisScale(0, 1, 1, rightStickSensitivity); // Right stick Y
+    inputControllerSetAxisDeadzone(0, 0, 0, leftStickDeadzone); // Left stick X deadzone
+    inputControllerSetAxisDeadzone(0, 0, 1, leftStickDeadzone); // Left stick Y deadzone
+    inputControllerSetAxisDeadzone(0, 1, 0, rightStickDeadzone); // Right stick X deadzone
+    inputControllerSetAxisDeadzone(0, 1, 1, rightStickDeadzone); // Right stick Y deadzone
+    inputRumbleSetStrength(0, vibrationStrength);
+    
+    // Save configuration to file
+    configSave(CONFIG_PATH);
+    
+    __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Settings applied successfully");
 }
 
 int pd_main(int argc, const char **argv)

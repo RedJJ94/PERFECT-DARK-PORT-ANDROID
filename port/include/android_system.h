@@ -26,6 +26,17 @@ JNIEXPORT void JNICALL Java_com_perfectdark_port_TouchControls_nativeStickInput(
 JNIEXPORT void JNICALL Java_com_perfectdark_port_TouchControls_nativeButtonDown(JNIEnv* env, jobject thiz, jint button);
 JNIEXPORT void JNICALL Java_com_perfectdark_port_TouchControls_nativeButtonUp(JNIEnv* env, jobject thiz, jint button);
 
+// Settings application function
+JNIEXPORT void JNICALL Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
+    JNIEnv* env, jobject thiz,
+    jboolean fullscreen, jboolean vsync, jboolean displayFPS, jboolean detailTextures, jboolean texFilter2D,
+    jint framerateLimit, jfloat screenShake,
+    jboolean disableMpDeathMusic,
+    jboolean uncapTickrate, jboolean geMuzzleFlashes, jint fieldOfView, jint hudCenter,
+    jboolean showControls, jfloat leftStickSensitivity, jfloat rightStickSensitivity,
+    jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength
+);
+
 #endif // ANDROID
 
 #endif // ANDROID_SYSTEM_H
