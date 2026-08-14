@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fundo base escuro azulado (cor sólida como fallback) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#0A0A1A" />
+        </shape>
+    </item>
+    <!-- Grade estilo holo/retro cyberpunk -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="600dp"
+                android:startColor="#1A004466"
+                android:endColor="#00000000"
+                android:centerX="0.5"
+                android:centerY="0.4" />
+        </shape>
+    </item>
+</layer-list>

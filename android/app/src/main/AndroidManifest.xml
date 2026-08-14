@@ -22,18 +22,26 @@
         <!-- SDL orientation hint like Starship uses -->
         <meta-data android:name="SDL_ENV.SDL_IOS_ORIENTATIONS" android:value="LandscapeLeft LandscapeRight"/>
         
-        <!-- LauncherActivity handles ROM selection/copy before starting SDL -->
+        <!-- MainMenuActivity: Tela inicial com botões Iniciar / Configurações / Sair -->
         <activity
-            android:name=".LauncherActivity"
+            android:name=".MainMenuActivity"
             android:exported="true"
             android:screenOrientation="landscape"
             android:configChanges="layoutDirection|locale|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
-            android:theme="@style/Theme.PerfectDark.Fullscreen">
+            android:theme="@style/Theme.PerfectDark.MainMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- LauncherActivity handles ROM selection/copy before starting SDL -->
+        <activity
+            android:name=".LauncherActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="layoutDirection|locale|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:theme="@style/Theme.PerfectDark.Fullscreen" />
 
         <!-- MainActivity (SDLActivity) runs the game after ROM is present -->
         <activity
@@ -50,6 +58,12 @@
             android:screenOrientation="landscape"
             android:configChanges="layoutDirection|locale|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:theme="@style/Theme.PerfectDark.Settings"/>
+
+        <!-- MusicService: toca menu.mp3 em loop nas telas de menu/configurações -->
+        <service
+            android:name=".MusicService"
+            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -28,4 +28,18 @@
         <item name="colorPrimary">#4a9eff</item>
         <item name="colorAccent">#4a9eff</item>
     </style>
+
+    <!-- Tema da tela inicial (MainMenuActivity) -->
+    <style name="Theme.PerfectDark.MainMenu" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">#0A0A1A</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="colorPrimary">#00E5FF</item>
+        <item name="colorAccent">#00E5FF</item>
+        <item name="android:statusBarColor">#0A0A1A</item>
+        <item name="android:navigationBarColor">#0A0A1A</item>
+    </style>
 </resources>
