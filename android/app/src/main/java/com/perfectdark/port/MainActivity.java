@@ -8,18 +8,21 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.perfectdark.port.R;
+import com.perfectdark.port.VirtualControlsView;
 import java.io.File;
 
 public class MainActivity extends SDLActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
     private static final int SETTINGS_REQUEST_CODE = 100;
     private ImageButton backButton;
+    private VirtualControlsView virtualControls;
     
     static {
         System.loadLibrary("SDL2");
@@ -61,6 +64,16 @@ public class MainActivity extends SDLActivity {
         // Inflate the overlay layout
         View overlay = LayoutInflater.from(this).inflate(R.layout.game_overlay, mLayout, false);
         
+        // Conecta o VirtualControlsView (já declarado no XML)
+        // A View usa JNI nativamente através da biblioteca "pd" já carregada.
+        virtualControls = overlay.findViewById(R.id.virtualControls);
+        if (virtualControls != null) {
+            android.util.Log.i("PerfectDark", "VirtualControlsView conectado com sucesso");
+            // Aplica configuração de visibilidade dos controles virtuais
+            boolean showControls = SettingsActivity.getShowControls(this);
+            virtualControls.setVisibility(showControls ? View.VISIBLE : View.GONE);
+        }
+
         // Get the back button and set click listener
         backButton = overlay.findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +134,25 @@ public class MainActivity extends SDLActivity {
     protected void onResume() {
         super.onResume();
         hideSystemUI();
+        // Request focus for virtual controls and apply visibility setting
+        if (virtualControls != null) {
+            boolean showControls = SettingsActivity.getShowControls(this);
+            virtualControls.setVisibility(showControls ? View.VISIBLE : View.GONE);
+            virtualControls.reloadSensitivitySettings();
+            if (showControls) {
+                virtualControls.requestFocus();
+            }
+        }
+    }
+    
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        // Passa o evento para o VirtualControlsView primeiro
+        if (virtualControls != null) {
+            virtualControls.onTouchEvent(ev);
+        }
+        // Deixa o SDL processar também
+        return super.dispatchTouchEvent(ev);
     }
     
     @Override
@@ -138,8 +170,16 @@ public class MainActivity extends SDLActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SETTINGS_REQUEST_CODE) {
-            // Settings were potentially changed, you could reload game settings here if needed
+            // Settings were potentially changed, reload virtual controls visibility and sensitivity
             hideSystemUI();
+            if (virtualControls != null) {
+                boolean showControls = SettingsActivity.getShowControls(this);
+                virtualControls.setVisibility(showControls ? View.VISIBLE : View.GONE);
+                virtualControls.reloadSensitivitySettings();
+                if (showControls) {
+                    virtualControls.requestFocus();
+                }
+            }
         }
     }
 

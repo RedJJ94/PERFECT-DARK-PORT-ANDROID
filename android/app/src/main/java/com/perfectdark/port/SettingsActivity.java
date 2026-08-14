@@ -216,11 +216,8 @@ public class SettingsActivity extends Activity {
     private void applySettingsToNative() {
         // Convert SeekBar values to appropriate float/int values for native code
         float screenShakeValue = seekScreenShake.getProgress() / 10.0f;
-        float leftStickSensValue = seekLeftStickSensitivity.getProgress() / 50.0f;
-        float rightStickSensValue = seekRightStickSensitivity.getProgress() / 50.0f;
-        float leftStickDeadzoneValue = seekLeftStickDeadzone.getProgress() / 32.0f;
-        float rightStickDeadzoneValue = seekRightStickDeadzone.getProgress() / 32.0f;
-        float vibrationStrengthValue = seekVibrationStrength.getProgress() / 10.0f;
+        // Control settings are now applied directly in VirtualControlsView, not passed to native
+        // to avoid conflicts with native "port mode" defaults
         
         nativeApplySettings(
             checkFullscreen.isChecked(),
@@ -235,13 +232,13 @@ public class SettingsActivity extends Activity {
             checkGeMuzzleFlashes.isChecked(),
             seekFieldOfView.getProgress(),
             seekHudCenter.getProgress(),
-            checkShowControls.isChecked(),
-            leftStickSensValue,
-            rightStickSensValue,
-            leftStickDeadzoneValue,
-            rightStickDeadzoneValue,
-            checkVibration.isChecked(),
-            vibrationStrengthValue
+            true,  // showControls - placeholder, not used by native
+            1.0f,  // leftStickSensitivity - placeholder, not used by native
+            1.0f,  // rightStickSensitivity - placeholder, not used by native
+            0.0f,  // leftStickDeadzone - placeholder, not used by native
+            0.0f,  // rightStickDeadzone - placeholder, not used by native
+            true,  // vibration - placeholder, not used by native
+            0.5f   // vibrationStrength - placeholder, not used by native
         );
     }
 

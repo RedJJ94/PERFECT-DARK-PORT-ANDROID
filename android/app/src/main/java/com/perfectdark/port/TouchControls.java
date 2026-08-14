@@ -107,7 +107,7 @@ public class TouchControls {
                 
                 // Normalize to -1 to 1 range
                 float normalizedX = deltaX / STICK_RADIUS;
-                float normalizedY = deltaY / STICK_RADIUS;
+                float normalizedY = -deltaY / STICK_RADIUS;  // Inverte Y (Android Y+ é para baixo)
                 
                 nativeStickInput(0, normalizedX, normalizedY); // Left stick
             }
@@ -123,7 +123,7 @@ public class TouchControls {
                 }
                 
                 float normalizedX = deltaX / STICK_RADIUS;
-                float normalizedY = deltaY / STICK_RADIUS;
+                float normalizedY = -deltaY / STICK_RADIUS;  // Inverte Y
                 
                 nativeStickInput(1, normalizedX, normalizedY); // Right stick
             }

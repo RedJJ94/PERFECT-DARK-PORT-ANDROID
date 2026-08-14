@@ -10,6 +10,14 @@
 const char* sysGetDataPath(void);
 bool sysIsAndroid(void);
 
+// Virtual touch-controller state (defined in input.c, written by JNI in main.c)
+#include <PR/ultratypes.h>
+extern volatile u32 g_androidButtons;
+extern volatile s8  g_androidStickX;
+extern volatile s8  g_androidStickY;
+extern volatile s8  g_androidCamX;
+extern volatile s8  g_androidCamY;
+
 // Input functions for Android
 void inputGetStickInput(int stick, float* x, float* y);
 bool inputGetButtonState(int button);

@@ -546,19 +546,6 @@ static MenuItemHandlerResult menuhandlerVibration(s32 operation, struct menuitem
 	return 0;
 }
 
-static MenuItemHandlerResult menuhandlerAnalogMovement(s32 operation, struct menuitem *item, union handlerdata *data)
-{
-	switch (operation) {
-	case MENUOP_GET:
-		return inputControllerGetDualAnalog(g_ExtMenuPlayer);
-	case MENUOP_SET:
-		inputControllerSetDualAnalog(g_ExtMenuPlayer, data->checkbox.value);
-		break;
-	}
-
-	return 0;
-}
-
 static MenuItemHandlerResult menuhandlerSwapSticks(s32 operation, struct menuitem *item, union handlerdata *data)
 {
 	switch (operation) {
@@ -624,14 +611,6 @@ struct menuitem g_ExtendedControllerMenuItems[] = {
 		(uintptr_t)"Controller",
 		0,
 		menuhandlerController,
-	},
-	{
-		MENUITEMTYPE_CHECKBOX,
-		0,
-		MENUITEMFLAG_LITERAL_TEXT,
-		(uintptr_t)"Analog Movement",
-		0,
-		menuhandlerAnalogMovement,
 	},
 	{
 		MENUITEMTYPE_CHECKBOX,

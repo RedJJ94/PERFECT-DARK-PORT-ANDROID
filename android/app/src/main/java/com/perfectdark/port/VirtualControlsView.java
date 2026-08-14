@@ -14,7 +14,6 @@ import android.view.View;
  *
  * Layout:
  *  - Analógico esquerdo dinâmico (floating): movimentação do personagem
- *  - Área de swipe (toda tela exceto analógico e botões): câmera livre
  *  - Botão A, B: ações
  *  - Botão L, R: shoulder buttons (topo)
  *  - Botão Z: gatilho / mira (meio direita)
@@ -22,7 +21,6 @@ import android.view.View;
  *
  * Mapeamento JNI:
  *   nativeStickInput(0, x, y) → analógico esquerdo (movimento)
- *   nativeStickInput(1, x, y) → câmera (swipe)
  *   nativeButtonDown/Up(0) → A
  *   nativeButtonDown/Up(1) → B
  *   nativeButtonDown/Up(2) → Z
@@ -46,7 +44,6 @@ public class VirtualControlsView extends View {
 
     // Stick IDs
     private static final int STICK_LEFT  = 0;
-    private static final int STICK_RIGHT = 1;  // câmera
 
     // Visual alpha dos controles (0-255)
     private static final int CONTROLS_ALPHA = 160;
@@ -60,7 +57,6 @@ public class VirtualControlsView extends View {
     private static final int COLOR_BTN_BORDER = 0xA0FFFFFF;  // borda botão
     private static final int COLOR_TEXT       = 0xFFFFFFFF;  // texto botão
     private static final int COLOR_SHOULDER   = 0x70333333;  // fundo L/R
-    private static final int COLOR_CAMERA     = 0x10FFFFFF;  // zona câmera
 
     // ────────────────────────────────────────────────────────────────────────
     //  Paint objects
@@ -70,7 +66,6 @@ public class VirtualControlsView extends View {
     private final Paint paintBtn    = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintBorder = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintText   = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint paintCamera = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     // ────────────────────────────────────────────────────────────────────────
     //  Analógico esquerdo (floating)
@@ -87,16 +82,9 @@ public class VirtualControlsView extends View {
     private static final float STICK_ZONE_WIDTH_RATIO = 0.40f;
 
     // ────────────────────────────────────────────────────────────────────────
-    //  Câmera (swipe livre - lado direito)
+    //  Sensibilidade
     // ────────────────────────────────────────────────────────────────────────
-    private boolean camActive       = false;
-    private int     camPointerId    = -1;
-    private float   camCenterX, camCenterY;  // centro do controle de câmera
-    private float   camSensitivity  = 5.0f;  // multiplicador de câmera (lido das configurações)
     private float   leftStickSensitivity = 1.0f;  // multiplicador do analógico esquerdo (lido das configurações)
-    private static final float CAM_DEADZONE = 0.05f;  // deadzone para câmera (evita ruído de touch)
-
-    // Zona de câmera: toda a tela exceto analógico e botões
 
     // ────────────────────────────────────────────────────────────────────────
     //  Botões — definidos em onSizeChanged
@@ -174,10 +162,6 @@ public class VirtualControlsView extends View {
         paintText.setColor(COLOR_TEXT);
         paintText.setTextAlign(Paint.Align.CENTER);
         paintText.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-
-        // Zona câmera
-        paintCamera.setColor(COLOR_CAMERA);
-        paintCamera.setStyle(Paint.Style.FILL);
 
         // Inicializa pointer IDs dos botões
         for (int i = 0; i < NUM_BUTTONS; i++) {
@@ -412,14 +396,6 @@ public class VirtualControlsView extends View {
             nativeStickInput(STICK_LEFT, 0, 0);
             return;
         }
-        // 5) Câmera — qualquer área não capturada por botões ou analógico
-        if (!camActive) {
-            camActive    = true;
-            camPointerId = pId;
-            camCenterX   = x;
-            camCenterY   = y;
-            nativeStickInput(STICK_RIGHT, 0, 0);
-        }
     }
 
     private void handleMove(MotionEvent event) {
@@ -458,31 +434,6 @@ public class VirtualControlsView extends View {
                 nativeStickInput(STICK_LEFT, nx, ny);
             }
 
-            // Câmera (posição relativa ao centro → input câmera)
-            if (pId == camPointerId && camActive) {
-                float dx  = x - camCenterX;
-                float dy  = y - camCenterY;
-                float len = (float) Math.sqrt(dx * dx + dy * dy);
-                float maxDist = viewW * 0.15f;  // raio máximo do controle de câmera
-
-                if (len > maxDist) {
-                    dx = dx / len * maxDist;
-                    dy = dy / len * maxDist;
-                }
-
-                float nx = dx / maxDist * camSensitivity;
-                float ny = -dy / maxDist * camSensitivity;  // Inverte Y
-
-                // Aplica deadzone para evitar ruído de touch
-                if (Math.abs(nx) < CAM_DEADZONE && Math.abs(ny) < CAM_DEADZONE) {
-                    nx = 0;
-                    ny = 0;
-                }
-
-                android.util.Log.d("VirtualControls", "Camera move: nx=" + nx + " ny=" + ny);
-                nativeStickInput(STICK_RIGHT, nx, ny);
-            }
-
             // Botões pressionados: verificar se o dedo saiu da área (drag release)
             for (int id : new int[]{BTN_A, BTN_B, BTN_Z, BTN_START}) {
                 if (btnPointer[id] == pId) {
@@ -511,13 +462,6 @@ public class VirtualControlsView extends View {
             nativeStickInput(STICK_LEFT, 0, 0);
         }
 
-        // Câmera
-        if (pId == camPointerId) {
-            camActive    = false;
-            camPointerId = -1;
-            nativeStickInput(STICK_RIGHT, 0, 0);
-        }
-
         // Botões
         for (int id = 0; id < NUM_BUTTONS; id++) {
             if (btnPointer[id] == pId) {
@@ -544,10 +488,6 @@ public class VirtualControlsView extends View {
         stickActive    = false;
         stickPointerId = -1;
         nativeStickInput(STICK_LEFT, 0, 0);
-
-        camActive    = false;
-        camPointerId = -1;
-        nativeStickInput(STICK_RIGHT, 0, 0);
 
         for (int id = 0; id < NUM_BUTTONS; id++) {
             releaseButton(id);
@@ -583,13 +523,11 @@ public class VirtualControlsView extends View {
     // ────────────────────────────────────────────────────────────────────────
     private void loadSensitivitySettings() {
         int leftSens = SettingsActivity.getLeftStickSensitivity(getContext());
-        int rightSens = SettingsActivity.getRightStickSensitivity(getContext());
         
         // Converte valores (0-100) para multiplicadores (0.0-2.0)
         leftStickSensitivity = leftSens / 50.0f;
-        camSensitivity = rightSens / 50.0f * 5.0f;  // base 5.0f como antes
         
-        android.util.Log.d("VirtualControls", "Sensibilidade carregada: left=" + leftStickSensitivity + " right=" + camSensitivity);
+        android.util.Log.d("VirtualControls", "Sensibilidade carregada: left=" + leftStickSensitivity);
     }
 
     public void reloadSensitivitySettings() {

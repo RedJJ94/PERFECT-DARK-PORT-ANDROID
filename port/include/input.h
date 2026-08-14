@@ -141,10 +141,6 @@ s32 inputControllerMask(void);
 s32 inputControllerGetSticksSwapped(s32 cidx);
 void inputControllerSetSticksSwapped(s32 cidx, s32 swapped);
 
-// get/set Input.Player%d.StickCButtons (DualAnalog is 1 if StickCButtons is 0)
-s32 inputControllerGetDualAnalog(s32 cidx);
-void inputControllerSetDualAnalog(s32 cidx, s32 enable);
-
 // get/set Input.Player%d.CancelCButtons
 s32 inputControllerGetCancelCButtons(s32 cidx);
 void inputControllerSetCancelCButtons(s32 cidx, s32 cancel);

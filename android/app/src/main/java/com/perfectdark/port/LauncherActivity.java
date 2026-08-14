@@ -2,6 +2,7 @@ package com.perfectdark.port;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +34,10 @@ public class LauncherActivity extends AppCompatActivity {
     private static final String MD5_NTSC_V11 = "e03b088b6ac9e0080440efed07c1e40f";
     // Secondary: NTSC-U v1.0 .z64 (not recommended, but optionally allowed)
     private static final String MD5_NTSC_V10 = "7f4171b0c8d17815be37913f535e4e93";
+    
+    private static final String PREFS_NAME = "RomValidationPrefs";
+    private static final String KEY_ROM_VALIDATED = "rom_validated";
+    private static final String KEY_ROM_MD5 = "rom_md5";
 
     private View missingRomView;
     private TextView infoText;
@@ -56,10 +61,35 @@ public class LauncherActivity extends AppCompatActivity {
 
         if (romExists()) {
             File target = new File(new File(getExternalFilesDir(null), "data"), ROM_FILE_NAME);
+            
+            // Check if ROM was already validated
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            boolean wasValidated = prefs.getBoolean(KEY_ROM_VALIDATED, false);
+            String savedMd5 = prefs.getString(KEY_ROM_MD5, null);
+            
+            if (wasValidated && savedMd5 != null) {
+                // Verify the saved MD5 still matches the current file
+                try {
+                    String currentMd5 = computeMd5(target);
+                    if (savedMd5.equalsIgnoreCase(currentMd5)) {
+                        // ROM unchanged, skip verification
+                        startGame();
+                        return;
+                    }
+                } catch (Exception e) {
+                    // If hash check fails, fall through to full verification
+                }
+            }
+            
+            // Full verification needed
             int hashStatus = checkRomHash(target);
             if (hashStatus == 0) {
+                // Save validation state for v1.1
+                saveRomValidation(target, MD5_NTSC_V11);
                 startGame();
             } else if (hashStatus == 1) {
+                // Save validation state for v1.0
+                saveRomValidation(target, MD5_NTSC_V10);
                 showV10WarningDialog(target);
             } else {
                 showHashMismatchDialog(target);
@@ -117,9 +147,13 @@ public class LauncherActivity extends AppCompatActivity {
             File target = new File(new File(getExternalFilesDir(null), "data"), ROM_FILE_NAME);
             int hashStatus = checkRomHash(target);
             if (hashStatus == 0) {
+                // Save validation state for v1.1
+                saveRomValidation(target, MD5_NTSC_V11);
                 Toast.makeText(this, "ROM verified — starting game", Toast.LENGTH_SHORT).show();
                 startGame();
             } else if (hashStatus == 1) {
+                // Save validation state for v1.0
+                saveRomValidation(target, MD5_NTSC_V10);
                 showV10WarningDialog(target);
             } else {
                 showHashMismatchDialog(target);
@@ -170,6 +204,14 @@ public class LauncherActivity extends AppCompatActivity {
             Toast.makeText(this, "Hash check failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             return -1;
         }
+    }
+
+    private void saveRomValidation(File file, String md5) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(KEY_ROM_VALIDATED, true);
+        editor.putString(KEY_ROM_MD5, md5);
+        editor.apply();
     }
 
     private void showHashMismatchDialog(File target) {
