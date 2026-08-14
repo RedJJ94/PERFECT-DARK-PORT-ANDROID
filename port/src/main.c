@@ -134,6 +134,13 @@ int pd_main(int argc, const char **argv);
 static char g_data_path[512] = {0};
 static int g_initialized = 0;
 
+// Android input state
+s8 g_androidStickX = 0;
+s8 g_androidStickY = 0;
+s8 g_androidCamX = 0;
+s8 g_androidCamY = 0;
+u32 g_androidButtons = 0;
+
 // JNI functions for Android
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     return JNI_VERSION_1_6;
