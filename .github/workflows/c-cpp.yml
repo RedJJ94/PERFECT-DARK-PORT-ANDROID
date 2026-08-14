@@ -39,7 +39,7 @@ jobs:
             -storepass perfectdark123 \
             -keypass perfectdark123 \
             -dname "CN=Perfect Dark Port, OU=Game, O=Port, L=Unknown, S=Unknown, C=BR" \
-            -noprompt
+            -noprompt || true
 
       - name: Write keystore.properties
         run: |
