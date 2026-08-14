@@ -864,10 +864,22 @@ s32 inputReadController(s32 idx, OSContPad *npad)
 	if (!pads[idx]) {
 #ifdef ANDROID
 		// No physical controller — use virtual touch inputs
+		// Hybrid mode: Y axis = movement, X axis = camera
 		if (idx == 0) {
-			if (!npad->stick_x && g_androidStickX) npad->stick_x = g_androidStickX;
+			// Y axis controls movement (frente/trás)
 			if (!npad->stick_y && g_androidStickY) npad->stick_y = g_androidStickY;
-			if (g_androidCamX) npad->rstick_x = g_androidCamX;
+			// X axis controls camera (esquerda/direita)
+			if (g_androidStickX) {
+				if (cfg->stickCButtons) {
+					// Style 1.1: X axis emulates C buttons
+					if (g_androidStickX < -0x4000) npad->button |= L_CBUTTONS;
+					if (g_androidStickX > +0x4000) npad->button |= R_CBUTTONS;
+				} else {
+					// Style ext: X axis as analog camera
+					npad->rstick_x = g_androidStickX;
+				}
+			}
+			// Virtual camera area still works for Y axis camera
 			if (g_androidCamY) npad->rstick_y = g_androidCamY;
 		}
 #endif
@@ -884,19 +896,29 @@ s32 inputReadController(s32 idx, OSContPad *npad)
 	rightX = inputAxisScale(rightX, cfg->deadzone[cfg->axisMap[1][0]], cfg->sens[cfg->axisMap[1][0]]);
 	rightY = inputAxisScale(rightY, cfg->deadzone[cfg->axisMap[1][1]], cfg->sens[cfg->axisMap[1][1]]);
 
-	if (!npad->stick_x && leftX) {
-		npad->stick_x = leftX / 0x100;
-	}
-
+	// Hybrid mode: Left stick Y = movement, Left stick X = camera
+	// Y axis controls movement (frente/trás)
 	s32 stickY = -leftY / 0x100;
 	if (!npad->stick_y && stickY) {
 		npad->stick_y = (stickY == 128) ? 127 : stickY;
 	}
 
+	// X axis controls camera (esquerda/direita)
+	if (leftX) {
+		if (cfg->stickCButtons) {
+			// Style 1.1: X axis emulates C buttons
+			if (leftX < -0x4000) npad->button |= L_CBUTTONS;
+			if (leftX > +0x4000) npad->button |= R_CBUTTONS;
+		} else {
+			// Style ext: X axis as analog camera
+			npad->rstick_x = leftX / 0x100;
+		}
+	}
+
 #ifdef ANDROID
 	// Overlay virtual stick on top of physical if physical is idle
+	// Hybrid mode: Only overlay Y axis for movement, X axis already handled above
 	if (idx == 0) {
-		if (!npad->stick_x && g_androidStickX) npad->stick_x = g_androidStickX;
 		if (!npad->stick_y && g_androidStickY) npad->stick_y = g_androidStickY;
 	}
 #endif
