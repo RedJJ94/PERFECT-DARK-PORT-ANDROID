@@ -28,26 +28,26 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Decode keystore from secret
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      - name: Generate release keystore
         run: |
-          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/perfectdark-release.keystore
-
-      - name: Verify keystore is valid
-        run: |
-          keytool -list \
+          keytool -genkeypair \
             -keystore android/perfectdark-release.keystore \
-            -storepass "${{ secrets.KEY_STORE_PASSWORD }}" \
+            -alias perfectdark \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass perfectdark123 \
+            -keypass perfectdark123 \
+            -dname "CN=Perfect Dark Port, OU=Game, O=Port, L=Unknown, S=Unknown, C=BR" \
             -noprompt
 
       - name: Write keystore.properties
         run: |
           {
             echo "storeFile=perfectdark-release.keystore"
-            echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}"
-            echo "keyAlias=${{ secrets.KEY_ALIAS }}"
-            echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
+            echo "storePassword=perfectdark123"
+            echo "keyAlias=perfectdark"
+            echo "keyPassword=perfectdark123"
           } > android/keystore.properties
 
       - name: Grant execute permission for gradlew
