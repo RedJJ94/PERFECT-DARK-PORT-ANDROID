@@ -32,16 +32,23 @@ jobs:
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > android/perfectdark-release.keystore
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/perfectdark-release.keystore
+
+      - name: Verify keystore is valid
+        run: |
+          keytool -list \
+            -keystore android/perfectdark-release.keystore \
+            -storepass "${{ secrets.KEY_STORE_PASSWORD }}" \
+            -noprompt
 
       - name: Write keystore.properties
         run: |
-          cat > android/keystore.properties <<EOF
-          storeFile=perfectdark-release.keystore
-          storePassword=${{ secrets.KEY_STORE_PASSWORD }}
-          keyAlias=${{ secrets.KEY_ALIAS }}
-          keyPassword=${{ secrets.KEY_PASSWORD }}
-          EOF
+          {
+            echo "storeFile=perfectdark-release.keystore"
+            echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}"
+            echo "keyAlias=${{ secrets.KEY_ALIAS }}"
+            echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
+          } > android/keystore.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
