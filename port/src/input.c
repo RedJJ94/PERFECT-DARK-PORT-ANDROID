@@ -43,7 +43,7 @@ static SDL_GameController *pads[INPUT_MAX_CONTROLLERS];
 	.sens = { 1.f, 1.f, 1.f, 1.f }, \
 	.deadzone = { DEFAULT_DEADZONE, DEFAULT_DEADZONE, DEFAULT_DEADZONE, DEFAULT_DEADZONE_RY }, \
 	.stickCButtons = 1, \
-	.swapSticks = 1, \
+	.swapSticks = 0, \
 	.deviceIndex = -1, \
 	.cancelCButtons = 0, \
 }
