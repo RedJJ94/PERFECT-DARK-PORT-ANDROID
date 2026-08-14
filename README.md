@@ -1,6 +1,6 @@
-# Perfect Dark port
+# Perfect Dark Android Port
 
-This repository contains a work-in-progress port of the [Perfect Dark decompilation](https://github.com/n64decomp/perfect_dark) to modern platforms.
+This repository contains an Android port of the [Perfect Dark decompilation](https://github.com/n64decomp/perfect_dark).
 
 To run the port, you must already have a Perfect Dark ROM, specifically one of the following:
 * `ntsc-final`/`US V1.1`/`US Rev 1` (md5 `e03b088b6ac9e0080440efed07c1e40f`).  
@@ -35,170 +35,80 @@ There are minor graphics- and gameplay-related issues, and possibly occasional c
   * in practice the game will have issues running faster than ~165 FPS, so use VSync or `Video.FramerateLimit` to cap it.
 * emulate the Transfer Pak functionality the game has on the Nintendo 64 to unlock some cheats automatically.
 
-**The following platforms are officially supported and tested:**
-* Windows 7+: i686, x86_64
-* Linux: i686, x86_64
-* MacOS: x86_64 (OS 10.9+), arm64 (OS 11.0+)
-* Nintendo Switch: arm64
-* Android: arm64-v8a, armeabi-v7a, x86_64, x86
+**Supported Android architectures:**
+* arm64-v8a
+* armeabi-v7a
+* x86_64
+* x86
 
 ## Download
 
-Latest [automatic builds](https://github.com/fgsfdsfgs/perfect_dark/releases/tag/ci-dev-build) for supported platforms:
-* [x86_64-windows](https://github.com/fgsfdsfgs/perfect_dark/releases/download/ci-dev-build/pd-x86_64-windows.zip)
-* [i686-windows](https://github.com/fgsfdsfgs/perfect_dark/releases/download/ci-dev-build/pd-i686-windows.zip)
-* [x86_64-linux](https://github.com/fgsfdsfgs/perfect_dark/releases/download/ci-dev-build/pd-x86_64-linux.tar.gz)
-* [i686-linux](https://github.com/fgsfdsfgs/perfect_dark/releases/download/ci-dev-build/pd-i686-linux.tar.gz)
-* [arm64-nswitch](https://github.com/fgsfdsfgs/perfect_dark/releases/download/ci-dev-build/pd-arm64-nswitch.zip)
-
-If you are looking for netplay builds (the `port-net` branch), see [this link](https://github.com/fgsfdsfgs/perfect_dark/blob/port-net/README.md#download).
+Latest automatic builds are available via GitHub Actions. Check the Actions tab for the latest APK releases.
 
 ## Running
 
-You must already have a Perfect Dark ROM to run the game, as specified above.  
+You must already have a Perfect Dark ROM to run the game, as specified above.
 
-This assumes that you're using an x86_64 build. If you aren't, replace `x86_64` below with your arch (e.g. `i686`).
+1. Install the APK on your Android device
+2. Launch the app and grant storage permissions when prompted
+3. Select your Perfect Dark ROM file when asked
+4. The game will start automatically
 
-1. Create a directory named `data` next to `pd.x86_64` if it's not there.
-2. Put your Perfect Dark NTSC ROM named `pd.ntsc-final.z64` into it.
-3. Run the `pd.x86_64` executable.
+If you want to use a PAL or JPN ROM instead, select the appropriate ROM file when prompted.
 
-If you want to use a PAL or JPN ROM instead, put them into the `data` directory and run the appropriate executable:
-* PAL: ROM name `pd.pal-final.z64`, executable name `pd.pal.x86_64`.
-* JPN: ROM name `pd.jpn-final.z64`, executable name `pd.jpn.x86_64`.
+Optionally, you can also put your Perfect Dark for GameBoy Color ROM named `pd.gbc` in the app's data directory if you want to emulate having the Nintendo 64's Transfer Pak and unlock some cheats automatically.
 
-Optionally, you can also put your Perfect Dark for GameBoy Color ROM named `pd.gbc` in the `data` directory if you want to emulate having the Nintendo 64's Transfer Pak and unlock some cheats automatically.
-
-Optionally, you can move the data folder to `~/.local/share/perfectdark` on Linux or `~/Library/Application Support/perfectdark` on MacOS.
-
-Additional information can be found in the [wiki](https://github.com/fgsfdsfgs/perfect_dark/wiki).
-
-A GPU supporting OpenGL 3.0/ES3.0 or above is required to run the port.
-
-### Installing the Nintendo Switch version
-
-The Nintendo Switch build ZIP comes with all 3 regions in different folders: `perfectdark`, `perfectdark_pal` and `perfectdark_jpn`.
-
-Take the folder for the region you want and put it into the `/switch` folder on your SD card, then put your ROM into the `data` folder inside of the folder you extracted as described above.
+A GPU supporting OpenGL ES 3.0 or above is required to run the port.
 
 ## Controls
 
-1964GEPD-style and Xbox-style bindings are implemented.
+The Android port includes touch controls and supports external controllers.
+
+1964GEPD-style and Xbox-style bindings are implemented for external controllers.
 
 N64 pad buttons X and Y (or `X_BUTTON`, `Y_BUTTON` in the code) refer to the reserved buttons `0x40` and `0x80`, which are also leveraged by 1964GEPD.
 
 Support for one controller, two-stick configurations are enabled for 1.2.
 
-Note that the mouse only controls player 1.
+Default control scheme for external controllers is as follows:
 
-Controls can be rebound in `pd.ini`. Default control scheme is as follows:
-
-| Action           | Keyboard and mouse     | Xbox pad                 | N64 pad                   |
-| -                | -                      | -                        | -                         |
-| Fire / Accept    | LMB/Space              | RT                       | Z Trigger                 |
-| Aim mode         | RMB/Z                  | LT                       | R Trigger                 |
-| Use / Cancel     | E                      | N/A                      | B                         |
-| Use / Accept     | N/A                    | A                        | A                         |
-| Crouch cycle     | N/A                    | L3                       | `0x80000000` (Extra)      |
-| Half-Crouch      | Shift                  | N/A                      | `0x40000000` (Extra)      |
-| Full-Crouch      | Control                | N/A                      | `0x20000000` (Extra)      |
-| Reload           | R                      | X                        | X `(0x40)`                |
-| Previous weapon  | Mousewheel forward     | B                        | D-Left                    |
-| Next weapon      | Mousewheel back        | Y                        | Y `(0x80)`                |
-| Radial menu      | Q                      | LB                       | D-Down                    |
-| Alt fire mode    | F                      | RB                       | L Trigger                 |
-| Alt-fire oneshot | `F + LMB` or `E + LMB` | `A + RT` or  `RB + RT`   | `A + Z`     or `L + Z`    |
-| Quick-detonate   | `E + Q`   or `E + R`   | `A + B`  or  `A + X`     | `A + D-Left`or `A + X`    |
+|| Action           | Xbox pad                 | N64 pad                   |
+|| -                | -                        | -                         |
+|| Fire / Accept    | RT                       | Z Trigger                 |
+|| Aim mode         | LT                       | R Trigger                 |
+|| Use / Cancel     | N/A                      | B                         |
+|| Use / Accept     | A                        | A                         |
+|| Crouch cycle     | L3                       | `0x80000000` (Extra)      |
+|| Half-Crouch      | N/A                      | `0x40000000` (Extra)      |
+|| Full-Crouch      | N/A                      | `0x20000000` (Extra)      |
+|| Reload           | X                        | X `(0x40)`                |
+|| Previous weapon  | B                        | D-Left                    |
+|| Next weapon      | Y                        | Y `(0x80)`                |
+|| Radial menu      | LB                       | D-Down                    |
+|| Alt fire mode    | RB                       | L Trigger                 |
+|| Alt-fire oneshot | `A + RT` or  `RB + RT`   | `A + Z`     or `L + Z`    |
+|| Quick-detonate   | `A + B`  or  `A + X`     | `A + D-Left`or `A + X`    |
 
 ## Building
 
-### Windows
+### Android
 
-1. Install [MSYS2](https://www.msys2.org).
-2. Open the `MINGW64` prompt if building for x86_64, or the `MINGW32` prompt if building for i686. (**NOTE:** _do not_ use the `MSYS` prompt)
-3. Install dependencies:  
-   `pacman -S mingw-w64-x86_64-toolchain mingw-w64-x86_64-SDL2 mingw-w64-x86_64-zlib mingw-w64-x86_64-cmake mingw-w64-x86_64-python3 mingw-w64-i686-toolchain mingw-w64-i686-SDL2 mingw-w64-i686-zlib mingw-w64-i686-cmake mingw-w64-i686-python3 make git`
-4. Get the source code:  
-   `git clone --recursive https://github.com/fgsfdsfgs/perfect_dark.git && cd perfect_dark`
-5. Run `cmake -G"Unix Makefiles" -Bbuild .`.
-   * Add ` -DROMID=pal-final` or ` -DROMID=jpn-final` at the end of the command if you want to build a PAL or JPN executable respectively.\
-6. Run `cmake --build build -j4 -- -O`.
-7. The resulting executable will be at `build/pd.x86_64.exe` (or at `build/pd.i686.exe` if building for i686).
-8. If you don't know where you downloaded the source to, you can run `explorer .` to open the current directory.
-
-### Linux
-
-1. Ensure you have gcc, g++ (version 10.0+), make, cmake, git, python3 and SDL2 (version 2.0.12+), libGL and ZLib installed on your system.
-   * If you wish to crosscompile, you will also need to have libraries and compilers for the target platform installed, e.g. `gcc-multilib` and `g++-multilib` for x86_64 -> i686 crosscompilation.
+1. Install Android Studio and set up the Android SDK
 2. Get the source code:  
-   `git clone --recursive https://github.com/fgsfdsfgs/perfect_dark.git && cd perfect_dark`
-3. Run the following command:
-   * ```cmake -G"Unix Makefiles" -Bbuild .```
-   * Add ` -DROMID=pal-final` or ` -DROMID=jpn-final` at the end of the command if you want to build a PAL or JPN executable respectively.
-   * Add ` -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32` at the end of the command if you want to crosscompile from x86_64 to x86.
-4. Run `cmake --build build -j4`.
-5. The resulting executable will be at `build/pd.<arch>` (for example `build/pd.x86_64`).
-
-### MacOS
-
-1. Set up Homebrew.
-2. Install dependencies:
-   * Execute command: `brew install cmake gcc python3 zlib git`
-3. Install SDL2:
-   * Execute commands:
-     ```
-     wget http://libsdl.org/release/SDL2-2.30.9.dmg -O SDL2.dmg
-     hdiutil mount SDL2.dmg
-     sudo cp -vr /Volumes/SDL2/SDL2.framework /Library/Frameworks
-     hdiutil detach /Volumes/SDL2
-     ```
-   * This installs SDL2 system-wide and this is how the automatic builds are done. The game will also look for it in the executable path, so you could
-     download it locally instead.
-4. Get the source code:  
-   `git clone --recursive https://github.com/fgsfdsfgs/perfect_dark.git && cd perfect_dark`
-5. Configure:
-   * Execute command: `cmake -G"Unix Makefiles" -Bbuild -DCMAKE_OSX_ARCHITECTURES=x86_64 .`
-   * Replace `x86_64` with `arm64` if building for an ARM64 Mac.
-   * Add ` -DROMID=pal-final` or ` -DROMID=jpn-final` at the end of the command if you want to build a PAL or JPN executable respectively.
-6. Build:
-   * Execute command: `cmake --build build --target pd -j4 --clean-first`
-7. The resulting executable will be at `build/pd.<arch>` (for example `build/pd.x86_64`).
-   * You might need to execute `chmod +x build/pd.x86-64` before you can run it.
-
-### Nintendo Switch
-
-1. Set up the [devkitA64 environment](https://devkitpro.org/wiki/Getting_Started).
-   * On Windows you can do it under MSYS2 or WSL, usually MSYS2 is recommended.
-   * If using MSYS2, make sure to use the **MSYS2** shell, **not** MINGW32 or MINGW64.
-2. Install host dependencies:
-   * On MSYS2: execute command `pacman -Syuu && pacman -S git make cmake python3`
-   * On Linux: use your package manager as normal to install the above dependencies.
-3. Install Switch toolchain and dependencies:
-   * Execute commands:
-     ```
-     dkp-pacman -Syuu
-     dkp-pacman -S devkitA64 libnx switch-zlib switch-sdl2 switch-cmake dkp-toolchain-vars
-     ```
-   * If in MSYS2 or `dkp-pacman` doesn't work, replace it with just `pacman`.
-4. Get the source code:  
-   `git clone --recursive https://github.com/fgsfdsfgs/perfect_dark.git && cd perfect_dark`
-5. Ensure devkitA64 environment variables are set:
-   * Execute command: `source /opt/devkitpro/switchvars.sh`
-   * If your `$DEVKITPRO` path is different, substitute that instead or set the variables manually.
-6. Configure:
-   * Execute command: `aarch64-none-elf-cmake -G"Unix Makefiles" -Bbuild .`
-   * Add ` -DROMID=pal-final` or ` -DROMID=jpn-final` at the end of the command if you want to build a PAL or JPN executable respectively.
-7. Build:
-   * Execute command: `make -C build -j4`
-8. The resulting executable will be at `build/pd.arm64.nro`.
+   `git clone --recursive https://github.com/WINDROID-EMU/PERFECT-DARK-PORT-ANDROID.git && cd perfect_dark`
+3. Open the `android` directory in Android Studio
+4. Build the APK using Android Studio's build system or Gradle:
+   ```bash
+   cd android
+   ./gradlew assembleRelease
+   ```
+5. The resulting APK will be at `android/app/build/outputs/apk/release/app-release.apk`
 
 ### Notes
 
-Alternate compilers or toolchains can be specified by passing `-DCMAKE_TOOLCHAIN_FILE=whatever` as normal. The port does not build with Visual Studio.
+The Android port uses the native CMake build system integrated with Gradle. The CMakeLists.txt in the root directory is used by the Android build system.
 
-You will need to provide a `jpn-final` or `pal-final` ROM to run executables built for those regions, named `pd.jpn-final.z64` or `pd.pal-final.z64`.
-
-It might be possible to build and run the game on platforms that are not specified in the supported platforms list (e.g. Linux on armv7), but this has not been tested.
+You will need to provide a `jpn-final` or `pal-final` ROM to run builds for those regions.
 
 ## Credits
 
