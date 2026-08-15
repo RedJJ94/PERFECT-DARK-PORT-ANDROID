@@ -5,6 +5,7 @@
 
 #include "mixer.h"
 #include "platform.h"
+#include "system.h"
 
 #define MINIMP3_IMPLEMENTATION
 #include "external/minimp3.h"
@@ -681,35 +682,126 @@ void aSetVolumeImpl(uint8_t flags, int16_t v, int16_t t, int16_t r) {
     }
 }
 
-void aPlayMP3Impl(const void *mp3file, u32 mp3size, void *out, int reset) {
-    static mp3dec_t mp3d;
-    static const u8 *curdata = NULL; // pointer to the mp3 we're currently processing
-    static s32 dataptr = 0; // byte index into curdata
+#define MP3_OUT_SAMPLES 580
+#define MP3_TARGET_HZ   22050
+#define MP3_RING_SIZE   16384
 
-    if (mp3file != curdata || reset) {
-        // new mp3, reinit decoder
-        mp3dec_init(&mp3d);
-        curdata = mp3file;
-        dataptr = 0;
+static struct {
+    mp3dec_t mp3d;
+    const u8 *curdata;
+    u32 mp3size;
+    s32 dataptr;
+    s16 ring[MP3_RING_SIZE];
+    s32 ring_read;
+    s32 ring_write;
+    s32 ring_count;
+    u32 resample_pos; // 16.16 fixed point
+} g_Mp3Stream;
+
+s32 aPlayMP3IsPlaying(void) {
+    return (g_Mp3Stream.curdata != NULL && (g_Mp3Stream.dataptr < (s32)g_Mp3Stream.mp3size || g_Mp3Stream.ring_count > 0));
+}
+
+void aPlayMP3Impl(const void *mp3file, u32 mp3size, void *out, int reset) {
+    if (!mp3file || mp3size == 0) {
+        memset(out, 0, MP3_OUT_SAMPLES * sizeof(s16));
+        return;
     }
 
-    // this command is supposed to write one full frame to out
-    // but which frame? we'll just decode sequentially, it'll probably work
-    if (dataptr < mp3size) {
-        // FIXME: decoding straight to out might bite us in the ass because it's only 1160 bytes
+    if (mp3file != g_Mp3Stream.curdata || reset) {
+        sysLogPrintf(LOG_NOTE, "aPlayMP3Impl: starting mp3 size=%u reset=%d", mp3size, reset);
+        mp3dec_init(&g_Mp3Stream.mp3d);
+        g_Mp3Stream.curdata = (const u8 *)mp3file;
+        g_Mp3Stream.mp3size = mp3size;
+        g_Mp3Stream.dataptr = 0;
+        g_Mp3Stream.ring_read = 0;
+        g_Mp3Stream.ring_write = 0;
+        g_Mp3Stream.ring_count = 0;
+        g_Mp3Stream.resample_pos = 0;
+    }
+
+    s16 *out16 = (s16 *)out;
+
+    // Decode and buffer samples until we have at least MP3_OUT_SAMPLES or hit EOF
+    while (g_Mp3Stream.ring_count < MP3_OUT_SAMPLES && g_Mp3Stream.dataptr < (s32)mp3size) {
         mp3dec_frame_info_t info;
-        const s32 samples = mp3dec_decode_frame(&mp3d, curdata + dataptr, mp3size - dataptr, out, &info);
-        // fill in the rest of the buffer if frame is smaller
-        const s32 diff = 580 - samples;
-        if (diff > 0) {
-            memset((s16 *)out + samples, 0, diff * 2);
-        } else {
-            assert(diff == 0);
+        s16 dec_buf[MINIMP3_MAX_SAMPLES_PER_FRAME]; // up to 1152 * 2 = 2304 samples
+        
+        const s32 samples = mp3dec_decode_frame(&g_Mp3Stream.mp3d, 
+                                                g_Mp3Stream.curdata + g_Mp3Stream.dataptr, 
+                                                mp3size - g_Mp3Stream.dataptr, 
+                                                dec_buf, 
+                                                &info);
+        
+        if (info.frame_bytes <= 0) {
+            // No valid frame found, advance 1 byte or break
+            g_Mp3Stream.dataptr++;
+            continue;
         }
-        dataptr += info.frame_bytes;
-    } else {
-        // empty frame
-        memset(out, 0, 580 * 2);
+
+        g_Mp3Stream.dataptr += info.frame_bytes;
+
+        if (samples > 0 && info.channels > 0 && info.hz > 0) {
+            const s32 frame_count = samples / info.channels;
+            s16 mono_buf[1152];
+            
+            // Downmix to mono
+            if (info.channels == 2) {
+                for (s32 i = 0; i < frame_count; i++) {
+                    mono_buf[i] = (s16)(((s32)dec_buf[i * 2] + (s32)dec_buf[i * 2 + 1]) / 2);
+                }
+            } else {
+                for (s32 i = 0; i < frame_count; i++) {
+                    mono_buf[i] = dec_buf[i];
+                }
+            }
+
+            // Resample to MP3_TARGET_HZ (22050 Hz)
+            if (info.hz == MP3_TARGET_HZ) {
+                // Direct copy
+                for (s32 i = 0; i < frame_count; i++) {
+                    if (g_Mp3Stream.ring_count < MP3_RING_SIZE) {
+                        g_Mp3Stream.ring[g_Mp3Stream.ring_write] = mono_buf[i];
+                        g_Mp3Stream.ring_write = (g_Mp3Stream.ring_write + 1) % MP3_RING_SIZE;
+                        g_Mp3Stream.ring_count++;
+                    }
+                }
+            } else {
+                // Linear interpolation resampling
+                const u32 step = (u32)(((u64)info.hz << 16) / MP3_TARGET_HZ);
+                while (g_Mp3Stream.ring_count < MP3_RING_SIZE) {
+                    u32 idx = g_Mp3Stream.resample_pos >> 16;
+                    if (idx >= (u32)frame_count) {
+                        g_Mp3Stream.resample_pos -= ((u32)frame_count << 16);
+                        break;
+                    }
+
+                    s32 s0 = mono_buf[idx];
+                    s32 s1 = (idx + 1 < (u32)frame_count) ? mono_buf[idx + 1] : s0;
+                    u32 frac = g_Mp3Stream.resample_pos & 0xffff;
+                    s16 interp = (s16)(s0 + (((s1 - s0) * (s32)frac) >> 16));
+
+                    g_Mp3Stream.ring[g_Mp3Stream.ring_write] = interp;
+                    g_Mp3Stream.ring_write = (g_Mp3Stream.ring_write + 1) % MP3_RING_SIZE;
+                    g_Mp3Stream.ring_count++;
+
+                    g_Mp3Stream.resample_pos += step;
+                }
+            }
+        }
+    }
+
+    // Output MP3_OUT_SAMPLES into out buffer
+    s32 to_copy = (g_Mp3Stream.ring_count >= MP3_OUT_SAMPLES) ? MP3_OUT_SAMPLES : g_Mp3Stream.ring_count;
+    for (s32 i = 0; i < to_copy; i++) {
+        out16[i] = g_Mp3Stream.ring[g_Mp3Stream.ring_read];
+        g_Mp3Stream.ring_read = (g_Mp3Stream.ring_read + 1) % MP3_RING_SIZE;
+    }
+    g_Mp3Stream.ring_count -= to_copy;
+
+    // If buffer ran out, zero-fill the rest
+    if (to_copy < MP3_OUT_SAMPLES) {
+        memset(out16 + to_copy, 0, (MP3_OUT_SAMPLES - to_copy) * sizeof(s16));
     }
 }
 

@@ -188,7 +188,14 @@ struct asistream *mp3main00044460(s32 arg0, void *arg1, s32 arg2)
 	stream->unk2020 = 0;
 	stream->unk3ba0 = 0;
 
+#ifdef PLATFORM_N64
 	mp3main00043ef8(stream, 0);
+#else
+	stream->numchannels = 1;
+	stream->doneinitial = true;
+	stream->version = 1;
+	stream->layer = 3;
+#endif
 
 	stream->unk8474 = 0;
 
@@ -200,6 +207,7 @@ struct asistream *mp3main00044460(s32 arg0, void *arg1, s32 arg2)
 s32 mp3main0004453c(struct asistream *streamptr, struct mp3thing **arg1, s32 *arg2)
 {
 	struct asistream *stream = streamptr;
+#ifdef PLATFORM_N64
 	s32 result;
 
 	stream->unk3ba0++;
@@ -225,4 +233,21 @@ s32 mp3main0004453c(struct asistream *streamptr, struct mp3thing **arg1, s32 *ar
 	}
 
 	return result;
+#else
+	extern s32 aPlayMP3IsPlaying(void);
+
+	stream->unk3ba0++;
+	if (stream->unk3ba0 > 5) {
+		stream->unk3ba0 = 0;
+	}
+
+	if (!g_Mp3Vars.reset && !aPlayMP3IsPlaying()) {
+		g_Mp3Vars.var8009c3e0 = 3;
+		return 0;
+	}
+
+	*arg1 = &stream->unk2070[stream->unk3ba0];
+	*arg2 = 1;
+	return 1;
+#endif
 }

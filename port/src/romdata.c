@@ -469,6 +469,106 @@ u8 *romdataFileGetData(s32 fileNum)
 	return romdataFileLoad(fileNum, NULL);
 }
 
+static u8 *romdataTryLoadExternalFile(s32 fileNum, u32 *outSize)
+{
+	const char *name = fileSlots[fileNum].name;
+	char tmp[FS_MAXPATH] = { 0 };
+	u8 *out = NULL;
+	u32 size = 0;
+
+	if (name && name[0]) {
+		// 1. If it's an audio file or might be in the audio folder
+		if (name[0] == 'A') {
+			// Check audio/<name>.mp3 (e.g. audio/Arecep01M.mp3)
+			snprintf(tmp, sizeof(tmp), "audio/%s.mp3", name);
+			if (fsFileSize(tmp) > 0) {
+				out = fsFileLoad(tmp, &size);
+				if (out && size) goto success;
+			}
+
+			// Check audio/<name> (e.g. audio/Arecep01M)
+			snprintf(tmp, sizeof(tmp), "audio/%s", name);
+			if (fsFileSize(tmp) > 0) {
+				out = fsFileLoad(tmp, &size);
+				if (out && size) goto success;
+			}
+
+			// Check audio/<name_without_A_and_M>.mp3 (e.g. audio/recep01.mp3)
+			const size_t namelen = strlen(name);
+			if (namelen > 2) {
+				char subname[64] = { 0 };
+				size_t copy_len = namelen - 1; // skip leading 'A'
+				if (name[namelen - 1] == 'M' || name[namelen - 1] == 'Z') {
+					copy_len -= 1; // skip trailing 'M' or 'Z'
+				}
+				if (copy_len > 0 && copy_len < sizeof(subname)) {
+					strncpy(subname, name + 1, copy_len);
+					subname[copy_len] = '\0';
+
+					snprintf(tmp, sizeof(tmp), "audio/%s.mp3", subname);
+					if (fsFileSize(tmp) > 0) {
+						out = fsFileLoad(tmp, &size);
+						if (out && size) goto success;
+					}
+				}
+			}
+
+			// Check files/audio/<name>.mp3
+			snprintf(tmp, sizeof(tmp), "files/audio/%s.mp3", name);
+			if (fsFileSize(tmp) > 0) {
+				out = fsFileLoad(tmp, &size);
+				if (out && size) goto success;
+			}
+		}
+
+		// 2. Check by file number in audio/ (e.g. audio/0625.mp3, audio/0271.mp3)
+		snprintf(tmp, sizeof(tmp), "audio/%04d.mp3", fileNum);
+		if (fsFileSize(tmp) > 0) {
+			out = fsFileLoad(tmp, &size);
+			if (out && size) goto success;
+		}
+
+		snprintf(tmp, sizeof(tmp), "audio/%04x.mp3", fileNum);
+		if (fsFileSize(tmp) > 0) {
+			out = fsFileLoad(tmp, &size);
+			if (out && size) goto success;
+		}
+
+		snprintf(tmp, sizeof(tmp), "audio/voice_%04d.mp3", fileNum);
+		if (fsFileSize(tmp) > 0) {
+			out = fsFileLoad(tmp, &size);
+			if (out && size) goto success;
+		}
+
+		snprintf(tmp, sizeof(tmp), "audio/voice_%04x.mp3", fileNum);
+		if (fsFileSize(tmp) > 0) {
+			out = fsFileLoad(tmp, &size);
+			if (out && size) goto success;
+		}
+
+		// 3. Check general files/<name>
+		snprintf(tmp, sizeof(tmp), ROMDATA_FILEDIR "/%s", name);
+		if (fsFileSize(tmp) > 0) {
+			out = fsFileLoad(tmp, &size);
+			if (out && size) goto success;
+		}
+
+		// 4. Check files/<name>.mp3
+		snprintf(tmp, sizeof(tmp), ROMDATA_FILEDIR "/%s.mp3", name);
+		if (fsFileSize(tmp) > 0) {
+			out = fsFileLoad(tmp, &size);
+			if (out && size) goto success;
+		}
+	}
+
+	return NULL;
+
+success:
+	sysLogPrintf(LOG_NOTE, "file %d (%s) loaded externally from %s (size %u)", fileNum, name ? name : "", tmp, size);
+	*outSize = size;
+	return out;
+}
+
 u8 *romdataFileLoad(s32 fileNum, u32 *outSize)
 {
 	if (fileNum < 1 || fileNum >= ROMDATA_MAX_FILES) {
@@ -480,22 +580,18 @@ u8 *romdataFileLoad(s32 fileNum, u32 *outSize)
 
 	// try to load external file
 	if (fileSlots[fileNum].source == SRC_UNLOADED) {
-		char tmp[FS_MAXPATH] = { 0 };
-		snprintf(tmp, sizeof(tmp), ROMDATA_FILEDIR "/%s", fileSlots[fileNum].name);
-		if (fsFileSize(tmp) > 0) {
-			u32 size = 0;
-			out = fsFileLoad(tmp, &size);
-			if (out && size) {
-				sysLogPrintf(LOG_NOTE, "file %d (%s) loaded externally", fileNum, fileSlots[fileNum].name);
-				fileSlots[fileNum].data = out;
-				fileSlots[fileNum].size = size;
-				fileSlots[fileNum].source = SRC_EXTERNAL;
-				// external file; do not apply patches to this
-				fileSlots[fileNum].numpatches = 0;
-			}
+		u32 extSize = 0;
+		out = romdataTryLoadExternalFile(fileNum, &extSize);
+		if (out && extSize) {
+			fileSlots[fileNum].data = out;
+			fileSlots[fileNum].size = extSize;
+			fileSlots[fileNum].source = SRC_EXTERNAL;
+			// external file; do not apply patches to this
+			fileSlots[fileNum].numpatches = 0;
+		} else {
+			// tried and failed, fall back to ROM
+			fileSlots[fileNum].source = SRC_ROM;
 		}
-		// tried and failed, fall back to ROM
-		fileSlots[fileNum].source = SRC_ROM;
 	}
 
 	if (!out) {

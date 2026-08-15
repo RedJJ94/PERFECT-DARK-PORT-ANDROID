@@ -28,5 +28,12 @@ CppProperties.json
 cmake-build-debug
 android/keystore.properties
 android/perfectdark-release.keystore
+android/local.properties
+android/.gradle
+android/app/.cxx
+android/app/build
 *.keystore
 *.jks
+*.z64
+audio/*.mp3
+

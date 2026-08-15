@@ -20,13 +20,21 @@
 #include "utils.h"
 #include "texexport.h"
 
+#include <SDL.h>
+
 #ifdef ANDROID
 #include <jni.h>
 #include <android/log.h>
-#include <SDL.h>
 #include <SDL_main.h>
 #include <unistd.h>
 #include "android_system.h"
+#else
+#ifndef ANDROID_LOG_INFO
+#define ANDROID_LOG_INFO 1
+#define ANDROID_LOG_ERROR 2
+#define ANDROID_LOG_WARN 3
+#define __android_log_print(prio, tag, ...) sysLogPrintf(LOG_NOTE, __VA_ARGS__)
+#endif
 #endif
 
 u32 g_OsMemSize = 0;
@@ -381,10 +389,12 @@ int main(int argc, const char **argv)
 		return -1;
 	}
 	
+#ifdef ANDROID
 	// Set OpenGL ES attributes for Android
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#endif
 	
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "videoInit starting");
 	videoInit();
