@@ -516,21 +516,39 @@ static void romdataIndexScanDir(const char *relDir)
 				// Check if it's an MP3 file
 				const size_t len = strlen(ent->d_name);
 				if (len > 4 && strcasecmp(ent->d_name + len - 4, ".mp3") == 0) {
-					if (g_AudioIndexCount >= g_AudioIndexCapacity) {
-						g_AudioIndexCapacity = (g_AudioIndexCapacity == 0) ? 512 : g_AudioIndexCapacity * 2;
-						g_AudioIndex = sysMemRealloc(g_AudioIndex, g_AudioIndexCapacity * sizeof(struct audio_index_entry));
+					char lookupKey[64];
+					size_t klen = strlen(ent->d_name);
+					if (klen >= sizeof(lookupKey)) klen = sizeof(lookupKey) - 1;
+					for (size_t i = 0; i < klen; ++i) {
+						lookupKey[i] = tolower((unsigned char)ent->d_name[i]);
 					}
-					if (g_AudioIndex) {
-						struct audio_index_entry *entry = &g_AudioIndex[g_AudioIndexCount++];
-						strncpy(entry->fullpath, subRel, sizeof(entry->fullpath) - 1);
-						entry->fullpath[sizeof(entry->fullpath) - 1] = '\0';
+					lookupKey[klen] = '\0';
 
-						size_t klen = strlen(ent->d_name);
-						if (klen >= sizeof(entry->key)) klen = sizeof(entry->key) - 1;
-						for (size_t i = 0; i < klen; ++i) {
-							entry->key[i] = tolower((unsigned char)ent->d_name[i]);
+					// Check if key already exists
+					bool exists = false;
+					for (u32 i = 0; i < g_AudioIndexCount; ++i) {
+						if (strcmp(g_AudioIndex[i].key, lookupKey) == 0) {
+							exists = true;
+							// If existing entry is a simple root audio/ file but new one is from a scene subfolder, replace with scene subfolder
+							if (strncmp(g_AudioIndex[i].fullpath, "audio/", 6) == 0 && strchr(g_AudioIndex[i].fullpath + 6, '/') == NULL) {
+								strncpy(g_AudioIndex[i].fullpath, subRel, sizeof(g_AudioIndex[i].fullpath) - 1);
+								g_AudioIndex[i].fullpath[sizeof(g_AudioIndex[i].fullpath) - 1] = '\0';
+							}
+							break;
 						}
-						entry->key[klen] = '\0';
+					}
+
+					if (!exists) {
+						if (g_AudioIndexCount >= g_AudioIndexCapacity) {
+							g_AudioIndexCapacity = (g_AudioIndexCapacity == 0) ? 512 : g_AudioIndexCapacity * 2;
+							g_AudioIndex = sysMemRealloc(g_AudioIndex, g_AudioIndexCapacity * sizeof(struct audio_index_entry));
+						}
+						if (g_AudioIndex) {
+							struct audio_index_entry *entry = &g_AudioIndex[g_AudioIndexCount++];
+							strncpy(entry->fullpath, subRel, sizeof(entry->fullpath) - 1);
+							entry->fullpath[sizeof(entry->fullpath) - 1] = '\0';
+							strcpy(entry->key, lookupKey);
+						}
 					}
 				}
 			}
@@ -548,9 +566,9 @@ static void romdataBuildAudioIndex(void)
 	g_AudioIndexBuilt = true;
 
 #if !defined(_WIN32) || !defined(_MSC_VER)
-	// Scan directories where custom audio or scene subfolders may reside
-	romdataIndexScanDir("audio");
+	// Scan directories where custom audio or scene subfolders reside (audios_por_cenas has highest priority)
 	romdataIndexScanDir("audios_por_cenas");
+	romdataIndexScanDir("audio");
 	romdataIndexScanDir("files/audio");
 
 	if (g_AudioIndexCount > 0) {
@@ -593,14 +611,67 @@ static u8 *romdataTryLoadExternalFile(s32 fileNum, u32 *outSize)
 	u32 size = 0;
 
 	if (name && name[0]) {
-		// 1. If it's an audio file or might be in the audio folder
+		// 1. Check indexed audio files in subdirectories (audios_por_cenas / subfolders) FIRST
+		if (name[0] == 'A' || fileNum > 0) {
+			char lookupBuf[64];
+			const char *foundPath = NULL;
+
+			// Try <name>.mp3
+			snprintf(lookupBuf, sizeof(lookupBuf), "%s.mp3", name);
+			foundPath = romdataFindIndexedAudio(lookupBuf);
+
+			// Try <name>
+			if (!foundPath) {
+				foundPath = romdataFindIndexedAudio(name);
+			}
+
+			// Try subname (without 'A' and 'M')
+			if (!foundPath && name[0] == 'A') {
+				const size_t namelen = strlen(name);
+				if (namelen > 2) {
+					char subname[64] = { 0 };
+					size_t copy_len = namelen - 1;
+					if (name[namelen - 1] == 'M' || name[namelen - 1] == 'Z') {
+						copy_len -= 1;
+					}
+					if (copy_len > 0 && copy_len < sizeof(subname)) {
+						strncpy(subname, name + 1, copy_len);
+						subname[copy_len] = '\0';
+						snprintf(lookupBuf, sizeof(lookupBuf), "%s.mp3", subname);
+						foundPath = romdataFindIndexedAudio(lookupBuf);
+					}
+				}
+			}
+
+			// Try by decimal number: %04d.mp3
+			if (!foundPath) {
+				snprintf(lookupBuf, sizeof(lookupBuf), "%04d.mp3", fileNum);
+				foundPath = romdataFindIndexedAudio(lookupBuf);
+			}
+
+			// Try by hex number: %04x.mp3
+			if (!foundPath) {
+				snprintf(lookupBuf, sizeof(lookupBuf), "%04x.mp3", fileNum);
+				foundPath = romdataFindIndexedAudio(lookupBuf);
+			}
+
+			if (foundPath && fsFileSize(foundPath) > 0) {
+				out = fsFileLoad(foundPath, &size);
+				if (out && size) {
+					strncpy(tmp, foundPath, sizeof(tmp) - 1);
+					goto success;
+				}
+			}
+		}
+
+		// 2. Direct checks in audio/ root folder
 		if (name[0] == 'A') {
-			// Check audio/<name>.mp3 (e.g. audio/Arecep01M.mp3)
 			snprintf(tmp, sizeof(tmp), "audio/%s.mp3", name);
 			if (fsFileSize(tmp) > 0) {
 				out = fsFileLoad(tmp, &size);
 				if (out && size) goto success;
 			}
+
 
 			// Check audio/<name> (e.g. audio/Arecep01M)
 			snprintf(tmp, sizeof(tmp), "audio/%s", name);

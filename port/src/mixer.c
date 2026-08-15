@@ -742,6 +742,10 @@ void aPlayMP3Impl(const void *mp3file, u32 mp3size, void *out, int reset) {
         g_Mp3Stream.dataptr += info.frame_bytes;
 
         if (samples > 0 && info.channels > 0 && info.hz > 0) {
+            if (g_Mp3Stream.dataptr == info.frame_bytes) {
+                sysLogPrintf(LOG_NOTE, "aPlayMP3Impl: decoded first frame -> hz=%d channels=%d layer=%d bitrate_kbps=%d",
+                             info.hz, info.channels, info.layer, info.bitrate_kbps);
+            }
             const s32 frame_count = samples / info.channels;
             s16 mono_buf[MINIMP3_MAX_SAMPLES_PER_FRAME / 2];
             
