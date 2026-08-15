@@ -116,16 +116,16 @@ public class MainActivity extends SDLActivity {
     private void initializeGame() {
         android.util.Log.i("PerfectDark", "initializeGame start");
         
-        // Create data directory in external storage
-        File dataDir = new File(getExternalFilesDir(null), "data");
-        android.util.Log.i("PerfectDark", "Data dir: " + dataDir.getAbsolutePath());
-        if (!dataDir.exists()) {
-            dataDir.mkdirs();
+        // Create data directory in root of internal storage
+        File perfectDarkDir = new File(Environment.getExternalStorageDirectory(), "perfect dark");
+        android.util.Log.i("PerfectDark", "Perfect Dark dir: " + perfectDarkDir.getAbsolutePath());
+        if (!perfectDarkDir.exists()) {
+            perfectDarkDir.mkdirs();
         }
         
         // Initialize native game
         android.util.Log.i("PerfectDark", "Calling nativeInit");
-        nativeInit(dataDir.getAbsolutePath());
+        nativeInit(perfectDarkDir.getAbsolutePath());
         
         android.util.Log.i("PerfectDark", "initializeGame complete");
     }

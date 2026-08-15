@@ -62,23 +62,27 @@ jobs:
         id: rename_apk
         run: |
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          BUILD_DATE=$(date +%Y%m%d-%H%M%S)
           APK_SRC=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
-          APK_DEST="perfect-dark-port-${SHORT_SHA}.apk"
+          APK_DEST="perfect-dark-port-${BUILD_DATE}-${SHORT_SHA}.apk"
           mv "$APK_SRC" "$APK_DEST"
           echo "apk_path=$APK_DEST" >> $GITHUB_OUTPUT
           echo "short_sha=$SHORT_SHA" >> $GITHUB_OUTPUT
+          echo "build_date=$BUILD_DATE" >> $GITHUB_OUTPUT
+          echo "release_tag=v${BUILD_DATE}" >> $GITHUB_OUTPUT
 
       - name: Publish GitHub Release
         if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: latest
-          name: "Perfect Dark Port – Latest Build"
+          tag_name: ${{ steps.rename_apk.outputs.release_tag }}
+          name: "Perfect Dark Port – Build ${{ steps.rename_apk.outputs.build_date }}"
           body: |
             🎮 **Automatic build** do branch `port`
 
             **Commit:** [`${{ steps.rename_apk.outputs.short_sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
             **Data:** ${{ github.event.head_commit.timestamp }}
+            **Tag:** ${{ steps.rename_apk.outputs.release_tag }}
 
             ### Como instalar
             1. Baixe o arquivo `.apk` abaixo
@@ -90,5 +94,5 @@ jobs:
           files: ${{ steps.rename_apk.outputs.apk_path }}
           prerelease: true
           make_latest: true
-          replace_latest: true
+          replace_latest: false
           draft: false

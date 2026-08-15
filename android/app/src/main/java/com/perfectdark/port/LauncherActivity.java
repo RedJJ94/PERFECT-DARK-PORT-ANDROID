@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Launcher that ensures the Perfect Dark ROM exists in
- * getExternalFilesDir(null)/data as pd.ntsc-final.z64 before starting SDL.
+ * /perfect dark as pd.ntsc-final.z64 before starting SDL.
  */
 public class LauncherActivity extends AppCompatActivity {
     private static final String ROM_FILE_NAME = "pd.ntsc-final.z64";
@@ -60,7 +61,7 @@ public class LauncherActivity extends AppCompatActivity {
         ensureDataDir();
 
         if (romExists()) {
-            File target = new File(new File(getExternalFilesDir(null), "data"), ROM_FILE_NAME);
+            File target = new File(new File(Environment.getExternalStorageDirectory(), "perfect dark"), ROM_FILE_NAME);
             
             // Check if ROM was already validated
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -100,21 +101,21 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     private void ensureDataDir() {
-        File dataDir = new File(getExternalFilesDir(null), "data");
-        if (!dataDir.exists()) {
+        File perfectDarkDir = new File(Environment.getExternalStorageDirectory(), "perfect dark");
+        if (!perfectDarkDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
-            dataDir.mkdirs();
+            perfectDarkDir.mkdirs();
         }
     }
 
     private boolean romExists() {
-        File target = new File(new File(getExternalFilesDir(null), "data"), ROM_FILE_NAME);
+        File target = new File(new File(Environment.getExternalStorageDirectory(), "perfect dark"), ROM_FILE_NAME);
         return target.exists() && target.length() > 0;
     }
 
     private void showMissingRomUi() {
         missingRomView.setVisibility(View.VISIBLE);
-        infoText.setText("ROM not found. Select your Perfect Dark NTSC (z64) ROM to proceed.\nIt will be copied to Android/data/com.perfectdark.port/files/data as " + ROM_FILE_NAME + ".");
+        infoText.setText("ROM not found. Select your Perfect Dark NTSC (z64) ROM to proceed.\nIt will be copied to /perfect dark as " + ROM_FILE_NAME + ".");
     }
 
     private void openRomPicker() {
@@ -144,7 +145,7 @@ public class LauncherActivity extends AppCompatActivity {
         }
 
         if (romExists()) {
-            File target = new File(new File(getExternalFilesDir(null), "data"), ROM_FILE_NAME);
+            File target = new File(new File(Environment.getExternalStorageDirectory(), "perfect dark"), ROM_FILE_NAME);
             int hashStatus = checkRomHash(target);
             if (hashStatus == 0) {
                 // Save validation state for v1.1
@@ -164,13 +165,13 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     private void copyRomToAppData(Uri sourceUri) throws IOException {
-        File dataDir = new File(getExternalFilesDir(null), "data");
-        if (!dataDir.exists()) {
+        File perfectDarkDir = new File(Environment.getExternalStorageDirectory(), "perfect dark");
+        if (!perfectDarkDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
-            dataDir.mkdirs();
+            perfectDarkDir.mkdirs();
         }
 
-        File target = new File(dataDir, ROM_FILE_NAME);
+        File target = new File(perfectDarkDir, ROM_FILE_NAME);
 
         try (InputStream in = getContentResolver().openInputStream(sourceUri);
              FileOutputStream out = new FileOutputStream(target)) {

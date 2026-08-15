@@ -18,6 +18,7 @@
 #include "mod.h"
 #include "system.h"
 #include "utils.h"
+#include "texexport.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -296,7 +297,8 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     jboolean disableMpDeathMusic,
     jboolean uncapTickrate, jboolean geMuzzleFlashes, jint fieldOfView, jint hudCenter,
     jboolean showControls, jfloat leftStickSensitivity, jfloat rightStickSensitivity,
-    jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength
+    jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength,
+    jboolean texDumpEnabled, jboolean texLoadEnabled
 ) {
     __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Applying settings from Android");
 
@@ -331,6 +333,11 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     inputControllerSetAxisDeadzone(0, 1, 1, rightStickDeadzone); // Right stick Y deadzone
     inputRumbleSetStrength(0, vibrationStrength);
 
+    // Apply texture settings
+    // g_TexDumpEnabled = 1 means: create trigger file at next texExportCheckAndRun() call.
+    g_TexDumpEnabled = texDumpEnabled ? 1 : 0;
+    g_TexLoadEnabled = texLoadEnabled ? 1 : 0;
+
     // Mark config as dirty and save immediately
     markConfigDirty();
     inputSaveBinds();
@@ -360,6 +367,14 @@ int main(int argc, const char **argv)
 	fsInit();
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "configInit starting");
 	configInit();
+	
+	// Create texture directories automatically
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Creating texture directories");
+	fsCreateDir("$H/texturas");
+	fsCreateDir("$H/texturas/dump");
+	fsCreateDir("$H/texturas/load");
+	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Texture directories created");
+	
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "SDL2 init starting");
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
 		__android_log_print(ANDROID_LOG_ERROR, "PerfectDark", "SDL_Init failed: %s", SDL_GetError());
@@ -387,6 +402,10 @@ int main(int argc, const char **argv)
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "gameInit starting");
 	gameInit();
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "gameInit complete");
+
+	// Note: Texture export check removed from auto-start to prevent crash
+	// Textures need to be loaded into memory before export can work
+	// Users can trigger export manually by creating the trigger file
 
 	if (fsGetModDir()) {
 		modConfigLoad(MOD_CONFIG_FNAME);
