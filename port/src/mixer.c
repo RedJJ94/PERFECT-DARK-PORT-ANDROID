@@ -682,9 +682,9 @@ void aSetVolumeImpl(uint8_t flags, int16_t v, int16_t t, int16_t r) {
     }
 }
 
-#define MP3_OUT_SAMPLES 580
+#define MP3_OUT_SAMPLES 576
 #define MP3_TARGET_HZ   22050
-#define MP3_RING_SIZE   16384
+#define MP3_RING_SIZE   65536
 
 static struct {
     mp3dec_t mp3d;
@@ -743,7 +743,7 @@ void aPlayMP3Impl(const void *mp3file, u32 mp3size, void *out, int reset) {
 
         if (samples > 0 && info.channels > 0 && info.hz > 0) {
             const s32 frame_count = samples / info.channels;
-            s16 mono_buf[1152];
+            s16 mono_buf[MINIMP3_MAX_SAMPLES_PER_FRAME / 2];
             
             // Downmix to mono
             if (info.channels == 2) {
@@ -769,13 +769,9 @@ void aPlayMP3Impl(const void *mp3file, u32 mp3size, void *out, int reset) {
             } else {
                 // Linear interpolation resampling
                 const u32 step = (u32)(((u64)info.hz << 16) / MP3_TARGET_HZ);
-                while (g_Mp3Stream.ring_count < MP3_RING_SIZE) {
+                const u32 max_pos = (u32)frame_count << 16;
+                while (g_Mp3Stream.resample_pos < max_pos && g_Mp3Stream.ring_count < MP3_RING_SIZE) {
                     u32 idx = g_Mp3Stream.resample_pos >> 16;
-                    if (idx >= (u32)frame_count) {
-                        g_Mp3Stream.resample_pos -= ((u32)frame_count << 16);
-                        break;
-                    }
-
                     s32 s0 = mono_buf[idx];
                     s32 s1 = (idx + 1 < (u32)frame_count) ? mono_buf[idx + 1] : s0;
                     u32 frac = g_Mp3Stream.resample_pos & 0xffff;
@@ -786,6 +782,9 @@ void aPlayMP3Impl(const void *mp3file, u32 mp3size, void *out, int reset) {
                     g_Mp3Stream.ring_count++;
 
                     g_Mp3Stream.resample_pos += step;
+                }
+                if (g_Mp3Stream.resample_pos >= max_pos) {
+                    g_Mp3Stream.resample_pos -= max_pos;
                 }
             }
         }
@@ -804,6 +803,7 @@ void aPlayMP3Impl(const void *mp3file, u32 mp3size, void *out, int reset) {
         memset(out16 + to_copy, 0, (MP3_OUT_SAMPLES - to_copy) * sizeof(s16));
     }
 }
+
 
 void aPoleFilterImpl(uint8_t flags, int16_t gain, uint32_t t, uint32_t addr) {
     // this never gets called?
