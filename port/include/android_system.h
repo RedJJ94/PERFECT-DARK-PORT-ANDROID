@@ -42,7 +42,8 @@ JNIEXPORT void JNICALL Java_com_perfectdark_port_SettingsActivity_nativeApplySet
     jboolean disableMpDeathMusic,
     jboolean uncapTickrate, jboolean geMuzzleFlashes, jint fieldOfView, jint hudCenter,
     jboolean showControls, jfloat leftStickSensitivity, jfloat rightStickSensitivity,
-    jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength
+    jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength,
+    jboolean texDumpEnabled, jboolean texLoadEnabled
 );
 
 #endif // ANDROID
