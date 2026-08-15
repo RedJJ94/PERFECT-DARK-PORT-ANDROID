@@ -38,7 +38,6 @@
 
 #define TEXEXPORT_PARENT   "$H/texturas"
 #define TEXEXPORT_DIR      "$H/texturas/dump"
-#define TEXEXPORT_DIR_ORIG "$H/texturas/dump_original"
 #define TEXLOAD_DIR        "$H/texturas/load"
 #define TEXEXPORT_TRIGGER  "$H/export_textures.txt"
 #define TEXEXPORT_POOLSIZE (1024 * 1024) // generous; textures are small, this just needs to fit one at a time
@@ -320,11 +319,6 @@ int texExportSingle(u16 texturenum)
 		return 0;
 	}
 
-	// Export original resolution (for AI upscaling tools)
-	char relPathOrig[FS_MAXPATH + 1];
-	snprintf(relPathOrig, sizeof(relPathOrig), TEXEXPORT_DIR_ORIG "/%04x.png", texturenum);
-	const int okOrig = stbi_write_png(fsFullPath(relPathOrig), t->width, t->height, 4, rgba, t->width * 4);
-
 	// Upscale texture by TEXEXPORT_SCALE factor using bilinear interpolation
 	const s32 scaledWidth = t->width * TEXEXPORT_SCALE;
 	const s32 scaledHeight = t->height * TEXEXPORT_SCALE;
@@ -332,7 +326,7 @@ int texExportSingle(u16 texturenum)
 	if (!scaledRgba) {
 		sysLogPrintf(LOG_WARNING, "texexport: could not allocate scaled buffer for texture %04x", texturenum);
 		sysMemFree(rgba);
-		return okOrig;
+		return 0;
 	}
 
 	// Bilinear upscaling for smoother results
@@ -354,12 +348,12 @@ int texExportSingle(u16 texturenum)
 	char relPath[FS_MAXPATH + 1];
 	snprintf(relPath, sizeof(relPath), TEXEXPORT_DIR "/%04x.png", texturenum);
 
-	const int okScaled = stbi_write_png(fsFullPath(relPath), scaledWidth, scaledHeight, 4, scaledRgba, scaledWidth * 4);
+	const int ok = stbi_write_png(fsFullPath(relPath), scaledWidth, scaledHeight, 4, scaledRgba, scaledWidth * 4);
 
 	sysMemFree(scaledRgba);
 	sysMemFree(rgba);
 
-	return okOrig && okScaled;
+	return ok;
 }
 
 void texExportCheckAndRun(void)
@@ -386,7 +380,6 @@ void texExportCheckAndRun(void)
 	sysLogPrintf(LOG_NOTE, "texexport: starting full texture export to " TEXEXPORT_DIR);
 	fsCreateDir(TEXEXPORT_PARENT); // perfect dark/texturas/
 	fsCreateDir(TEXEXPORT_DIR);    // perfect dark/texturas/dump/
-	fsCreateDir(TEXEXPORT_DIR_ORIG); // perfect dark/texturas/dump_original/
 	fsCreateDir(TEXLOAD_DIR);      // perfect dark/texturas/load/ (created once so user knows where to put files)
 
 	s32 exported = 0;
