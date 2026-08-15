@@ -75,7 +75,6 @@
 #include "data.h"
 #include "types.h"
 #include "system.h"
-#include "texexport.h"
 
 extern u8 *g_MempHeap;
 extern u32 g_MempHeapSize;
@@ -284,8 +283,6 @@ void mainProc(void)
 
 	while (true) {
 		saveConfigIfNeeded();
-		// Check for texture export trigger during gameplay
-		texExportCheckAndRun();
 		mainLoop();
 	}
 }
