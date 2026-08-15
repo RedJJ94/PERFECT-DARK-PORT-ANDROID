@@ -1,0 +1,23 @@
+=== Fase_01_dataDyne_Defection ===
+Total de áudios nesta cena: 16
+
+Arquivos de áudio:
+  - Adevr01M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr02M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr03M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr04M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr05M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr06M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr07M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr08M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr09M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr10M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr11M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Adevr12M.mp3         | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Aoffwrk01M.mp3       | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Aoffwrk02M.mp3       | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Aoffwrk03M.mp3       | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+  - Aoffwrk04M.mp3       | Diálogos de Cassandra De Vries e trabalhadores da dataDyne
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

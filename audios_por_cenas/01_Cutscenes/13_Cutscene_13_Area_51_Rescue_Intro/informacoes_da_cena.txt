@@ -1,0 +1,12 @@
+=== 13_Cutscene_13_Area_51_Rescue_Intro ===
+Total de áudios nesta cena: 5
+
+Arquivos de áudio:
+  - Ap13_01_joM.mp3      | Voz: Joanna Dark
+  - Ap13_02_suM.mp3      | Voz: Piloto / Técnico Maian
+  - Ap13_03_joM.mp3      | Voz: Joanna Dark
+  - Ap13_04_suM.mp3      | Voz: Piloto / Técnico Maian
+  - Ap13_06_suM.mp3      | Voz: Piloto / Técnico Maian
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

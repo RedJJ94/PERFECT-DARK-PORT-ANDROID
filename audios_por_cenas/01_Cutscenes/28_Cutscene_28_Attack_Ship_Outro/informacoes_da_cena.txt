@@ -1,0 +1,13 @@
+=== 28_Cutscene_28_Attack_Ship_Outro ===
+Total de áudios nesta cena: 6
+
+Arquivos de áudio:
+  - Ap28_01_elM.mp3      | Voz: Elvis (Maian)
+  - Ap28_02_joM.mp3      | Voz: Joanna Dark
+  - Ap28_03_elM.mp3      | Voz: Elvis (Maian)
+  - Ap28_04_joM.mp3      | Voz: Joanna Dark
+  - Ap28_05_elM.mp3      | Voz: Elvis (Maian)
+  - Ap28_06_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

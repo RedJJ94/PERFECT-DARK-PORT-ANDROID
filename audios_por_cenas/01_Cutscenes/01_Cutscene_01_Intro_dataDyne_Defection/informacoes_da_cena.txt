@@ -1,0 +1,15 @@
+=== 01_Cutscene_01_Intro_dataDyne_Defection ===
+Total de áudios nesta cena: 8
+
+Arquivos de áudio:
+  - Ap1_01_joM.mp3       | Voz: Joanna Dark
+  - Ap1_02_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap1_03_joM.mp3       | Voz: Joanna Dark
+  - Ap1_04_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap1_05_joM.mp3       | Voz: Joanna Dark
+  - Ap1_06_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap1_07_joM.mp3       | Voz: Joanna Dark
+  - Ap1_08_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

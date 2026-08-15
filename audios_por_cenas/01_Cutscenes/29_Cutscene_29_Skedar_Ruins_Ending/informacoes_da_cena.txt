@@ -1,0 +1,22 @@
+=== 29_Cutscene_29_Skedar_Ruins_Ending ===
+Total de áudios nesta cena: 15
+
+Arquivos de áudio:
+  - Ap29_01_elM.mp3      | Voz: Elvis (Maian)
+  - Ap29_02_joM.mp3      | Voz: Joanna Dark
+  - Ap29_03_elM.mp3      | Voz: Elvis (Maian)
+  - Ap29_04_joM.mp3      | Voz: Joanna Dark
+  - Ap29_05_joM.mp3      | Voz: Joanna Dark
+  - Ap29_06_elM.mp3      | Voz: Elvis (Maian)
+  - Ap29_07_joM.mp3      | Voz: Joanna Dark
+  - Ap29_08_elM.mp3      | Voz: Elvis (Maian)
+  - Ap29_09_joM.mp3      | Voz: Joanna Dark
+  - Ap29_10_elM.mp3      | Voz: Elvis (Maian)
+  - Ap29_11_joM.mp3      | Voz: Joanna Dark
+  - Ap29_12_elM.mp3      | Voz: Elvis (Maian)
+  - Ap29_13_joM.mp3      | Voz: Joanna Dark
+  - Ap29_14_joM.mp3      | Voz: Joanna Dark
+  - Ap29_15_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

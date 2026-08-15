@@ -1,0 +1,16 @@
+=== 10_Cutscene_10_G5_Building_Outro ===
+Total de áudios nesta cena: 9
+
+Arquivos de áudio:
+  - Ap10_01_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap10_02_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap10_03_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap10_04_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap10_05_joM.mp3      | Voz: Joanna Dark
+  - Ap10_06_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap10_07_joM.mp3      | Voz: Joanna Dark
+  - Ap10_08_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap10_09_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

@@ -1,0 +1,13 @@
+=== 27_Cutscene_27_Carrington_Institute_Defense_Outro ===
+Total de áudios nesta cena: 6
+
+Arquivos de áudio:
+  - Ap27_01_joM.mp3      | Voz: Joanna Dark
+  - Ap27_02_elM.mp3      | Voz: Elvis (Maian)
+  - Ap27_03_elM.mp3      | Voz: Elvis (Maian)
+  - Ap27_04_joM.mp3      | Voz: Joanna Dark
+  - Ap27_05_joM.mp3      | Voz: Joanna Dark
+  - Ap27_06_elM.mp3      | Voz: Elvis (Maian)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

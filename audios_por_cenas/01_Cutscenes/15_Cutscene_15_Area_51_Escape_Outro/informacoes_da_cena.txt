@@ -1,0 +1,18 @@
+=== 15_Cutscene_15_Area_51_Escape_Outro ===
+Total de áudios nesta cena: 11
+
+Arquivos de áudio:
+  - Ap15_01_elM.mp3      | Voz: Elvis (Maian)
+  - Ap15_02_elM.mp3      | Voz: Elvis (Maian)
+  - Ap15_03_joM.mp3      | Voz: Joanna Dark
+  - Ap15_04_jnM.mp3      | Voz: Jonathan (Agente CI)
+  - Ap15_05_elM.mp3      | Voz: Elvis (Maian)
+  - Ap15_06_joM.mp3      | Voz: Joanna Dark
+  - Ap15_07_elM.mp3      | Voz: Elvis (Maian)
+  - Ap15_08_joM.mp3      | Voz: Joanna Dark
+  - Ap15_09_elM.mp3      | Voz: Elvis (Maian)
+  - Ap15_10_joM.mp3      | Voz: Joanna Dark
+  - Ap15_11_elM.mp3      | Voz: Elvis (Maian)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

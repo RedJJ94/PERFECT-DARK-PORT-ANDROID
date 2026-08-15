@@ -1,0 +1,34 @@
+=== Fase_10_Air_Base ===
+Total de áudios nesta cena: 27
+
+Arquivos de áudio:
+  - Aairbgd01M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd02M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd03M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd04M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd05M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd06M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd07M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd08M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd09M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd10M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd11M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd12M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd13M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd14M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd15M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairbgd16M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairstw01M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairstw02M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Aairstw03M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Absewrk01M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Absewrk02M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Absewrk03M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Absewrk04M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Absewrk05M.mp3       | Diálogos da Base Aérea e Comissários de Voo
+  - Ahelic01M.mp3        | Diálogos da Base Aérea e Comissários de Voo
+  - Ahelic02M.mp3        | Diálogos da Base Aérea e Comissários de Voo
+  - Ahelic03M.mp3        | Diálogos da Base Aérea e Comissários de Voo
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

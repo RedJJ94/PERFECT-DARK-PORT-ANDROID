@@ -1,0 +1,25 @@
+=== Fase_02_dataDyne_Investigation ===
+Total de áudios nesta cena: 18
+
+Arquivos de áudio:
+  - Ainvcar01M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar02M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar03M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar04M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar05M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar06M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar07M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar08M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar09M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar10M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar11M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - Ainvcar12M.mp3       | Diálogos da missão de investigação na dataDyne Central
+  - AinvfarrM.mp3        | Diálogos da missão de investigação na dataDyne Central
+  - AinvfemaM.mp3        | Diálogos da missão de investigação na dataDyne Central
+  - AinvfostM.mp3        | Diálogos da missão de investigação na dataDyne Central
+  - AinvgrimM.mp3        | Diálogos da missão de investigação na dataDyne Central
+  - AinvhopkM.mp3        | Diálogos da missão de investigação na dataDyne Central
+  - AinvmaleM.mp3        | Diálogos da missão de investigação na dataDyne Central
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

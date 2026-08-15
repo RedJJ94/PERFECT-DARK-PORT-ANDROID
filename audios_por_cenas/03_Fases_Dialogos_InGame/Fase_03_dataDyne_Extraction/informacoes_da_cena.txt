@@ -1,0 +1,22 @@
+=== Fase_03_dataDyne_Extraction ===
+Total de áudios nesta cena: 15
+
+Arquivos de áudio:
+  - Aexec01M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec02M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec04M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec05M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec06M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec07M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec08M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec09M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec10M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec11M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec12M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec13M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Aexec14M.mp3         | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Ajoexec01M.mp3       | Diálogos dos executivos e Joanna na extração da dataDyne
+  - Ajoexec02M.mp3       | Diálogos dos executivos e Joanna na extração da dataDyne
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

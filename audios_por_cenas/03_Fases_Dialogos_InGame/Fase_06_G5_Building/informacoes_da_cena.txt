@@ -1,0 +1,10 @@
+=== Fase_06_G5_Building ===
+Total de áudios nesta cena: 3
+
+Arquivos de áudio:
+  - Abnblde01M.mp3       | Diálogos no Prédio da G5 e no Cofre
+  - Abncass01M.mp3       | Diálogos no Prédio da G5 e no Cofre
+  - Avault2M.mp3         | Diálogos no Prédio da G5 e no Cofre
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

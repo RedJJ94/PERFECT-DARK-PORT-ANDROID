@@ -1,0 +1,11 @@
+=== 07_Cutscene_07_Carrington_Villa_Outro ===
+Total de áudios nesta cena: 4
+
+Arquivos de áudio:
+  - Ap7_01_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap7_02_joM.mp3       | Voz: Joanna Dark
+  - Ap7_03_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap7_04_joM.mp3       | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

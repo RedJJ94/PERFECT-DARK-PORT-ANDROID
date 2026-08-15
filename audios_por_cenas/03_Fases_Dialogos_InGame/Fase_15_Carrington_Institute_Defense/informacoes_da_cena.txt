@@ -1,0 +1,13 @@
+=== Fase_15_Carrington_Institute_Defense ===
+Total de áudios nesta cena: 6
+
+Arquivos de áudio:
+  - Aassael01M.mp3       | Diálogos da invasão e defesa do Instituto Carrington
+  - Aassael02M.mp3       | Diálogos da invasão e defesa do Instituto Carrington
+  - Aassael03M.mp3       | Diálogos da invasão e defesa do Instituto Carrington
+  - Aassael04M.mp3       | Diálogos da invasão e defesa do Instituto Carrington
+  - Aassael05M.mp3       | Diálogos da invasão e defesa do Instituto Carrington
+  - Aassael06M.mp3       | Diálogos da invasão e defesa do Instituto Carrington
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

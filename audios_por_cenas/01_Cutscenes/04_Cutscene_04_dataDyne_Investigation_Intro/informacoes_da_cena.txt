@@ -1,0 +1,16 @@
+=== 04_Cutscene_04_dataDyne_Investigation_Intro ===
+Total de áudios nesta cena: 9
+
+Arquivos de áudio:
+  - Ap4_01_dvM.mp3       | Voz: Cassandra De Vries
+  - Ap4_02_joM.mp3       | Voz: Joanna Dark
+  - Ap4_03_dvM.mp3       | Voz: Cassandra De Vries
+  - Ap4_04_joM.mp3       | Voz: Joanna Dark
+  - Ap4_05_dvM.mp3       | Voz: Cassandra De Vries
+  - Ap4_06_joM.mp3       | Voz: Joanna Dark
+  - Ap4_07_blM.mp3       | Voz: Mr. Blonde
+  - Ap4_08_dvM.mp3       | Voz: Cassandra De Vries
+  - Ap4_09_dvM.mp3       | Voz: Cassandra De Vries
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

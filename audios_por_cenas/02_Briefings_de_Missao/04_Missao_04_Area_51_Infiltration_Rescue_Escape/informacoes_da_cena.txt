@@ -1,0 +1,19 @@
+=== 04_Missao_04_Area_51_Infiltration_Rescue_Escape ===
+Total de áudios nesta cena: 12
+
+Arquivos de áudio:
+  - Am4_l1_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l1_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l1_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l1_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l2_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l2_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l2_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l2_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l3_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l3_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l3_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am4_l3_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

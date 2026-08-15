@@ -1,0 +1,55 @@
+=== 04_Personagens_e_Seguranca ===
+Total de áudios nesta cena: 48
+
+Arquivos de áudio:
+  - Acicarr06M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acicarr07M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acicarr08M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acicarr09M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acicarr10M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acicarr11M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifarr01M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifarr02M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifarr03M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifarr08M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifarr12M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifema01M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifema04M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifema07M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifema08M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifema09M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifema14M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifost08M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acifost12M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim01M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim03M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim04M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim05M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim06M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim07M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim08M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim09M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acigrim10M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acihopk01M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acihopk04M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acihopk06M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acihopk09M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acihopk11M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acimale02M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acimale03M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acimale07M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acimale09M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acimale11M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acimale13M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Aciroge01M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Aciroge02M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Aciroge08M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Aciroge12M.mp3       | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acsec01M.mp3         | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acsec02M.mp3         | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acsec03M.mp3         | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acstan1M.mp3         | Funcionários, cientistas e seguranças do Instituto Carrington
+  - Acstan2M.mp3         | Funcionários, cientistas e seguranças do Instituto Carrington
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

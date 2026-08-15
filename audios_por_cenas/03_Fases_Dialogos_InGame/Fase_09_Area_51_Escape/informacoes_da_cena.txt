@@ -1,0 +1,8 @@
+=== Fase_09_Area_51_Escape ===
+Total de áudios nesta cena: 1
+
+Arquivos de áudio:
+  - Asaucerexp1M.mp3     | Diálogos da fuga no disco voador na Área 51
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

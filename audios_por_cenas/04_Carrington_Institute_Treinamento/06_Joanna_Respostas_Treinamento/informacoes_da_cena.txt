@@ -1,0 +1,22 @@
+=== 06_Joanna_Respostas_Treinamento ===
+Total de áudios nesta cena: 15
+
+Arquivos de áudio:
+  - Ajoinst01M.mp3       | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajoinst02M.mp3       | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajoinst03M.mp3       | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajoinst04M.mp3       | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajorep01M.mp3        | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajorep02M.mp3        | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajorep03M.mp3        | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajorep04M.mp3        | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajorpld01M.mp3       | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajorpld02M.mp3       | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajorpld03M.mp3       | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajorpld04M.mp3       | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajosci01M.mp3        | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajosci02M.mp3        | Respostas e falas de Joanna Dark durante o treinamento
+  - Ajosci03M.mp3        | Respostas e falas de Joanna Dark durante o treinamento
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

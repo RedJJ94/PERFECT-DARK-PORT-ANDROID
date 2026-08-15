@@ -1,0 +1,9 @@
+=== Fase_05_Chicago_Stealth ===
+Total de áudios nesta cena: 2
+
+Arquivos de áudio:
+  - Achdroid1M.mp3       | Vozes do Robô de Segurança / Droid G5 nas ruas de Chicago
+  - Achdroid2M.mp3       | Vozes do Robô de Segurança / Droid G5 nas ruas de Chicago
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

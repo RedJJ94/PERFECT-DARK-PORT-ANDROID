@@ -1,0 +1,10 @@
+=== 25_Cutscene_25_Deep_Sea_Outro ===
+Total de áudios nesta cena: 3
+
+Arquivos de áudio:
+  - Ap25_01_joM.mp3      | Voz: Joanna Dark
+  - Ap25_02_joM.mp3      | Voz: Joanna Dark
+  - Ap25_03_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

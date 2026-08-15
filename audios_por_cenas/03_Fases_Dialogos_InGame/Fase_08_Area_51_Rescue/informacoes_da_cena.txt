@@ -1,0 +1,41 @@
+=== Fase_08_Area_51_Rescue ===
+Total de áudios nesta cena: 34
+
+Arquivos de áudio:
+  - Aa51elv01M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51elv02M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51elv03M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd01M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd02M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd03M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd04M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd05M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd06M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd07M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd08M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd09M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51grd10M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jo1M.mp3         | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jo2M.mp3         | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jo3M.mp3         | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jo4M.mp3         | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jo5M.mp3         | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jo6M.mp3         | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon01M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon02M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon03M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon04M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon05M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon06M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon07M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon08M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon09M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon10M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon11M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon12M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon14M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51jon15M.mp3       | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+  - Aa51sci1M.mp3        | Diálogos in-game na Área 51 (Elvis, Jonathan, Guardas e Cientistas)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

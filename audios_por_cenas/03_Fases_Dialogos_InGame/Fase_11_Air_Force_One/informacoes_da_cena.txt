@@ -1,0 +1,23 @@
+=== Fase_11_Air_Force_One ===
+Total de áudios nesta cena: 16
+
+Arquivos de áudio:
+  - Aaf1jo01M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1jo02M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1jo03M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr01M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr02M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr03M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr04M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr05M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr06M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr07M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr08M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr09M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1pr10M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1tr01M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1tr02M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+  - Aaf1tr03M.mp3        | Diálogos a bordo do Air Force One (Presidente, Trent, Joanna)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

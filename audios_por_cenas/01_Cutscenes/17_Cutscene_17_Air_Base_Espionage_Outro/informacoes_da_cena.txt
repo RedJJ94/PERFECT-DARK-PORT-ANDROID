@@ -1,0 +1,13 @@
+=== 17_Cutscene_17_Air_Base_Espionage_Outro ===
+Total de áudios nesta cena: 6
+
+Arquivos de áudio:
+  - Ap17_01_trM.mp3      | Voz: Trent Easton
+  - Ap17_02_prM.mp3      | Voz: Presidente dos EUA
+  - Ap17_03_trM.mp3      | Voz: Trent Easton
+  - Ap17_04_prM.mp3      | Voz: Presidente dos EUA
+  - Ap17_05_trM.mp3      | Voz: Trent Easton
+  - Ap17_06_trM.mp3      | Voz: Trent Easton
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

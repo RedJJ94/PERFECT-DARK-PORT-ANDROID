@@ -1,0 +1,11 @@
+=== 09_Missao_09_Skedar_Ruins_Battle_Shrine ===
+Total de áudios nesta cena: 4
+
+Arquivos de áudio:
+  - Am9_l1_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am9_l1_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am9_l1_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am9_l1_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

@@ -1,0 +1,15 @@
+=== 19_Cutscene_19_Air_Force_One_Outro ===
+Total de áudios nesta cena: 8
+
+Arquivos de áudio:
+  - Ap19_01_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap19_02_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap19_03_joM.mp3      | Voz: Joanna Dark
+  - Ap19_04_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap19_05_joM.mp3      | Voz: Joanna Dark
+  - Ap19_06_joM.mp3      | Voz: Joanna Dark
+  - Ap19_07_joM.mp3      | Voz: Joanna Dark
+  - Ap19_08_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

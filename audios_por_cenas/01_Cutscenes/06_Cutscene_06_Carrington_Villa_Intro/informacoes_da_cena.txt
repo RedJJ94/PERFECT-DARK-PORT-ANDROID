@@ -1,0 +1,13 @@
+=== 06_Cutscene_06_Carrington_Villa_Intro ===
+Total de áudios nesta cena: 6
+
+Arquivos de áudio:
+  - Ap6_01_joM.mp3       | Voz: Joanna Dark
+  - Ap6_02_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap6_03_joM.mp3       | Voz: Joanna Dark
+  - Ap6_04_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap6_05_joM.mp3       | Voz: Joanna Dark
+  - Ap6_06_caM.mp3       | Voz: Daniel Carrington / Cassandra De Vries
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

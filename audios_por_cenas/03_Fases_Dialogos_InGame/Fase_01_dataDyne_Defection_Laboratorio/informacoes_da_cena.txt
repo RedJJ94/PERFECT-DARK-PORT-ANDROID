@@ -1,0 +1,21 @@
+=== Fase_01_dataDyne_Defection_Laboratorio ===
+Total de áudios nesta cena: 14
+
+Arquivos de áudio:
+  - Alabacc1M.mp3        | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabacc2M.mp3        | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabacc3M.mp3        | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabacc4M.mp3        | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabacc5M.mp3        | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabacc6M.mp3        | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabtech1M.mp3       | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabtech2M.mp3       | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabtech3M.mp3       | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabtech5M.mp3       | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabtech6M.mp3       | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabtech7M.mp3       | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabtech8M.mp3       | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+  - Alabtech9M.mp3       | Diálogos dos técnicos e cientistas nos laboratórios dataDyne
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

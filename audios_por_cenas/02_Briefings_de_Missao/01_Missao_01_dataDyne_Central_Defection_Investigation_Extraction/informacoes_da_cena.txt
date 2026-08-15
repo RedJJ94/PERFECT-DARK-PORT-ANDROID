@@ -1,0 +1,19 @@
+=== 01_Missao_01_dataDyne_Central_Defection_Investigation_Extraction ===
+Total de áudios nesta cena: 12
+
+Arquivos de áudio:
+  - Am1_l1_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l1_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l1_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l1_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l2_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l2_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l2_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l2_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l3_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l3_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l3_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am1_l3_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

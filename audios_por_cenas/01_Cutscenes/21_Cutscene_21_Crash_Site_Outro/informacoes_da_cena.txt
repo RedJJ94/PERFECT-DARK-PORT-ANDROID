@@ -1,0 +1,11 @@
+=== 21_Cutscene_21_Crash_Site_Outro ===
+Total de áudios nesta cena: 4
+
+Arquivos de áudio:
+  - Ap21_01_elM.mp3      | Voz: Elvis (Maian)
+  - Ap21_02_joM.mp3      | Voz: Joanna Dark
+  - Ap21_03_elM.mp3      | Voz: Elvis (Maian)
+  - Ap21_04_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

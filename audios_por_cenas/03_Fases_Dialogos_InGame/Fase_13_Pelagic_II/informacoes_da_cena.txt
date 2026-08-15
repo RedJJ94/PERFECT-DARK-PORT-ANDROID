@@ -1,0 +1,10 @@
+=== Fase_13_Pelagic_II ===
+Total de áudios nesta cena: 3
+
+Arquivos de áudio:
+  - Apelelv01M.mp3       | Diálogos do submarino/elevador Pelagic II
+  - Apelelv02M.mp3       | Diálogos do submarino/elevador Pelagic II
+  - Apelgrd01M.mp3       | Diálogos do submarino/elevador Pelagic II
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

@@ -1,0 +1,10 @@
+=== Fase_14_Deep_Sea ===
+Total de áudios nesta cena: 3
+
+Arquivos de áudio:
+  - Acetael01M.mp3       | Diálogos da missão Deep Sea e nave alienígena Cetan
+  - Aelvcet01M.mp3       | Diálogos da missão Deep Sea e nave alienígena Cetan
+  - Aelvcet02M.mp3       | Diálogos da missão Deep Sea e nave alienígena Cetan
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

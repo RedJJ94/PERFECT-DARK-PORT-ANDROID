@@ -1,0 +1,19 @@
+=== 05_Missao_05_Air_Base_Air_Force_One_Crash_Site ===
+Total de áudios nesta cena: 12
+
+Arquivos de áudio:
+  - Am5_l1_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l1_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l1_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l1_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l2_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l2_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l2_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l2_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l3_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l3_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l3_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am5_l3_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

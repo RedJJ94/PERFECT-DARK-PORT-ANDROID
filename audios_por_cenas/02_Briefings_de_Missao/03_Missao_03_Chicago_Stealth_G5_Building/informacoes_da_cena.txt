@@ -1,0 +1,16 @@
+=== 03_Missao_03_Chicago_Stealth_G5_Building ===
+Total de áudios nesta cena: 9
+
+Arquivos de áudio:
+  - Am3_l1_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am3_l1_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am3_l1_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am3_l1_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am3_l2_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am3_l2_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am3_l2_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am3_l2_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am3l2carrM.mp3       | Briefing de Daniel Carrington (G5 Building)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

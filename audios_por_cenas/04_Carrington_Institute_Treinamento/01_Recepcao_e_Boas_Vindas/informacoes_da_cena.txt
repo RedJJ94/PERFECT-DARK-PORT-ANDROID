@@ -1,0 +1,13 @@
+=== 01_Recepcao_e_Boas_Vindas ===
+Total de áudios nesta cena: 6
+
+Arquivos de áudio:
+  - Arecep01M.mp3        | Voz da Recepcionista do Instituto Carrington
+  - Arecep02M.mp3        | Voz da Recepcionista do Instituto Carrington
+  - Arecep03M.mp3        | Voz da Recepcionista do Instituto Carrington
+  - Arecep04M.mp3        | Voz da Recepcionista do Instituto Carrington
+  - Arecep05M.mp3        | Voz da Recepcionista do Instituto Carrington
+  - Arecep06M.mp3        | Voz da Recepcionista do Instituto Carrington
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

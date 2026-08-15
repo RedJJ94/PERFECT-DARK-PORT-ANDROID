@@ -1,0 +1,11 @@
+=== 08_Missao_08_Attack_Ship_Covert_Assault ===
+Total de áudios nesta cena: 4
+
+Arquivos de áudio:
+  - Am8_l1_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am8_l1_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am8_l1_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am8_l1_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

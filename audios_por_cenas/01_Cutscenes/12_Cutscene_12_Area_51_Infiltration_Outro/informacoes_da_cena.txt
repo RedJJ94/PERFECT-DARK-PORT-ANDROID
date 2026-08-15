@@ -1,0 +1,17 @@
+=== 12_Cutscene_12_Area_51_Infiltration_Outro ===
+Total de áudios nesta cena: 10
+
+Arquivos de áudio:
+  - Ap12_01_jnM.mp3      | Voz: Jonathan (Agente CI)
+  - Ap12_02_joM.mp3      | Voz: Joanna Dark
+  - Ap12_03_jnM.mp3      | Voz: Jonathan (Agente CI)
+  - Ap12_04_joM.mp3      | Voz: Joanna Dark
+  - Ap12_05_jnM.mp3      | Voz: Jonathan (Agente CI)
+  - Ap12_06_joM.mp3      | Voz: Joanna Dark
+  - Ap12_07_jnM.mp3      | Voz: Jonathan (Agente CI)
+  - Ap12_08_joM.mp3      | Voz: Joanna Dark
+  - Ap12_09_jnM.mp3      | Voz: Jonathan (Agente CI)
+  - Ap12_10_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

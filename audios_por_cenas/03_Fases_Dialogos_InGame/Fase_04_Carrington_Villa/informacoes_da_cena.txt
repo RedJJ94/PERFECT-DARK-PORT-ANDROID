@@ -1,0 +1,9 @@
+=== Fase_04_Carrington_Villa ===
+Total de áudios nesta cena: 2
+
+Arquivos de áudio:
+  - Acarrbye02M.mp3      | Diálogos na Vila de Carrington (Grimshaw e Carrington)
+  - AvilgrimM.mp3        | Diálogos na Vila de Carrington (Grimshaw e Carrington)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

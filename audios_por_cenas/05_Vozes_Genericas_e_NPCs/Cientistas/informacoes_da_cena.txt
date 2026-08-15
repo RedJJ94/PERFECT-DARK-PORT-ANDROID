@@ -1,0 +1,28 @@
+=== Cientistas ===
+Total de áudios nesta cena: 21
+
+Arquivos de áudio:
+  - Ascie2aM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie2bM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie2cM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie2dM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie2eM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie2fM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie2gM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie3aM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie3bM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie3cM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie3dM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie3eM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascie3gM.mp3         | Vozes e reações de cientistas neutros/inimigos
+  - Ascien10aM.mp3       | Vozes e reações de cientistas neutros/inimigos
+  - Ascien2_aM.mp3       | Vozes e reações de cientistas neutros/inimigos
+  - Ascien3_aM.mp3       | Vozes e reações de cientistas neutros/inimigos
+  - Ascien4_aM.mp3       | Vozes e reações de cientistas neutros/inimigos
+  - Ascien5_aM.mp3       | Vozes e reações de cientistas neutros/inimigos
+  - Ascien6_aM.mp3       | Vozes e reações de cientistas neutros/inimigos
+  - Ascien7_aM.mp3       | Vozes e reações de cientistas neutros/inimigos
+  - Ascien9_aM.mp3       | Vozes e reações de cientistas neutros/inimigos
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

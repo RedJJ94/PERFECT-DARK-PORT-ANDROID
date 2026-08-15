@@ -1,0 +1,26 @@
+=== 03_Treinamento_com_Instrutores ===
+Total de áudios nesta cena: 19
+
+Arquivos de áudio:
+  - Atrcarr01M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr02M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr03M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr04M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr05M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr06M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr07M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr08M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr09M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr10M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr11M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrcarr12M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrfost01M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrfost02M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrfost03M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrgrim01M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrgrim02M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrjo01M.mp3         | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+  - Atrroge01M.mp3       | Instruções de treino (Carrington, Foster, Grimshaw, Rogers)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

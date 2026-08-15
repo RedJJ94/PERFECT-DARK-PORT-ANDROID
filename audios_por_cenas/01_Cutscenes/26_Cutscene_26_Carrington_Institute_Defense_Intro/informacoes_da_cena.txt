@@ -1,0 +1,15 @@
+=== 26_Cutscene_26_Carrington_Institute_Defense_Intro ===
+Total de áudios nesta cena: 8
+
+Arquivos de áudio:
+  - Ap26_01_joM.mp3      | Voz: Joanna Dark
+  - Ap26_02_dvM.mp3      | Voz: Cassandra De Vries
+  - Ap26_03_joM.mp3      | Voz: Joanna Dark
+  - Ap26_04_dvM.mp3      | Voz: Cassandra De Vries
+  - Ap26_05_dvM.mp3      | Voz: Cassandra De Vries
+  - Ap26_06_joM.mp3      | Voz: Joanna Dark
+  - Ap26_07_dvM.mp3      | Voz: Cassandra De Vries
+  - Ap26_08_dvM.mp3      | Voz: Cassandra De Vries
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

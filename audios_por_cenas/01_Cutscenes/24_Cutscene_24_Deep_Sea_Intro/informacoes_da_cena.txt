@@ -1,0 +1,15 @@
+=== 24_Cutscene_24_Deep_Sea_Intro ===
+Total de áudios nesta cena: 8
+
+Arquivos de áudio:
+  - Ap24_01_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap24_02_joM.mp3      | Voz: Joanna Dark
+  - Ap24_03_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap24_04_joM.mp3      | Voz: Joanna Dark
+  - Ap24_05_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap24_06_caM.mp3      | Voz: Daniel Carrington / Cassandra De Vries
+  - Ap24_07_joM.mp3      | Voz: Joanna Dark
+  - Ap24_08_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

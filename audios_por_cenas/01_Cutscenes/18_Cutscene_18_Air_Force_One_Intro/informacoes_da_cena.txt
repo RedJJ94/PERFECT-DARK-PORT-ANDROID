@@ -1,0 +1,12 @@
+=== 18_Cutscene_18_Air_Force_One_Intro ===
+Total de áudios nesta cena: 5
+
+Arquivos de áudio:
+  - Ap18_01_joM.mp3      | Voz: Joanna Dark
+  - Ap18_02_elM.mp3      | Voz: Elvis (Maian)
+  - Ap18_03_elM.mp3      | Voz: Elvis (Maian)
+  - Ap18_04_joM.mp3      | Voz: Joanna Dark
+  - Ap18_05_elM.mp3      | Voz: Elvis (Maian)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

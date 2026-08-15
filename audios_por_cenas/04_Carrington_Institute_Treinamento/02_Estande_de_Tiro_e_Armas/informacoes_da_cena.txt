@@ -1,0 +1,13 @@
+=== 02_Estande_de_Tiro_e_Armas ===
+Total de áudios nesta cena: 6
+
+Arquivos de áudio:
+  - Awepgd01M.mp3        | Instrutores e técnicos do estande de tiro
+  - Awepgd02M.mp3        | Instrutores e técnicos do estande de tiro
+  - Awepgd03M.mp3        | Instrutores e técnicos do estande de tiro
+  - Awepsc01M.mp3        | Instrutores e técnicos do estande de tiro
+  - Awepsc02M.mp3        | Instrutores e técnicos do estande de tiro
+  - Awepsc03M.mp3        | Instrutores e técnicos do estande de tiro
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

@@ -1,0 +1,11 @@
+=== 22_Cutscene_22_Pelagic_II_Intro ===
+Total de áudios nesta cena: 4
+
+Arquivos de áudio:
+  - Ap22_01_elM.mp3      | Voz: Elvis (Maian)
+  - Ap22_02_joM.mp3      | Voz: Joanna Dark
+  - Ap22_03_elM.mp3      | Voz: Elvis (Maian)
+  - Ap22_04_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

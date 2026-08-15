@@ -1,0 +1,9 @@
+=== 05_Hologramas_de_Treino ===
+Total de áudios nesta cena: 2
+
+Arquivos de áudio:
+  - Ahologd01M.mp3       | Vozes dos hologramas de combate virtual
+  - AholohopkM.mp3       | Vozes dos hologramas de combate virtual
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

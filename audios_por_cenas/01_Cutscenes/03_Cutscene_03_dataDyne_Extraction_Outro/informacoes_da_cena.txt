@@ -1,0 +1,10 @@
+=== 03_Cutscene_03_dataDyne_Extraction_Outro ===
+Total de áudios nesta cena: 3
+
+Arquivos de áudio:
+  - Ap3_01_gdM.mp3       | Voz: Guarda de Segurança
+  - Ap3_02_joM.mp3       | Voz: Joanna Dark
+  - Ap3_03_joM.mp3       | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

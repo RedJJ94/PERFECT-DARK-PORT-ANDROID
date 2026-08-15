@@ -1,0 +1,15 @@
+=== 20_Cutscene_20_Crash_Site_Intro ===
+Total de áudios nesta cena: 8
+
+Arquivos de áudio:
+  - Ap20_01_joM.mp3      | Voz: Joanna Dark
+  - Ap20_02_prM.mp3      | Voz: Presidente dos EUA
+  - Ap20_03_joM.mp3      | Voz: Joanna Dark
+  - Ap20_04_prM.mp3      | Voz: Presidente dos EUA
+  - Ap20_05_joM.mp3      | Voz: Joanna Dark
+  - Ap20_06_blM.mp3      | Voz: Mr. Blonde
+  - Ap20_07_trM.mp3      | Voz: Trent Easton
+  - Ap20_08_trM.mp3      | Voz: Trent Easton
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

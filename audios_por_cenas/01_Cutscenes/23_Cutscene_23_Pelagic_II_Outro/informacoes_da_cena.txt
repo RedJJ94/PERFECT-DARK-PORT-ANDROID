@@ -1,0 +1,15 @@
+=== 23_Cutscene_23_Pelagic_II_Outro ===
+Total de áudios nesta cena: 8
+
+Arquivos de áudio:
+  - Ap23_01_joM.mp3      | Voz: Joanna Dark
+  - Ap23_02_drM.mp3      | Voz: Dr. Caroll (IA)
+  - Ap23_03_joM.mp3      | Voz: Joanna Dark
+  - Ap23_04_drM.mp3      | Voz: Dr. Caroll (IA)
+  - Ap23_05_joM.mp3      | Voz: Joanna Dark
+  - Ap23_06_drM.mp3      | Voz: Dr. Caroll (IA)
+  - Ap23_07_joM.mp3      | Voz: Joanna Dark
+  - Ap23_08_drM.mp3      | Voz: Dr. Caroll (IA)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

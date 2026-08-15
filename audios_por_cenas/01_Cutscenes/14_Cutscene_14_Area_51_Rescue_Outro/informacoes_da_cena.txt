@@ -1,0 +1,12 @@
+=== 14_Cutscene_14_Area_51_Rescue_Outro ===
+Total de áudios nesta cena: 5
+
+Arquivos de áudio:
+  - Ap14_03_suM.mp3      | Voz: Piloto / Técnico Maian
+  - Ap14_04_joM.mp3      | Voz: Joanna Dark
+  - Ap14_05_suM.mp3      | Voz: Piloto / Técnico Maian
+  - Ap14_07_joM.mp3      | Voz: Joanna Dark
+  - Ap14_09_joM.mp3      | Voz: Joanna Dark
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

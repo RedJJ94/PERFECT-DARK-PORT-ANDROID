@@ -1,0 +1,14 @@
+=== 02_Cutscene_02_dataDyne_Defection_Outro ===
+Total de áudios nesta cena: 7
+
+Arquivos de áudio:
+  - Ap2_01_joM.mp3       | Voz: Joanna Dark
+  - Ap2_02_joM.mp3       | Voz: Joanna Dark
+  - Ap2_03_drM.mp3       | Voz: Dr. Caroll (IA)
+  - Ap2_04_joM.mp3       | Voz: Joanna Dark
+  - Ap2_05_joM.mp3       | Voz: Joanna Dark
+  - Ap2_06_drM.mp3       | Voz: Dr. Caroll (IA)
+  - Ap2_07_drM.mp3       | Voz: Dr. Caroll (IA)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

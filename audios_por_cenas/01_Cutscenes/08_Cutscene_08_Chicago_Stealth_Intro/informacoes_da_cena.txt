@@ -1,0 +1,16 @@
+=== 08_Cutscene_08_Chicago_Stealth_Intro ===
+Total de áudios nesta cena: 9
+
+Arquivos de áudio:
+  - Ap8_01_dvM.mp3       | Voz: Cassandra De Vries
+  - Ap8_02_blM.mp3       | Voz: Mr. Blonde
+  - Ap8_03_dvM.mp3       | Voz: Cassandra De Vries
+  - Ap8_04_blM.mp3       | Voz: Mr. Blonde
+  - Ap8_06_blM.mp3       | Voz: Mr. Blonde
+  - Ap8_07_trM.mp3       | Voz: Trent Easton
+  - Ap8_08_dvM.mp3       | Voz: Cassandra De Vries
+  - Ap8_09_trM.mp3       | Voz: Trent Easton
+  - Ap8_10_blM.mp3       | Voz: Mr. Blonde
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

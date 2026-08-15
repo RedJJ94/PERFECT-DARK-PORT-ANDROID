@@ -1,0 +1,14 @@
+=== Fase_08_Area_51_Laboratorio ===
+Total de áudios nesta cena: 7
+
+Arquivos de áudio:
+  - Arlguard1M.mp3       | Diálogos dos laboratórios de pesquisa militar da Área 51
+  - Arltech01M.mp3       | Diálogos dos laboratórios de pesquisa militar da Área 51
+  - Arltech02M.mp3       | Diálogos dos laboratórios de pesquisa militar da Área 51
+  - Arltech03M.mp3       | Diálogos dos laboratórios de pesquisa militar da Área 51
+  - Arltech04M.mp3       | Diálogos dos laboratórios de pesquisa militar da Área 51
+  - Arltech05M.mp3       | Diálogos dos laboratórios de pesquisa militar da Área 51
+  - Arltech06M.mp3       | Diálogos dos laboratórios de pesquisa militar da Área 51
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.

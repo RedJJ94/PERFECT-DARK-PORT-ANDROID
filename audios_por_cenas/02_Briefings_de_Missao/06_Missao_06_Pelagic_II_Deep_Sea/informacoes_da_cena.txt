@@ -1,0 +1,15 @@
+=== 06_Missao_06_Pelagic_II_Deep_Sea ===
+Total de áudios nesta cena: 8
+
+Arquivos de áudio:
+  - Am6_l1_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am6_l1_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am6_l1_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am6_l1_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am6_l2_aM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am6_l2_bM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am6_l2_cM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+  - Am6_l2_dM.mp3        | Briefing de Daniel Carrington (Instruções da Missão)
+
+Instruções para dublagem/substituição:
+  Para substituir qualquer áudio, mantenha o mesmo nome do arquivo .mp3 correspondente.
