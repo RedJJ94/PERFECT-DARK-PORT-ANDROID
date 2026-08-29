@@ -48,6 +48,23 @@
             app:cornerRadius="4dp"
             app:backgroundTint="#33000000" />
 
+        <!-- Botão MULTIPLAYER -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMultiplayer"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="MULTIPLAYER"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.18"
+            android:textColor="#FFD700"
+            android:layout_marginBottom="12dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:strokeColor="#FFD700"
+            app:strokeWidth="2dp"
+            app:cornerRadius="4dp"
+            app:backgroundTint="#33000000" />
+
         <!-- Botão CONFIGURAÇÕES -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSettings"

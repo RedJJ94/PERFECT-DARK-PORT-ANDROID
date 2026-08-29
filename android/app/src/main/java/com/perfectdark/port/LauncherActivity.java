@@ -188,6 +188,10 @@ public class LauncherActivity extends AppCompatActivity {
     private void startGame() {
         // Hand off to SDL/MainActivity
         Intent intent = new Intent(this, MainActivity.class);
+        // Forward any multiplayer or other extras
+        if (getIntent().getExtras() != null) {
+            intent.putExtras(getIntent().getExtras());
+        }
         // Ensure we don’t come back here when user quits the game
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

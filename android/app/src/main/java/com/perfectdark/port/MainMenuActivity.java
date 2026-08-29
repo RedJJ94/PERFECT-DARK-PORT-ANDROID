@@ -27,8 +27,13 @@ public class MainMenuActivity extends AppCompatActivity {
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 1001;
 
     private MaterialButton btnStart;
+    private MaterialButton btnMultiplayer;
     private MaterialButton btnSettings;
     private MaterialButton btnExit;
+
+    private static final String PREFS_NET = "NetplayPrefs";
+    private static final String KEY_LAST_IP = "last_join_ip";
+    private static final String KEY_LAST_PORT = "last_join_port";
 
     // ── Lifecycle ──────────────────────────────────────────────────────────────
 
@@ -37,9 +42,10 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        btnStart    = findViewById(R.id.btnStart);
-        btnSettings = findViewById(R.id.btnSettings);
-        btnExit     = findViewById(R.id.btnExit);
+        btnStart       = findViewById(R.id.btnStart);
+        btnMultiplayer = findViewById(R.id.btnMultiplayer);
+        btnSettings    = findViewById(R.id.btnSettings);
+        btnExit        = findViewById(R.id.btnExit);
 
         checkAndRequestStoragePermissions();
         setupListeners();
@@ -123,6 +129,11 @@ public class MainMenuActivity extends AppCompatActivity {
             })
         );
 
+        // MULTIPLAYER → abre opções de Host e Join
+        btnMultiplayer.setOnClickListener(v ->
+            animateButton(v, this::showMultiplayerDialog)
+        );
+
         // CONFIGURAÇÕES → música continua tocando
         btnSettings.setOnClickListener(v ->
             animateButton(v, () -> {
@@ -146,6 +157,117 @@ public class MainMenuActivity extends AppCompatActivity {
         );
     }
 
+    // ── Multiplayer ─────────────────────────────────────────────────────────────
+
+    private void showMultiplayerDialog() {
+        String[] options = {"Criar Sala (Host Game)", "Entrar em Sala (Join Game)"};
+        new AlertDialog.Builder(this)
+                .setTitle("Multiplayer (Netplay)")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        showHostDialog();
+                    } else {
+                        showJoinDialog();
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void showHostDialog() {
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
+        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        android.widget.TextView portLabel = new android.widget.TextView(this);
+        portLabel.setText("Porta UDP do Servidor:");
+        layout.addView(portLabel);
+
+        android.widget.EditText inputPort = new android.widget.EditText(this);
+        inputPort.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        inputPort.setText("27100");
+        layout.addView(inputPort);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Criar Sala (Host)")
+                .setMessage("Os outros jogadores deverão conectar no seu IP local ou público nesta porta.")
+                .setView(layout)
+                .setPositiveButton("Iniciar", (dialog, which) -> {
+                    int port = 27100;
+                    try {
+                        port = Integer.parseInt(inputPort.getText().toString().trim());
+                    } catch (Exception ignored) {}
+                    launchGameWithNet(1, null, port);
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void showJoinDialog() {
+        android.content.SharedPreferences prefs = getSharedPreferences(PREFS_NET, MODE_PRIVATE);
+        String lastIp = prefs.getString(KEY_LAST_IP, "127.0.0.1");
+        int lastPort = prefs.getInt(KEY_LAST_PORT, 27100);
+
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
+        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        android.widget.TextView ipLabel = new android.widget.TextView(this);
+        ipLabel.setText("Endereço IP / Hostname do Servidor:");
+        layout.addView(ipLabel);
+
+        android.widget.EditText inputIp = new android.widget.EditText(this);
+        inputIp.setText(lastIp);
+        inputIp.setHint("Ex: 192.168.1.100 ou meu-servidor.net");
+        layout.addView(inputIp);
+
+        android.widget.TextView portLabel = new android.widget.TextView(this);
+        portLabel.setText("Porta UDP:");
+        portLabel.setPadding(0, 20, 0, 0);
+        layout.addView(portLabel);
+
+        android.widget.EditText inputPort = new android.widget.EditText(this);
+        inputPort.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        inputPort.setText(String.valueOf(lastPort));
+        layout.addView(inputPort);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Entrar em Sala (Join)")
+                .setView(layout)
+                .setPositiveButton("Conectar", (dialog, which) -> {
+                    String ip = inputIp.getText().toString().trim();
+                    int port = 27100;
+                    try {
+                        port = Integer.parseInt(inputPort.getText().toString().trim());
+                    } catch (Exception ignored) {}
+
+                    if (ip.isEmpty()) {
+                        ip = "127.0.0.1";
+                    }
+
+                    // Salva último IP e Porta
+                    prefs.edit()
+                            .putString(KEY_LAST_IP, ip)
+                            .putInt(KEY_LAST_PORT, port)
+                            .apply();
+
+                    launchGameWithNet(2, ip, port);
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void launchGameWithNet(int mode, String ip, int port) {
+        stopMusicService();
+        Intent intent = new Intent(MainMenuActivity.this, LauncherActivity.class);
+        intent.putExtra("extra_net_mode", mode);
+        if (ip != null) {
+            intent.putExtra("extra_net_ip", ip);
+        }
+        intent.putExtra("extra_net_port", port);
+        startActivity(intent);
+    }
+
     // ── Música ─────────────────────────────────────────────────────────────────
 
     private void startMusicService() {
@@ -161,8 +283,8 @@ public class MainMenuActivity extends AppCompatActivity {
     // ── Animações ──────────────────────────────────────────────────────────────
 
     private void animateEntrance() {
-        View[] buttons = {btnStart, btnSettings, btnExit};
-        long[] delays  = {200, 350, 500};
+        View[] buttons = {btnStart, btnMultiplayer, btnSettings, btnExit};
+        long[] delays  = {200, 300, 400, 500};
         for (int i = 0; i < buttons.length; i++) {
             View btn = buttons[i];
             long delay = delays[i];

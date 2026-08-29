@@ -46,6 +46,12 @@ JNIEXPORT void JNICALL Java_com_perfectdark_port_SettingsActivity_nativeApplySet
     jboolean texDumpEnabled, jboolean texLoadEnabled
 );
 
+// Netplay mode setup function
+JNIEXPORT void JNICALL Java_com_perfectdark_port_MainActivity_nativeSetNetMode(
+    JNIEnv* env, jobject thiz,
+    jint mode, jstring ipAddress, jint port
+);
+
 #endif // ANDROID
 
 #endif // ANDROID_SYSTEM_H

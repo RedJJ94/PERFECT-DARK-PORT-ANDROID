@@ -17,8 +17,10 @@
 #include "config.h"
 #include "mod.h"
 #include "system.h"
+#include "console.h"
 #include "utils.h"
 #include "texexport.h"
+#include "net/net.h"
 
 #include <SDL.h>
 
@@ -88,7 +90,7 @@ static void gameInit(void)
 {
 	osMemSize = g_OsMemSizeMb * 1024 * 1024;
 
-	for (s32 i = 0; i < MAX_PLAYERS; ++i) {
+	for (s32 i = 0; i < MAX_LOCAL_PLAYERS; ++i) {
 		struct extplayerconfig *cfg = g_PlayerExtCfg + i;
 		cfg->fovzoommult = cfg->fovzoom ? cfg->fovy / 60.0f : 1.0f;
 	}
@@ -108,6 +110,7 @@ static s32 configDirty = 0;
 static void cleanup(void)
 {
 	sysLogPrintf(LOG_NOTE, "shutdown");
+	netDisconnect();
 	inputSaveBinds();
 	configSave(CONFIG_PATH);
 	videoShutdown();
@@ -354,6 +357,44 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Settings applied successfully");
 }
 
+JNIEXPORT void JNICALL
+Java_com_perfectdark_port_MainActivity_nativeSetNetMode(
+    JNIEnv* env, jobject thiz,
+    jint mode, jstring ipAddress, jint port
+) {
+    __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "nativeSetNetMode: mode=%d, port=%d", mode, port);
+
+    if (mode == 1) {
+        // Host Game
+        g_NetHostLatch = true;
+        g_NetJoinLatch = false;
+        if (port > 0) {
+            g_NetServerPort = (u32)port;
+        }
+    } else if (mode == 2) {
+        // Join Game
+        g_NetJoinLatch = true;
+        g_NetHostLatch = false;
+        if (ipAddress != NULL) {
+            const char *ip = (*env)->GetStringUTFChars(env, ipAddress, 0);
+            if (ip && ip[0]) {
+                if (port > 0 && strchr(ip, ':') == NULL) {
+                    snprintf(g_NetLastJoinAddr, sizeof(g_NetLastJoinAddr), "%s:%d", ip, port);
+                } else {
+                    strncpy(g_NetLastJoinAddr, ip, sizeof(g_NetLastJoinAddr) - 1);
+                    g_NetLastJoinAddr[sizeof(g_NetLastJoinAddr) - 1] = '\0';
+                }
+                __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "nativeSetNetMode: join addr = %s", g_NetLastJoinAddr);
+            }
+            (*env)->ReleaseStringUTFChars(env, ipAddress, ip);
+        }
+    } else {
+        // Normal single player
+        g_NetHostLatch = false;
+        g_NetJoinLatch = false;
+    }
+}
+
 int pd_main(int argc, const char **argv)
 #else
 int main(int argc, const char **argv)
@@ -365,10 +406,7 @@ int main(int argc, const char **argv)
 
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Starting initialization sequence");
 
-	if (!sysArgCheck("--no-crash-handler")) {
-		crashInit();
-	}
-
+	conInit();
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "sysInit starting");
 	sysInit();
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "fsInit starting");
@@ -405,6 +443,7 @@ int main(int argc, const char **argv)
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "romdataInit starting");
 	romdataInit();
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "romdataInit complete");
+	netInit();
 
 	g_ValidGbcRomFound = romdataCheckGbcRom();
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "GBC ROM check complete");
@@ -440,6 +479,8 @@ int main(int argc, const char **argv)
 
 	g_StageNum = sysArgGetInt("--boot-stage", STAGE_TITLE);
 
+	g_FileAutoSelect = sysArgGetInt("--profile", -1);
+
 	if (g_StageNum == STAGE_TITLE && (sysArgCheck("--skip-intro") || g_SkipIntro)) {
 		// shorthand for --boot-stage 0x26
 		g_StageNum = STAGE_CITRAINING;
@@ -448,11 +489,19 @@ int main(int argc, const char **argv)
 		g_StageNum = STAGE_TITLE;
 	}
 
+	if (g_NetJoinLatch || g_NetHostLatch) {
+		if (g_FileAutoSelect < 0) {
+			// default to profile 0 if going into a net game
+			g_FileAutoSelect = 0;
+		}
+		// skip the intro if going into a net game
+		g_StageNum = STAGE_CITRAINING;
+	}
+
 	if (g_StageNum != STAGE_TITLE) {
 		sysLogPrintf(LOG_NOTE, "boot stage set to 0x%02x", g_StageNum);
 	}
 
-	g_FileAutoSelect = sysArgGetInt("--profile", -1);
 	if (g_FileAutoSelect >= 0) {
 		sysLogPrintf(LOG_NOTE, "player profile set to %d", g_FileAutoSelect);
 	}
@@ -474,7 +523,7 @@ PD_CONSTRUCTOR static void gameConfigInit(void)
 	configRegisterInt("Game.DisableMpDeathMusic", &g_MusicDisableMpDeath, 0, 1);
 	configRegisterInt("Game.GEMuzzleFlashes", &g_BgunGeMuzzleFlashes, 0, 1);
 	configRegisterInt("Game.MaxExplosions", &g_MaxExplosions, 6, 96);
-	for (s32 j = 0; j < MAX_PLAYERS; ++j) {
+	for (s32 j = 0; j < MAX_LOCAL_PLAYERS; ++j) {
 		const s32 i = j + 1;
 		configRegisterFloat(strFmt("Game.Player%d.FovY", i), &g_PlayerExtCfg[j].fovy, 5.f, 175.f);
 		configRegisterInt(strFmt("Game.Player%d.FovAffectsZoom", i), &g_PlayerExtCfg[j].fovzoom, 0, 1);

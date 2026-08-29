@@ -1,6 +1,8 @@
-# Perfect Dark Android Port
+# Perfect Dark Android Port (with Netplay)
 
-This repository contains an Android port of the [Perfect Dark decompilation](https://github.com/n64decomp/perfect_dark).
+This repository contains an Android port of the [Perfect Dark decompilation](https://github.com/n64decomp/perfect_dark), including experimental **Multiplayer Netplay** support (powered by ENet).
+
+See [docs/netplay.md](docs/netplay.md) for more details on how the netplay system works.
 
 To run the port, you must already have a Perfect Dark ROM, specifically one of the following:
 * `ntsc-final`/`US V1.1`/`US Rev 1` (md5 `e03b088b6ac9e0080440efed07c1e40f`).  
@@ -18,22 +20,19 @@ To run the port, you must already have a Perfect Dark ROM, specifically one of t
 
 ## Status
 
-The game is in a mostly functional state, with both singleplayer and split-screen multiplayer modes fully working.  
+The game is in a mostly functional state, with singleplayer, split-screen multiplayer, and online/LAN netplay modes working.  
 There are minor graphics- and gameplay-related issues, and possibly occasional crashes.
 
 **The following extra features are implemented:**
-* mouselook;
-* dual analog controller support;
-* widescreen resolution support;
-* configurable field of view;
-* 60 FPS support, including fixes for some framerate-related issues;
-* fixes for a couple original bugs and crashes;
-* basic mod support, currently enough to load a few custom levels;
-* slightly expanded memory heap size;
-* experimental high framerate support (up to 240 FPS):
-  * enable `Uncap Tickrate` in `Extended Video Options` to activate;
-  * in practice the game will have issues running faster than ~165 FPS, so use VSync or `Video.FramerateLimit` to cap it.
-* emulate the Transfer Pak functionality the game has on the Nintendo 64 to unlock some cheats automatically.
+* Multiplayer Netplay (Host/Join rooms, LAN and Online via ENet UDP);
+* On-screen touch controls with customizable layout;
+* Dual analog and external gamepad support;
+* Widescreen resolution support;
+* Configurable field of view;
+* 60 FPS support, including fixes for framerate-related issues;
+* External MP3 voice dubbing and streaming mixer;
+* Basic mod support;
+* Emulated Transfer Pak functionality (`pd.gbc`).
 
 **Supported Android architectures:**
 * arm64-v8a
@@ -68,26 +67,24 @@ The Android port includes touch controls and supports external controllers.
 
 N64 pad buttons X and Y (or `X_BUTTON`, `Y_BUTTON` in the code) refer to the reserved buttons `0x40` and `0x80`, which are also leveraged by 1964GEPD.
 
-Support for one controller, two-stick configurations are enabled for 1.2.
-
 Default control scheme for external controllers is as follows:
 
-|| Action           | Xbox pad                 | N64 pad                   |
-|| -                | -                        | -                         |
-|| Fire / Accept    | RT                       | Z Trigger                 |
-|| Aim mode         | LT                       | R Trigger                 |
-|| Use / Cancel     | N/A                      | B                         |
-|| Use / Accept     | A                        | A                         |
-|| Crouch cycle     | L3                       | `0x80000000` (Extra)      |
-|| Half-Crouch      | N/A                      | `0x40000000` (Extra)      |
-|| Full-Crouch      | N/A                      | `0x20000000` (Extra)      |
-|| Reload           | X                        | X `(0x40)`                |
-|| Previous weapon  | B                        | D-Left                    |
-|| Next weapon      | Y                        | Y `(0x80)`                |
-|| Radial menu      | LB                       | D-Down                    |
-|| Alt fire mode    | RB                       | L Trigger                 |
-|| Alt-fire oneshot | `A + RT` or  `RB + RT`   | `A + Z`     or `L + Z`    |
-|| Quick-detonate   | `A + B`  or  `A + X`     | `A + D-Left`or `A + X`    |
+| Action           | Xbox pad                 | N64 pad                   |
+| -                | -                        | -                         |
+| Fire / Accept    | RT                       | Z Trigger                 |
+| Aim mode         | LT                       | R Trigger                 |
+| Use / Cancel     | N/A                      | B                         |
+| Use / Accept     | A                        | A                         |
+| Crouch cycle     | L3                       | `0x80000000` (Extra)      |
+| Half-Crouch      | N/A                      | `0x40000000` (Extra)      |
+| Full-Crouch      | N/A                      | `0x20000000` (Extra)      |
+| Reload           | X                        | X `(0x40)`                |
+| Previous weapon  | B                        | D-Left                    |
+| Next weapon      | Y                        | Y `(0x80)`                |
+| Radial menu      | LB                       | D-Down                    |
+| Alt fire mode    | RB                       | L Trigger                 |
+| Alt-fire oneshot | `A + RT` or  `RB + RT`   | `A + Z`     or `L + Z`    |
+| Quick-detonate   | `A + B`  or  `A + X`     | `A + D-Left`or `A + X`    |
 
 ## Building
 
@@ -103,23 +100,3 @@ Default control scheme for external controllers is as follows:
    ./gradlew assembleRelease
    ```
 5. The resulting APK will be at `android/app/build/outputs/apk/release/app-release.apk`
-
-### Notes
-
-The Android port uses the native CMake build system integrated with Gradle. The CMakeLists.txt in the root directory is used by the Android build system.
-
-You will need to provide a `jpn-final` or `pal-final` ROM to run builds for those regions.
-
-## Credits
-
-* the original [decompilation project](https://github.com/n64decomp/perfect_dark) authors;
-* Ryan Dwyer for the above, additional help, and `pd-extract`;
-* doomhack for the only other publicly available [PD porting effort](https://github.com/doomhack/perfect_dark) I could find;
-* [sm64-port](https://github.com/sm64-port/sm64-port) authors for the audio mixer and some other changes;
-* [Ship of Harkinian team](https://github.com/Kenix3/libultraship/tree/main/src/graphic/Fast3D), Emill and MaikelChan for the libultraship version of fast3d that this port uses;
-* lieff for [minimp3](https://github.com/lieff/minimp3);
-* Mouse Injector and 1964GEPD authors for some of the 60FPS- and mouselook-related fixes;
-* Raf for the 64-bit port;
-* NicNamSam for the icon;
-* everyone who has submitted pull requests and issues to this repository and tested the port;
-* probably more I'm forgetting.

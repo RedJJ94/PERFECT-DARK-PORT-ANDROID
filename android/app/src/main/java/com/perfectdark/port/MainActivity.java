@@ -123,6 +123,18 @@ public class MainActivity extends SDLActivity {
             perfectDarkDir.mkdirs();
         }
         
+        // Check for multiplayer netplay settings from Intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            int netMode = intent.getIntExtra("extra_net_mode", 0);
+            String netIp = intent.getStringExtra("extra_net_ip");
+            int netPort = intent.getIntExtra("extra_net_port", 27100);
+            if (netMode > 0) {
+                android.util.Log.i("PerfectDark", "Setting netplay mode: " + netMode + " IP: " + netIp + " Port: " + netPort);
+                nativeSetNetMode(netMode, netIp != null ? netIp : "", netPort);
+            }
+        }
+
         // Initialize native game
         android.util.Log.i("PerfectDark", "Calling nativeInit");
         nativeInit(perfectDarkDir.getAbsolutePath());
@@ -187,4 +199,5 @@ public class MainActivity extends SDLActivity {
     public native void nativeInit(String dataPath);
     public native void nativeStartGame();
     public native void nativeDestroy();
+    public native void nativeSetNetMode(int mode, String ipAddress, int port);
 }

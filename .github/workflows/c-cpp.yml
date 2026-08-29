@@ -2,7 +2,7 @@ name: Android APK Build
 
 on:
   push:
-    branches: [ "port" ]
+    branches: [ "port", "port-net" ]
   pull_request:
     branches: [ "port" ]
   workflow_dispatch:
