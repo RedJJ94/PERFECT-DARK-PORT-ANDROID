@@ -7,6 +7,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +19,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
+
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 
 /**
@@ -175,12 +185,55 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void showHostDialog() {
+        String ipSummary = getDeviceIpSummary();
+        String primaryIp = getPrimaryIpAddress();
+
         android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
         layout.setOrientation(android.widget.LinearLayout.VERTICAL);
-        layout.setPadding(50, 40, 50, 10);
+        layout.setPadding(50, 30, 50, 10);
 
+        // Título IP
+        android.widget.TextView ipTitle = new android.widget.TextView(this);
+        ipTitle.setText("Seu Endereço IP (Passe para os amigos entrarem):");
+        ipTitle.setTextSize(13f);
+        ipTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        ipTitle.setTextColor(0xFF00E5FF);
+        layout.addView(ipTitle);
+
+        // Bloco/Card com o IP detectado
+        android.widget.TextView ipBox = new android.widget.TextView(this);
+        ipBox.setText(ipSummary);
+        ipBox.setTextSize(14f);
+        ipBox.setTypeface(android.graphics.Typeface.MONOSPACE, android.graphics.Typeface.BOLD);
+        ipBox.setTextColor(0xFFFFFFFF);
+        ipBox.setBackgroundColor(0xFF222222);
+        ipBox.setPadding(24, 18, 24, 18);
+        android.widget.LinearLayout.LayoutParams boxParams = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        boxParams.setMargins(0, 10, 0, 12);
+        ipBox.setLayoutParams(boxParams);
+        layout.addView(ipBox);
+
+        // Botão para Copiar IP
+        com.google.android.material.button.MaterialButton btnCopyIp = new com.google.android.material.button.MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle);
+        btnCopyIp.setText("📋 Copiar IP (" + primaryIp + ")");
+        btnCopyIp.setTextColor(0xFFFFD700);
+        btnCopyIp.setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard != null) {
+                ClipData clip = ClipData.newPlainText("IP Perfect Dark", primaryIp);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(this, "IP " + primaryIp + " copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        layout.addView(btnCopyIp);
+
+        // Porta
         android.widget.TextView portLabel = new android.widget.TextView(this);
         portLabel.setText("Porta UDP do Servidor:");
+        portLabel.setPadding(0, 16, 0, 0);
         layout.addView(portLabel);
 
         android.widget.EditText inputPort = new android.widget.EditText(this);
@@ -188,11 +241,18 @@ public class MainMenuActivity extends AppCompatActivity {
         inputPort.setText("27100");
         layout.addView(inputPort);
 
+        // Dica explicativa
+        android.widget.TextView hintText = new android.widget.TextView(this);
+        hintText.setText("💡 Dica: Seus amigos devem estar conectados no mesmo Wi-Fi ou Ponto de Acesso (Hotspot) do seu celular e inserir este IP na opção 'Entrar em Sala'.");
+        hintText.setTextSize(12f);
+        hintText.setTextColor(0xFFAAAAAA);
+        hintText.setPadding(0, 12, 0, 8);
+        layout.addView(hintText);
+
         new AlertDialog.Builder(this)
                 .setTitle("Criar Sala (Host)")
-                .setMessage("Os outros jogadores deverão conectar no seu IP local ou público nesta porta.")
                 .setView(layout)
-                .setPositiveButton("Iniciar", (dialog, which) -> {
+                .setPositiveButton("Iniciar Sala", (dialog, which) -> {
                     int port = 27100;
                     try {
                         port = Integer.parseInt(inputPort.getText().toString().trim());
@@ -201,6 +261,62 @@ public class MainMenuActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
+    }
+
+    private String getDeviceIpSummary() {
+        StringBuilder sb = new StringBuilder();
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces != null && interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+                if (iface.isLoopback() || !iface.isUp()) continue;
+                String name = iface.getName().toLowerCase();
+                String displayName = iface.getDisplayName().toLowerCase();
+
+                String label = "Rede Local";
+                if (name.contains("wlan") || displayName.contains("wlan") || displayName.contains("wi-fi")) {
+                    label = "Wi-Fi";
+                } else if (name.contains("ap") || name.contains("rndis") || name.contains("tether")) {
+                    label = "Ponto de Acesso (Hotspot)";
+                } else if (name.contains("eth")) {
+                    label = "Ethernet";
+                } else if (name.contains("tun") || name.contains("zt") || name.contains("tailscale")) {
+                    label = "VPN / ZeroTier";
+                }
+
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    if (!addr.isLoopbackAddress() && addr instanceof Inet4Address) {
+                        if (sb.length() > 0) sb.append("\n");
+                        sb.append(label).append(" (").append(iface.getName()).append("): ").append(addr.getHostAddress());
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+
+        if (sb.length() == 0) {
+            return "127.0.0.1 (Sem conexão Wi-Fi/Hotspot ativa)";
+        }
+        return sb.toString();
+    }
+
+    private String getPrimaryIpAddress() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces != null && interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+                if (iface.isLoopback() || !iface.isUp()) continue;
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    if (!addr.isLoopbackAddress() && addr instanceof Inet4Address) {
+                        return addr.getHostAddress();
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+        return "127.0.0.1";
     }
 
     private void showJoinDialog() {
