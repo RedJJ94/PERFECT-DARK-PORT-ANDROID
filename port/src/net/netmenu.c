@@ -151,10 +151,30 @@ static const char *menutextJoinAddress(struct menuitem *item)
 	return tmp;
 }
 
+static MenuDialogHandlerResult menudialoghandlerJoining(s32 operation, struct menudialogdef *dialogdef, union handlerdata *data)
+{
+	if (operation == MENUOP_CLOSE) {
+		if (g_NetMode == NETMODE_CLIENT) {
+			netDisconnect();
+		}
+	} else if (operation == MENUOP_TICK) {
+		if (inputKeyPressed(VK_ESCAPE)) {
+			if (g_NetMode == NETMODE_CLIENT) {
+				netDisconnect();
+			}
+			menuPopDialog();
+		}
+	}
+
+	return 0;
+}
+
 static MenuItemHandlerResult menuhandlerJoining(s32 operation, struct menuitem *item, union handlerdata *data)
 {
-	if (inputKeyPressed(VK_ESCAPE)) {
-		netDisconnect();
+	if (operation == MENUOP_SET) {
+		if (g_NetMode == NETMODE_CLIENT) {
+			netDisconnect();
+		}
 		menuPopDialog();
 	}
 
@@ -181,8 +201,8 @@ struct menuitem g_NetJoiningMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		0,
-		MENUITEMFLAG_SELECTABLE_CENTRE | MENUITEMFLAG_LITERAL_TEXT,
-		(uintptr_t)"ESC to abort\n",
+		MENUITEMFLAG_SELECTABLE_CENTRE | MENUITEMFLAG_LITERAL_TEXT | MENUITEMFLAG_SELECTABLE_CLOSESDIALOG,
+		(uintptr_t)"B to abort\n",
 		0,
 		menuhandlerJoining,
 	},
@@ -193,8 +213,8 @@ struct menudialogdef g_NetJoiningDialog = {
 	MENUDIALOGTYPE_SUCCESS,
 	(uintptr_t)"Joining Game...",
 	g_NetJoiningMenuItems,
-	NULL,
-	MENUDIALOGFLAG_LITERAL_TEXT | MENUDIALOGFLAG_IGNOREBACK | MENUDIALOGFLAG_STARTSELECTS,
+	menudialoghandlerJoining,
+	MENUDIALOGFLAG_LITERAL_TEXT | MENUDIALOGFLAG_STARTSELECTS,
 	NULL,
 };
 
@@ -220,8 +240,8 @@ struct menuitem g_NetJoinAddressMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		0,
-		MENUITEMFLAG_SELECTABLE_CENTRE | MENUITEMFLAG_LITERAL_TEXT,
-		(uintptr_t)"ESC to return\n",
+		MENUITEMFLAG_SELECTABLE_CENTRE | MENUITEMFLAG_LITERAL_TEXT | MENUITEMFLAG_SELECTABLE_CLOSESDIALOG,
+		(uintptr_t)"B to return\n",
 		0,
 		menuhandlerEnterJoinAddress,
 	},
@@ -233,7 +253,7 @@ struct menudialogdef g_NetJoinAddressDialog = {
 	(uintptr_t)"Enter Address",
 	g_NetJoinAddressMenuItems,
 	NULL,
-	MENUDIALOGFLAG_LITERAL_TEXT | MENUDIALOGFLAG_IGNOREBACK | MENUDIALOGFLAG_STARTSELECTS,
+	MENUDIALOGFLAG_LITERAL_TEXT | MENUDIALOGFLAG_STARTSELECTS,
 	NULL,
 };
 
@@ -243,7 +263,13 @@ static MenuItemHandlerResult menuhandlerEnterJoinAddress(s32 operation, struct m
 		return 0;
 	}
 
-	if (inputTextHandler(g_NetJoinAddr, NET_MAX_ADDR, &g_NetJoinAddrPtr, false) < 0) {
+	if (operation == MENUOP_SET) {
+		inputStopTextInput();
+		menuPopDialog();
+		return 0;
+	}
+
+	if (inputTextHandler(g_NetJoinAddr, NET_MAX_ADDR, &g_NetJoinAddrPtr, false) < 0 || inputKeyPressed(VK_ESCAPE)) {
 		// escape has been pressed, stop editing
 		inputStopTextInput();
 		menuPopDialog();
