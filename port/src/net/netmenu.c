@@ -201,8 +201,8 @@ struct menuitem g_NetJoiningMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		0,
-		MENUITEMFLAG_SELECTABLE_CENTRE | MENUITEMFLAG_LITERAL_TEXT | MENUITEMFLAG_SELECTABLE_CLOSESDIALOG,
-		(uintptr_t)"B to abort\n",
+		MENUITEMFLAG_SELECTABLE_CENTRE | MENUITEMFLAG_LITERAL_TEXT,
+		(uintptr_t)"Cancel (B)\n",
 		0,
 		menuhandlerJoining,
 	},
@@ -240,8 +240,8 @@ struct menuitem g_NetJoinAddressMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		0,
-		MENUITEMFLAG_SELECTABLE_CENTRE | MENUITEMFLAG_LITERAL_TEXT | MENUITEMFLAG_SELECTABLE_CLOSESDIALOG,
-		(uintptr_t)"B to return\n",
+		MENUITEMFLAG_SELECTABLE_CENTRE | MENUITEMFLAG_LITERAL_TEXT,
+		(uintptr_t)"Cancel (B)\n",
 		0,
 		menuhandlerEnterJoinAddress,
 	},
