@@ -3861,11 +3861,7 @@ struct menudialogdef g_CiOptionsViaPcMenuDialog = {
 	L_OPTIONS_180, // "Options"
 	g_CiOptionsMenuItems,
 	menudialog0010559c,
-#ifdef PLATFORM_N64
 	0,
-#else
-	MENUDIALOGFLAG_IGNOREBACK,
-#endif
 	NULL,
 };
 
@@ -5050,11 +5046,7 @@ struct menuitem g_MainMenuMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		0,
-#ifdef PLATFORM_N64
 		MENUITEMFLAG_SELECTABLE_CLOSESDIALOG | MENUITEMFLAG_BIGFONT,
-#else
-		MENUITEMFLAG_SELECTABLE_CLOSESDIALOG | MENUITEMFLAG_BIGFONT | MENUITEMFLAG_ALWAYSDISABLED,
-#endif
 		L_MISC_446, // "Carrington Institute"
 		0x00000001,
 		NULL,
@@ -5062,11 +5054,7 @@ struct menuitem g_MainMenuMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		0,
-#ifdef PLATFORM_N64
 		MENUITEMFLAG_BIGFONT,
-#else
-		MENUITEMFLAG_BIGFONT | MENUITEMFLAG_ALWAYSDISABLED,
-#endif
 		(uintptr_t)&mainMenuTextLabel,
 		0x00000002,
 		menuhandlerMainMenuSoloMissions,
@@ -5074,11 +5062,7 @@ struct menuitem g_MainMenuMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		1,
-#ifdef PLATFORM_N64
 		MENUITEMFLAG_BIGFONT,
-#else
-		MENUITEMFLAG_BIGFONT | MENUITEMFLAG_ALWAYSDISABLED,
-#endif
 		(uintptr_t)&mainMenuTextLabel,
 		0x00000003,
 		menuhandlerMainMenuCombatSimulator,
@@ -5086,11 +5070,7 @@ struct menuitem g_MainMenuMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		2,
-#ifdef PLATFORM_N64
 		MENUITEMFLAG_BIGFONT,
-#else
-		MENUITEMFLAG_BIGFONT | MENUITEMFLAG_ALWAYSDISABLED,
-#endif
 		(uintptr_t)&mainMenuTextLabel,
 		0x00000004,
 		menuhandlerMainMenuCooperative,
@@ -5098,11 +5078,7 @@ struct menuitem g_MainMenuMenuItems[] = {
 	{
 		MENUITEMTYPE_SELECTABLE,
 		3,
-#ifdef PLATFORM_N64
 		MENUITEMFLAG_BIGFONT,
-#else
-		MENUITEMFLAG_BIGFONT | MENUITEMFLAG_ALWAYSDISABLED,
-#endif
 		(uintptr_t)&mainMenuTextLabel,
 		0x00000005,
 		menuhandlerMainMenuCounterOperative,
@@ -5145,11 +5121,7 @@ struct menudialogdef g_CiMenuViaPcMenuDialog = {
 	L_OPTIONS_116, // "Perfect Menu"
 	g_MainMenuMenuItems,
 	menudialogMainMenu,
-#ifdef PLATFORM_N64
 	MENUDIALOGFLAG_STARTSELECTS,
-#else
-	MENUDIALOGFLAG_STARTSELECTS | MENUDIALOGFLAG_IGNOREBACK,
-#endif
 	&g_CiOptionsViaPcMenuDialog,
 };
 
