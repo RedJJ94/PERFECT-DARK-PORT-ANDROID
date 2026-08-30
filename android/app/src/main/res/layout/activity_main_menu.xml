@@ -51,19 +51,20 @@
         <!-- Botão MULTIPLAYER -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMultiplayer"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginBottom="12dp"
+            android:letterSpacing="0.18"
             android:text="MULTIPLAYER"
+            android:textColor="#FFD700"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:letterSpacing="0.18"
-            android:textColor="#FFD700"
-            android:layout_marginBottom="12dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:strokeColor="#FFD700"
-            app:strokeWidth="2dp"
+            android:visibility="visible"
+            app:backgroundTint="#33000000"
             app:cornerRadius="4dp"
-            app:backgroundTint="#33000000" />
+            app:strokeColor="#FFD700"
+            app:strokeWidth="2dp" />
 
         <!-- Botão CONFIGURAÇÕES -->
         <com.google.android.material.button.MaterialButton
