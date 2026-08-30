@@ -5944,10 +5944,16 @@ struct sndstate *playerSndStart(s32 arg0, s16 sound, struct sndstate **handle, s
 	s32 vol = -1;
 	s32 pan = -1;
 #ifndef PLATFORM_N64
-	const struct player *pl = g_Vars.players[playernum];
+	const struct player *pl = (playernum >= 0 && playernum < MAX_PLAYERS) ? g_Vars.players[playernum] : NULL;
 	if (g_NetMode && playernum != 0 && pl && pl->prop) {
-		// auto attenuate sounds for remote players
+		// auto attenuate sounds for remote players based on 3D distance and angle to local player
 		psGetTheoreticalVolPan(&pl->prop->pos, pl->prop->rooms, sound, &vol, &pan);
+		if (vol <= 0) {
+			if (handle) {
+				*handle = NULL;
+			}
+			return NULL;
+		}
 	}
 #endif
 	return sndStart(arg0, sound, handle, vol, pan, pitch, fxbus, fxmix);
