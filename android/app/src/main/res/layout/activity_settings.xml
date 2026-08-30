@@ -196,11 +196,46 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Controles Virtuais"
+        android:text="Controles"
         android:textColor="#4a9eff"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estilo de Controle (Modo de Jogo)"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escolha o estilo de controle para jogar:"
+        android:textColor="#AAAAAA"
+        android:textSize="13sp"
+        android:layout_marginBottom="8dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerControlStyle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#2a2a44"
+        android:popupBackground="#1e1e34"
+        android:layout_marginBottom="6dp"/>
+
+    <TextView
+        android:id="@+id/textControlStyleDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Controles modernos estilo Port / Dual Stick. Analógico esquerdo move/strafe e mira suave."
+        android:textColor="#4a9eff"
+        android:textSize="12sp"
+        android:lineSpacingExtra="2dp"
         android:layout_marginBottom="16dp"/>
 
     <CheckBox

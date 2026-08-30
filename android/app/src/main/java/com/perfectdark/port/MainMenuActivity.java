@@ -130,11 +130,12 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void setupListeners() {
 
-        // INICIAR → para a música, depois vai ao LauncherActivity (verifica ROM)
+        // INICIAR → modo normal (campanha/single player) sem multiplayer
         btnStart.setOnClickListener(v ->
             animateButton(v, () -> {
                 stopMusicService(); // Música para ao entrar no jogo
                 Intent intent = new Intent(MainMenuActivity.this, LauncherActivity.class);
+                intent.putExtra("extra_net_mode", 0);
                 startActivity(intent);
             })
         );

@@ -43,7 +43,8 @@ JNIEXPORT void JNICALL Java_com_perfectdark_port_SettingsActivity_nativeApplySet
     jboolean uncapTickrate, jboolean geMuzzleFlashes, jint fieldOfView, jint hudCenter,
     jboolean showControls, jfloat leftStickSensitivity, jfloat rightStickSensitivity,
     jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength,
-    jboolean texDumpEnabled, jboolean texLoadEnabled
+    jboolean texDumpEnabled, jboolean texLoadEnabled,
+    jint controlStyle
 );
 
 // Netplay mode setup function

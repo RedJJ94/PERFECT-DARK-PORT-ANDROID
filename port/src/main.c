@@ -21,6 +21,7 @@
 #include "utils.h"
 #include "texexport.h"
 #include "net/net.h"
+#include "game/options.h"
 
 #include <SDL.h>
 
@@ -58,6 +59,7 @@ u8 g_VmShowStats = 0;
 
 s32 g_TickRateDiv = 1;
 s32 g_TickExtraSleep = true;
+static s32 g_AndroidControlStyle = CONTROLMODE_PC;
 
 s32 g_SkipIntro = false;
 
@@ -101,6 +103,11 @@ static void gameInit(void)
 	} else if (g_HudCenter == HUDCENTER_WIDE) {
 		g_HudAlignModeL = G_ASPECT_LEFT_EXT | G_ASPECT_WIDE_EXT;
 		g_HudAlignModeR = G_ASPECT_RIGHT_EXT | G_ASPECT_WIDE_EXT;
+	}
+
+	if (g_AndroidControlStyle >= 0 && g_AndroidControlStyle <= 8) {
+		optionsSetControlMode(0, g_AndroidControlStyle);
+		g_PlayerExtCfg[0].extcontrols = (g_AndroidControlStyle == CONTROLMODE_PC) ? 1 : 0;
 	}
 }
 
@@ -309,9 +316,10 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     jboolean uncapTickrate, jboolean geMuzzleFlashes, jint fieldOfView, jint hudCenter,
     jboolean showControls, jfloat leftStickSensitivity, jfloat rightStickSensitivity,
     jfloat leftStickDeadzone, jfloat rightStickDeadzone, jboolean vibration, jfloat vibrationStrength,
-    jboolean texDumpEnabled, jboolean texLoadEnabled
+    jboolean texDumpEnabled, jboolean texLoadEnabled,
+    jint controlStyle
 ) {
-    __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Applying settings from Android");
+    __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Applying settings from Android (controlStyle=%d)", controlStyle);
 
     // Apply video settings
     videoSetFullscreen(fullscreen ? 1 : 0);
@@ -331,9 +339,15 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     g_PlayerExtCfg[0].fovy = (f32)fieldOfView;
     g_HudCenter = hudCenter;
 
+    // Apply control style
+    if (controlStyle >= 0 && controlStyle <= 8) {
+        g_AndroidControlStyle = controlStyle;
+        optionsSetControlMode(0, controlStyle);
+        g_PlayerExtCfg[0].extcontrols = (controlStyle == CONTROLMODE_PC) ? 1 : 0;
+        __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Control style applied: %d (extcontrols=%d)", controlStyle, g_PlayerExtCfg[0].extcontrols);
+    }
+
     // Apply controls settings
-    // NOTE: extcontrols is NOT set here to preserve user's control style choice
-    // showControls only affects Android virtual controls visibility
     inputControllerSetAxisScale(0, 0, 0, leftStickSensitivity); // Left stick X
     inputControllerSetAxisScale(0, 0, 1, leftStickSensitivity); // Left stick Y
     inputControllerSetAxisScale(0, 1, 0, rightStickSensitivity); // Right stick X
@@ -456,6 +470,10 @@ int main(int argc, const char **argv)
 			g_NetLastJoinAddr[sizeof(g_NetLastJoinAddr) - 1] = '\0';
 			sysLogPrintf(LOG_NOTE, "NET: Android Join Latch set for address '%s'", g_NetLastJoinAddr);
 		}
+	} else {
+		g_NetHostLatch = false;
+		g_NetJoinLatch = false;
+		sysLogPrintf(LOG_NOTE, "NET: Single player mode (no netplay)");
 	}
 #endif
 
@@ -537,6 +555,7 @@ PD_CONSTRUCTOR static void gameConfigInit(void)
 	configRegisterInt("Game.DisableMpDeathMusic", &g_MusicDisableMpDeath, 0, 1);
 	configRegisterInt("Game.GEMuzzleFlashes", &g_BgunGeMuzzleFlashes, 0, 1);
 	configRegisterInt("Game.MaxExplosions", &g_MaxExplosions, 6, 96);
+	configRegisterInt("Game.Player1.ControlStyle", &g_AndroidControlStyle, 0, 8);
 	for (s32 j = 0; j < MAX_LOCAL_PLAYERS; ++j) {
 		const s32 i = j + 1;
 		configRegisterFloat(strFmt("Game.Player%d.FovY", i), &g_PlayerExtCfg[j].fovy, 5.f, 175.f);
