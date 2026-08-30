@@ -88,7 +88,10 @@ extern "C" {
 
 /* byte string operations */
 
-#ifndef PLATFORM_OSX
+#if defined(ANDROID) || defined(__ANDROID__)
+#include <strings.h>
+#include <string.h>
+#elif !defined(PLATFORM_OSX)
 extern void     bcopy(const void *, void *, size_t);
 extern int      bcmp(const void *, const void *, size_t);
 extern void     bzero(void *, size_t);

@@ -322,7 +322,7 @@ void menuTick(void)
 			}
 
 #ifndef PLATFORM_N64
-			if (g_NetMode == NETMODE_SERVER && g_MenuData.unk008 == -1) {
+			if (g_NetMode == NETMODE_SERVER && g_MenuData.prevmenuroot == -1) {
 				s32 slot = 1;
 				for (i = 1; i < g_NetMaxClients; ++i) {
 					if (g_NetClients[i].state >= CLSTATE_LOBBY) {
