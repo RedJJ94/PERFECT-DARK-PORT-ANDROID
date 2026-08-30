@@ -357,10 +357,9 @@ MenuItemHandlerResult menuhandlerHostGame(s32 operation, struct menuitem *item, 
 MenuItemHandlerResult menuhandlerJoinGame(s32 operation, struct menuitem *item, union handlerdata *data)
 {
 	if (operation == MENUOP_SET) {
-		if (g_NetJoinAddr[0] == '\0') {
-			strncpy(g_NetJoinAddr, g_NetLastJoinAddr, NET_MAX_ADDR);
-			g_NetJoinAddrPtr = strlen(g_NetJoinAddr);
-		}
+		strncpy(g_NetJoinAddr, g_NetLastJoinAddr, NET_MAX_ADDR);
+		g_NetJoinAddr[NET_MAX_ADDR] = '\0';
+		g_NetJoinAddrPtr = strlen(g_NetJoinAddr);
 		menuPushDialog(&g_NetJoinMenuDialog);
 	}
 

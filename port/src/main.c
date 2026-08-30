@@ -357,6 +357,10 @@ Java_com_perfectdark_port_SettingsActivity_nativeApplySettings(
     __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "Settings applied successfully");
 }
 
+static s32 g_AndroidPendingNetMode = 0;
+static char g_AndroidPendingNetIp[NET_MAX_ADDR + 1] = { 0 };
+static s32 g_AndroidPendingNetPort = 27100;
+
 JNIEXPORT void JNICALL
 Java_com_perfectdark_port_MainActivity_nativeSetNetMode(
     JNIEnv* env, jobject thiz,
@@ -364,37 +368,27 @@ Java_com_perfectdark_port_MainActivity_nativeSetNetMode(
 ) {
     __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "nativeSetNetMode: mode=%d, port=%d", mode, port);
 
-    if (mode == 1) {
-        // Host Game
-        g_NetHostLatch = true;
-        g_NetJoinLatch = false;
-        if (port > 0) {
-            g_NetServerPort = (u32)port;
-        }
-    } else if (mode == 2) {
-        // Join Game
-        g_NetJoinLatch = true;
-        g_NetHostLatch = false;
-        if (ipAddress != NULL) {
-            const char *ip = (*env)->GetStringUTFChars(env, ipAddress, 0);
-            if (ip && ip[0]) {
-                if (port > 0 && strchr(ip, ':') == NULL) {
-                    snprintf(g_NetLastJoinAddr, sizeof(g_NetLastJoinAddr), "%s:%d", ip, port);
-                } else {
-                    strncpy(g_NetLastJoinAddr, ip, sizeof(g_NetLastJoinAddr) - 1);
-                    g_NetLastJoinAddr[sizeof(g_NetLastJoinAddr) - 1] = '\0';
-                }
-                __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "nativeSetNetMode: join addr = %s", g_NetLastJoinAddr);
+    g_AndroidPendingNetMode = mode;
+    g_AndroidPendingNetPort = (port > 0) ? port : 27100;
+    g_AndroidPendingNetIp[0] = '\0';
+
+    if (ipAddress != NULL) {
+        const char *ip = (*env)->GetStringUTFChars(env, ipAddress, 0);
+        if (ip && ip[0]) {
+            if (port > 0 && strchr(ip, ':') == NULL) {
+                snprintf(g_AndroidPendingNetIp, sizeof(g_AndroidPendingNetIp), "%s:%d", ip, port);
+            } else {
+                strncpy(g_AndroidPendingNetIp, ip, sizeof(g_AndroidPendingNetIp) - 1);
+                g_AndroidPendingNetIp[sizeof(g_AndroidPendingNetIp) - 1] = '\0';
             }
-            (*env)->ReleaseStringUTFChars(env, ipAddress, ip);
+            __android_log_print(ANDROID_LOG_INFO, "PerfectDark", "nativeSetNetMode: pending join addr = %s", g_AndroidPendingNetIp);
         }
-    } else {
-        // Normal single player
-        g_NetHostLatch = false;
-        g_NetJoinLatch = false;
+        (*env)->ReleaseStringUTFChars(env, ipAddress, ip);
     }
 }
+#endif
 
+#ifdef ANDROID
 int pd_main(int argc, const char **argv)
 #else
 int main(int argc, const char **argv)
@@ -444,6 +438,26 @@ int main(int argc, const char **argv)
 	romdataInit();
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "romdataInit complete");
 	netInit();
+
+#ifdef ANDROID
+	// Apply pending netplay settings from Android UI AFTER configInit and netInit
+	if (g_AndroidPendingNetMode == 1) {
+		g_NetHostLatch = true;
+		g_NetJoinLatch = false;
+		if (g_AndroidPendingNetPort > 0) {
+			g_NetServerPort = (u32)g_AndroidPendingNetPort;
+		}
+		sysLogPrintf(LOG_NOTE, "NET: Android Host Latch set on port %u", g_NetServerPort);
+	} else if (g_AndroidPendingNetMode == 2) {
+		g_NetJoinLatch = true;
+		g_NetHostLatch = false;
+		if (g_AndroidPendingNetIp[0]) {
+			strncpy(g_NetLastJoinAddr, g_AndroidPendingNetIp, sizeof(g_NetLastJoinAddr) - 1);
+			g_NetLastJoinAddr[sizeof(g_NetLastJoinAddr) - 1] = '\0';
+			sysLogPrintf(LOG_NOTE, "NET: Android Join Latch set for address '%s'", g_NetLastJoinAddr);
+		}
+	}
+#endif
 
 	g_ValidGbcRomFound = romdataCheckGbcRom();
 	__android_log_print(ANDROID_LOG_INFO, "PerfectDark", "GBC ROM check complete");
